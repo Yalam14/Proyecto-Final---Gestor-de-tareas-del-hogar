@@ -19,4 +19,7 @@
     <string name="viernes">Viernes</string>
     <string name="sabado">Sábado</string>
     <string name="domingo">Domingo</string>
+    <string name="unirse">Unirse</string>
+    <string name="ingresar_codigo">Ingresar código:</string>
+    <string name="unirse_boton">Unirse</string>
 </resources>

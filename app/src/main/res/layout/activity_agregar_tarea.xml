@@ -47,7 +47,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@android:drawable/edit_text"
-                android:hint="@string/nothing"
                 android:inputType="text" />
 
             <TextView
@@ -65,7 +64,6 @@
                 android:background="@android:drawable/edit_text"
                 android:ems="10"
                 android:gravity="start|top"
-                android:hint="@string/nothing"
                 android:inputType="textMultiLine" />
 
             <TextView
