@@ -12,4 +12,11 @@
     <string name="lbl_tarea_descripcion">Descripción:</string>
     <string name="seleccion_dias">Seleccionar por días de la semana:</string>
     <string name="nothing">…</string>
+    <string name="lunes">Lunes</string>
+    <string name="martes">Martes</string>
+    <string name="miercoles">Miércoles</string>
+    <string name="jueves">Jueves</string>
+    <string name="viernes">Viernes</string>
+    <string name="sabado">Sábado</string>
+    <string name="domingo">Domingo</string>
 </resources>

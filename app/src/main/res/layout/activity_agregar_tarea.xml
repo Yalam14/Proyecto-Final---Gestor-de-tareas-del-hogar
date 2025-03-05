@@ -46,6 +46,7 @@
                 android:id="@+id/et_nombre"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:background="@android:drawable/edit_text"
                 android:hint="@string/nothing"
                 android:inputType="text" />
 
@@ -61,6 +62,7 @@
                 android:id="@+id/et_descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:background="@android:drawable/edit_text"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/nothing"
@@ -74,10 +76,103 @@
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_dias"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_lunes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lunes" />
+
+                <LinearLayout
+                    android:id="@+id/layout_lunes_miembros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/cb_martes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/martes" />
+
+                <LinearLayout
+                    android:id="@+id/layout_martes_miembros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/cb_miercoles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/miercoles" />
+
+                <LinearLayout
+                    android:id="@+id/layout_miercoles_miembros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/cb_jueves"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/jueves" />
+
+                <LinearLayout
+                    android:id="@+id/layout_jueves_miembros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/cb_viernes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/viernes" />
+
+                <LinearLayout
+                    android:id="@+id/layout_viernes_miembros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/cb_sabado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sabado" />
+
+                <LinearLayout
+                    android:id="@+id/layout_sabado_miembros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/cb_domingo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/domingo" />
+
+                <LinearLayout
+                    android:id="@+id/layout_domingo_miembros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
