@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_diario"
-        android:name="equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.home.HomeFragment"
+        android:name="equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.diario.DiarioFragment"
         android:label="@string/pestaña_diario"
         tools:layout="@layout/fragment_diario" />
 
     <fragment
         android:id="@+id/navigation_semanal"
-        android:name="equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.dashboard.DashboardFragment"
+        android:name="equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.semanal.SemanalFragment"
         android:label="@string/pestaña_semanal"
         tools:layout="@layout/fragment_semanal" />
 </navigation>

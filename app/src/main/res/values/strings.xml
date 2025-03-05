@@ -7,4 +7,9 @@
     <string name="title_activity_tareas">TareasActivity</string>
     <string name="pestaña_diario">Diario</string>
     <string name="pestaña_semanal">Semanal</string>
+    <string name="agregar_tarea">Agregar Tarea</string>
+    <string name="lbl_tarea_nombre">Nombre de la tarea:</string>
+    <string name="lbl_tarea_descripcion">Descripción:</string>
+    <string name="seleccion_dias">Seleccionar por días de la semana:</string>
+    <string name="nothing">…</string>
 </resources>

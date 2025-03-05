@@ -1,4 +1,4 @@
-package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.home
+package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.diario
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentHomeBinding
 
-class HomeFragment : Fragment() {
+class DiarioFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -23,7 +23,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this).get(DiarioViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root

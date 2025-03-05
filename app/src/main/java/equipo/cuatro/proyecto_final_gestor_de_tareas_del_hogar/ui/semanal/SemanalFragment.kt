@@ -1,4 +1,4 @@
-package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.dashboard
+package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.semanal
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentDashboardBinding
 
-class DashboardFragment : Fragment() {
+class SemanalFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
 
@@ -23,7 +23,7 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+            ViewModelProvider(this).get(SemanalViewModel::class.java)
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
