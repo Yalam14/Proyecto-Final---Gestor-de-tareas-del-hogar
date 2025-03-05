@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">proyecto_final_gestor_de_tareas_del_hogar</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="iniciarSesion">Iniciar Sesión</string>
+    <string name="lblContraseña">Contraseña:</string>
+    <string name="lblUsuario">Usuario:</string>
+    <string name="title_activity_tareas">TareasActivity</string>
+    <string name="pestaña_diario">Diario</string>
+    <string name="pestaña_semanal">Semanal</string>
 </resources>

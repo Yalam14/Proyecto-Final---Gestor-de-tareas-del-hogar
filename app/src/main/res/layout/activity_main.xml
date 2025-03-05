@@ -1,80 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:background="#FFFFFF">
+    android:padding="24dp">
 
 
     <TextView
         android:id="@+id/textViewIniciarSesion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="Iniciar Sesión"
-        android:textSize="45sp"
         android:layout_gravity="center"
         android:layout_marginBottom="24dp"
-        android:textColor="#212121" />
+        android:text="@string/iniciarSesion"
+        android:textColor="#212121"
+        android:textSize="45sp"
+        android:textStyle="bold" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Usuario:"
-        android:textStyle="bold"
+        android:text="@string/lblUsuario"
+        android:textColor="#212121"
         android:textSize="38sp"
-        android:textColor="#212121" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editTextUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:background="@android:drawable/edit_text"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp" />
+        android:padding="12dp" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contraseña:"
-        android:textStyle="bold"
+        android:text="@string/lblContraseña"
+        android:textColor="#212121"
         android:textSize="38sp"
-        android:textColor="#212121" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editTextContrasena"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:background="@android:drawable/edit_text"
-        android:padding="12dp"
         android:inputType="textPassword"
-        android:layout_marginBottom="24dp" />
+        android:padding="12dp" />
 
 
     <Button
         android:id="@+id/buttonIniciarSesion"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Iniciar Sesión"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/boton_oscuro"
-    android:padding="16dp"
-    android:layout_marginBottom="16dp" />
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/black"
+        android:padding="16dp"
+        android:text="@string/iniciarSesion"
+        android:textColor="@color/white" />
 
 
     <Button
         android:id="@+id/buttonRegistrarse"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Registrarse"
-        android:textColor="#000000"
-        android:background="@drawable/boton_claro"
-    android:padding="16dp" />
+        android:layout_gravity="center"
+        android:backgroundTint="@color/black"
+        android:padding="16dp"
+        android:text="@string/registrarse"
+        android:textColor="@color/white" />
 
 </LinearLayout>
