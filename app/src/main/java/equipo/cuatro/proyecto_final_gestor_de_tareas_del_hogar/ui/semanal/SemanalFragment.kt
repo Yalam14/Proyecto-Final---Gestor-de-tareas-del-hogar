@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentDashboardBinding
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentSemanalBinding
 
 class SemanalFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentSemanalBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -25,7 +25,7 @@ class SemanalFragment : Fragment() {
         val dashboardViewModel =
             ViewModelProvider(this).get(SemanalViewModel::class.java)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentSemanalBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textDashboard

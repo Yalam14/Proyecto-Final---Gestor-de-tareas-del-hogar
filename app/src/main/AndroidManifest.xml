@@ -27,7 +27,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-<<<<<<< HEAD
         </activity>
 
 
@@ -43,12 +42,3 @@
     </application>
 
 </manifest>
-=======
-        </activity> <!-- RegistrarseActivity (declaración correcta) -->
-        <activity
-            android:name=".RegistrarseActivity"
-            android:exported="false" />
-    </application>
-
-</manifest>
->>>>>>> 4a8f424e324e69100459aea41dbe3b556e4b77fc
