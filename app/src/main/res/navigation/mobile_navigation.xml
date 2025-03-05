@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_diario">
+
+    <fragment
+        android:id="@+id/navigation_diario"
+        android:name="equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.diario.DiarioFragment"
+        android:label="@string/pestaña_diario"
+        tools:layout="@layout/fragment_diario" />
+
+    <fragment
+        android:id="@+id/navigation_semanal"
+        android:name="equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.semanal.SemanalFragment"
+        android:label="@string/pestaña_semanal"
+        tools:layout="@layout/fragment_semanal" />
+</navigation>

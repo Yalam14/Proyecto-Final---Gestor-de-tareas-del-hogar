@@ -12,15 +12,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto_final_gestor_de_tareas_del_hogar"
         tools:targetApi="31">
-
-        <!-- MainActivity -->
+        <activity
+            android:name=".AgregarTareaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TareasActivity"
+            android:exported="false"
+            android:label="@string/title_activity_tareas" /> <!-- MainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+<<<<<<< HEAD
         </activity>
 
 
@@ -36,3 +43,12 @@
     </application>
 
 </manifest>
+=======
+        </activity> <!-- RegistrarseActivity (declaración correcta) -->
+        <activity
+            android:name=".RegistrarseActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>
+>>>>>>> 4a8f424e324e69100459aea41dbe3b556e4b77fc
