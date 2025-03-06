@@ -11,13 +11,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Botón para ir a la pantalla de Registrarse
         val buttonRegistrarse = findViewById<Button>(R.id.buttonRegistrarse)
         buttonRegistrarse.setOnClickListener {
-            val intent = Intent(
-                this@MainActivity,
-                RegistrarseActivity::class.java
-            )
+            val intent = Intent(this@MainActivity, RegistrarseActivity::class.java)
             startActivity(intent)
         }
+
+        val buttonIniciarSesion = findViewById<Button>(R.id.buttonIniciarSesion)
+        buttonIniciarSesion.setOnClickListener {
+            val intent = Intent(this@MainActivity, activity_hogar::class.java)
+            startActivity(intent)
+        }
+
     }
-}
+
+    }
+
