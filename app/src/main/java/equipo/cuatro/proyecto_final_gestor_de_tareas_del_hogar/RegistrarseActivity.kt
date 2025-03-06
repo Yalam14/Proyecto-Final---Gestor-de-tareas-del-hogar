@@ -16,7 +16,7 @@ class RegistrarseActivity : AppCompatActivity() {
         val registar: Button = findViewById(R.id.buttonRegistrarse)
 
         registar.setOnClickListener {
-            val intent: Intent = Intent(this, CrearHogarActivity::class.java)
+            val intent: Intent = Intent(this, HogarActivity::class.java)
             startActivity(intent)
         }
     }

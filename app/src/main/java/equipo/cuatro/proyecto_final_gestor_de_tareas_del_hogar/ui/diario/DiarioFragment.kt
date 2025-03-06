@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentHomeBinding
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentDiarioBinding
 
 class DiarioFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentDiarioBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,14 +22,14 @@ class DiarioFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val diarioViewModel =
+        val homeViewModel =
             ViewModelProvider(this).get(DiarioViewModel::class.java)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentDiarioBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        diarioViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.texthome
+        homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root

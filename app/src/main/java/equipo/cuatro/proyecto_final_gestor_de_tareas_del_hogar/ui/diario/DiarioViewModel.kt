@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class DiarioViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+        value = "Departamento 1"
     }
     val text: LiveData<String> = _text
 }

@@ -1,5 +1,6 @@
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
@@ -62,6 +63,9 @@ class CrearHogarActivity : AppCompatActivity() {
                 iconoSeleccionado = -1
                 icons.forEach { it.isSelected = false }
             }
+
+            val intent = Intent(this, HogaresExistentesActivity::class.java)
+            startActivity(intent)
         }
     }
 }
