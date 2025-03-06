@@ -20,11 +20,10 @@ class MainActivity : AppCompatActivity() {
 
         val buttonIniciarSesion = findViewById<Button>(R.id.buttonIniciarSesion)
         buttonIniciarSesion.setOnClickListener {
-            val intent = Intent(this@MainActivity, activity_hogar::class.java)
+            val intent = Intent(this@MainActivity, HogarActivity::class.java)
             startActivity(intent)
         }
 
     }
 
-    }
-
+}

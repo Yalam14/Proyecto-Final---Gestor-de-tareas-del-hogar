@@ -14,7 +14,7 @@
 
         <!-- Otras actividades -->
         <activity
-            android:name=".activity_configurar_hogar"
+            android:name=".ConfigurarHogarActivity"
             android:exported="false" />
         <activity
             android:name=".TareasActivity"
@@ -25,6 +25,9 @@
             android:exported="false" />
         <activity
             android:name=".AgregarTareaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HogaresExistentesActivity"
             android:exported="false" />
 
         <!-- MainActivity -->
@@ -47,7 +50,7 @@
 
         <!-- Declarar la actividad activity_hogar -->
         <activity
-            android:name=".activity_hogar"
+            android:name=".HogarActivity"
             android:exported="true" />
 
     </application>

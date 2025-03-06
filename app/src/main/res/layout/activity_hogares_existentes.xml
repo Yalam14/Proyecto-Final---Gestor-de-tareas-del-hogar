@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_hogares_existentes">
+    tools:context=".HogaresExistentesActivity">
 
         <TextView
             android:id="@+id/tvTitle"
@@ -37,6 +37,7 @@
             android:padding="18dp">
 
             <LinearLayout
+                android:id="@+id/dp1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
