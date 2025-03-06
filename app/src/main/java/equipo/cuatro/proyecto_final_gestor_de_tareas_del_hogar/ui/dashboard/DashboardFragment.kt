@@ -1,16 +1,17 @@
-package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.diario
+package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentDiarioBinding
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentDashboardBinding
 
-class DiarioFragment : Fragment() {
+class DashboardFragment : Fragment() {
 
-    private var _binding: FragmentDiarioBinding? = null
+    private var _binding: FragmentDashboardBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -21,14 +22,15 @@ class DiarioFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(DiarioViewModel::class.java)
+        val dashboardViewModel =
+            ViewModelProvider(this).get(DashboardViewModel::class.java)
 
-        _binding = FragmentDiarioBinding.inflate(inflater, container, false)
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        homeViewModel.text.observe(viewLifecycleOwner) {
-
+        val textView: TextView = binding.textDashboard
+        dashboardViewModel.text.observe(viewLifecycleOwner) {
+            textView.text = it
         }
         return root
     }
