@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Proyecto_final_gestor_de_tareas_del_hogar"
         tools:targetApi="31">
         <activity
+            android:name=".activity_hogar"
+            android:exported="false" />
+        <activity
+            android:name=".activity_hogares_existentes"
+            android:exported="false" />
+        <activity
             android:name=".UnirseActivity"
             android:exported="false" />
         <activity
