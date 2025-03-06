@@ -13,8 +13,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/texthome"
@@ -23,7 +24,7 @@
                 android:textSize="28sp"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                android:text="@string/titulo_hogar"/>
+                android:text="@string/titulo_hogar" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -32,6 +33,7 @@
                 android:layout_gravity="center_horizontal">
 
                 <Button
+                    android:id="@+id/btn_prev_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="&lt;"
@@ -40,8 +42,8 @@
                     android:textColor="@android:color/black"
                     android:padding="8dp"/>
 
-
                 <TextView
+                    android:id="@+id/txt_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
@@ -49,9 +51,10 @@
                     android:text="Lunes"/>
 
                 <Button
+                    android:id="@+id/btn_next_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=">"
+                    android:text="&gt;"
                     android:contentDescription="Ir al día siguiente"
                     android:background="?attr/selectableItemBackground"
                     android:textColor="@android:color/black"
@@ -60,126 +63,17 @@
             </LinearLayout>
 
             <ProgressBar
+                android:id="@+id/progress_tasks"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:progress="50"/>
+                android:progress="50" />
 
             <LinearLayout
+                android:id="@+id/task_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="true"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Limpiar la cocina"
-                        android:textSize="24dp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="OM, SV, AL, JV"
-                        android:textSize="24dp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="true"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Lavar el porche"
-                        android:textSize="24dp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="OM, SV"
-                        android:textSize="24dp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="false"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Bañar al perro"
-                        android:textSize="24dp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="SV, JV"
-                        android:textSize="24dp"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="false"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Jugar Roblox"
-                        android:textSize="24dp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="OM, SV, AL, JV"
-                        android:textSize="24dp"/>
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

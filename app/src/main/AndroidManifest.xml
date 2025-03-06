@@ -12,7 +12,6 @@
         android:theme="@style/Theme.Proyecto_final_gestor_de_tareas_del_hogar"
         tools:targetApi="31">
 
-        <!-- Otras actividades -->
         <activity
             android:name=".ConfigurarHogarActivity"
             android:exported="false" />
@@ -30,7 +29,10 @@
             android:name=".HogaresExistentesActivity"
             android:exported="false" />
 
-        <!-- MainActivity -->
+        <activity
+            android:name=".DetalleTareaActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -48,7 +50,6 @@
             android:name=".CrearHogarActivity"
             android:exported="false" />
 
-        <!-- Declarar la actividad activity_hogar -->
         <activity
             android:name=".HogarActivity"
             android:exported="true" />
