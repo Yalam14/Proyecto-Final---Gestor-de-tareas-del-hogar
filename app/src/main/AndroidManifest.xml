@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto_final_gestor_de_tareas_del_hogar"
         tools:targetApi="31">
+
+        <!-- Otras actividades -->
         <activity
             android:name=".activity_configurar_hogar"
             android:exported="false" />
@@ -24,19 +26,23 @@
             android:exported="false" />
         <activity
             android:name=".AgregarTareaActivity"
-            android:exported="false" /> <!-- MainActivity -->
+            android:exported="false" />
+
+        <!-- MainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".RegistrarseActivity"
-            android:exported="false" />
+            android:exported="true" />
+
         <activity
             android:name=".CrearHogarActivity"
             android:exported="false" />
