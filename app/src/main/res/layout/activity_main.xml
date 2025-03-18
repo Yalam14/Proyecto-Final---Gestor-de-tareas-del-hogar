@@ -15,7 +15,7 @@
         android:layout_marginBottom="24dp"
         android:text="@string/iniciarSesion"
         android:textColor="#212121"
-        android:textSize="45sp"
+        android:textSize="@dimen/titles"
         android:textStyle="bold" />
 
 
@@ -24,15 +24,15 @@
         android:layout_height="wrap_content"
         android:text="@string/lblUsuario"
         android:textColor="#212121"
-        android:textSize="38sp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/labels" />
 
     <EditText
         android:id="@+id/editTextUsuario"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/input_height"
         android:layout_marginBottom="16dp"
-        android:background="@android:drawable/edit_text"
+        android:background="@drawable/edit_text_background"
+        android:textSize="@dimen/input_text_size"
         android:padding="12dp" />
 
 
@@ -41,39 +41,38 @@
         android:layout_height="wrap_content"
         android:text="@string/lblContraseña"
         android:textColor="#212121"
-        android:textSize="38sp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/labels" />
 
     <EditText
         android:id="@+id/editTextContrasena"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/input_height"
         android:layout_marginBottom="24dp"
-        android:background="@android:drawable/edit_text"
+        android:background="@drawable/edit_text_background"
         android:inputType="textPassword"
+        android:textSize="@dimen/input_text_size"
         android:padding="12dp" />
 
-
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonIniciarSesion"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/black"
+        android:background="@drawable/boton_oscuro"
         android:padding="16dp"
         android:text="@string/iniciarSesion"
         android:textColor="@color/white" />
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonRegistrarse"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/black"
+        android:background="@drawable/boton_claro"
         android:padding="16dp"
         android:text="@string/registrarse"
-        android:textColor="@color/white" />
+        android:textColor="@color/black" />
 
 </LinearLayout>
