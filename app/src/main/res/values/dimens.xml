@@ -7,4 +7,5 @@
     <dimen name="labels">18sp</dimen>
     <dimen name="input_text_size">16sp</dimen>
     <dimen name="input_height">48dp</dimen>
+    <dimen name="home_title_option">24sp</dimen>
 </resources>
