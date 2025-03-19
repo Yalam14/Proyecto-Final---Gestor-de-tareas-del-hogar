@@ -44,7 +44,7 @@
 
         <activity
             android:name=".RegistrarseActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".CrearHogarActivity"
@@ -52,7 +52,7 @@
 
         <activity
             android:name=".HogarActivity"
-            android:exported="true" />
+            android:exported="false" />
 
     </application>
 
