@@ -56,16 +56,15 @@ class CrearHogarActivity : AppCompatActivity() {
             } else if (iconoSeleccionado == -1) {
                 Toast.makeText(this, "Por favor, selecciona un icono.", Toast.LENGTH_SHORT).show()
             } else {
-
                 Toast.makeText(this, "Hogar guardado: $nombreHogar", Toast.LENGTH_SHORT).show()
 
                 editTextNombreHogar.text.clear()
                 iconoSeleccionado = -1
                 icons.forEach { it.isSelected = false }
-            }
 
-            val intent = Intent(this, HogaresExistentesActivity::class.java)
-            startActivity(intent)
+                val intent = Intent(this, HogaresExistentesActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 }
