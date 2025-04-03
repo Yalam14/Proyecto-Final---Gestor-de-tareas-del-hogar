@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@android:color/white"
+    android:paddingTop="8dp"
     tools:context=".ui.semanal.SemanalFragment">
 
-    <!-- Encabezado -->
+    <!-- Encabezado mejorado -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="?attr/selectableItemBackground">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp"
+    android:background="?attr/selectableItemBackground">
 
+        <!-- Título más grande y mejor espaciado -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
+            android:textSize="40sp"
             android:textAlignment="center"
             android:textStyle="bold"
             android:textColor="#212121"
-            android:text="Tareas del Hogar"/>
+            android:text="Tareas del Hogar"
+            android:layout_marginBottom="8dp"/>
 
-        <!-- Selector de semana -->
+        <!-- Selector de semana con mejor espaciado -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
             <ImageButton
                 android:id="@+id/buttonPreviousWeek"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_left"
                 android:contentDescription="Semana anterior"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                />
+                android:background="?attr/selectableItemBackgroundBorderless"/>
 
             <TextView
                 android:id="@+id/textWeekNumber"
@@ -48,7 +51,8 @@
                 android:layout_marginHorizontal="16dp"
                 android:text="Semana 1"
                 android:textColor="#212121"
-                android:textSize="18sp" />
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
             <ImageButton
                 android:id="@+id/buttonNextWeek"
@@ -56,68 +60,69 @@
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_right"
                 android:contentDescription="Semana siguiente"
-                android:background="?attr/selectableItemBackgroundBorderless"
-               />
+                android:background="?attr/selectableItemBackgroundBorderless"/>
         </LinearLayout>
 
-        <!-- Barra de progreso -->
+        <!-- Barra de progreso con mejor espaciado -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Progreso semanal"
-                android:textSize="14sp"
-                android:textColor="#616161"/>
+                android:textSize="16sp"
+                android:textColor="#616161"
+                android:layout_marginBottom="8dp"/>
 
             <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_marginTop="4dp"
+                android:layout_height="10dp"
                 android:progressDrawable="@drawable/progress_bar_black"
                 android:progress="50"/>
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Separador -->
+    <!-- Separador más grueso -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#EEEEEE"/>
+        android:layout_height="2dp"
+        android:background="#EEEEEE"
+        android:layout_marginBottom="8dp"/>
 
     <!-- Lista de días -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:paddingBottom="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="12dp">
 
             <!-- Lunes -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="12dp"
                 android:background="?attr/selectableItemBackground"
-                android:padding="12dp">
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textColor="#212121"
-                    android:text="Lunes"/>
+                    android:text="Lunes"
+                    android:layout_marginBottom="12dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,32 +135,38 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Limpiar cocina"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
-                        android:background="#F5F5F5"/>
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="16dp"
+                        android:background="#212121"
+                        android:minHeight="100dp"
+                        android:gravity="center"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Lavar porche"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="16dp"
+                        android:layout_marginLeft="12dp"
+                        android:background="#212121"
+                        android:minHeight="100dp"
+                        android:gravity="center"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Bañar perro"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="16dp"
+                        android:layout_marginLeft="12dp"
+                        android:background="#212121"
+                        android:minHeight="100dp"
+                        android:gravity="center"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -187,32 +198,35 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Limpiar baños"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
-                        android:background="#F5F5F5"/>
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Regar plantas"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Sacar basura"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -244,32 +258,35 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Aspirar alfombras"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
-                        android:background="#F5F5F5"/>
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Limpiar ventanas"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Ordenar closet"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -301,32 +318,35 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Limpiar cocina"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
-                        android:background="#F5F5F5"/>
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Lavar ropa"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Planchar"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -358,32 +378,35 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Comprar víveres"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
-                        android:background="#F5F5F5"/>
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Limpiar cocina"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Sacar mascotas"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -415,32 +438,35 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Lavar auto"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
-                        android:background="#F5F5F5"/>
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Jardinería"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Día de descanso"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -472,32 +498,35 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Planificar semana"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
-                        android:background="#F5F5F5"/>
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Día familiar"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Descanso"
-                        android:textSize="14sp"
-                        android:textColor="#424242"
-                        android:padding="8dp"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
                         android:layout_marginLeft="8dp"
-                        android:background="#F5F5F5"/>
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
