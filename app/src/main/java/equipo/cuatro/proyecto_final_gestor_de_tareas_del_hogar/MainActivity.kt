@@ -9,9 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var homeRef: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,12 +52,27 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun goToMainExistentes(user: FirebaseUser) {
+        val intent = Intent(this, HogaresExistentesActivity::class.java)
+        intent.putExtra("user", user.email)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+    }
+
     override fun onStart() {
         super.onStart()
 
+        homeRef = FirebaseDatabase.getInstance().getReference("homes")
+
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            goToMain(currentUser)
+            hayHogares(homeRef) { vacia ->
+                if (vacia) {
+                    goToMain(currentUser)
+                }else {
+                    goToMainExistentes(currentUser)
+                }
+            }
         }
     }
 
@@ -67,4 +88,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun hayHogares(homeRef: DatabaseReference, callback: (Boolean) -> Unit) {
+        homeRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                callback(!snapshot.exists() || !snapshot.hasChildren())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(false)
+            }
+        })
+    }
 }
