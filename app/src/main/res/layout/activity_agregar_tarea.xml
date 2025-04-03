@@ -15,7 +15,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/agregar_tarea"
         android:textColor="@color/black"
-        android:textSize="32sp"
+        android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,12 +41,13 @@
                 android:layout_marginTop="25dp"
                 android:text="@string/lbl_tarea_nombre"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/et_nombre"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
+                android:textSize="18sp"
                 android:background="@drawable/edit_text_border"
                 android:inputType="text" />
 
@@ -56,16 +57,17 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/lbl_tarea_descripcion"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/et_descripcion"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="120dp"
+                android:textSize="18sp"
                 android:background="@drawable/edit_text_border"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
-                android:padding="8dp" />
+                android:padding="12dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -73,395 +75,414 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/seleccion_dias"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
 
-        <!-- Lunes -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <CheckBox
-                android:id="@+id/cb_lunes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lunes" />
-
+            <!-- Lunes -->
             <LinearLayout
-                android:id="@+id/layout_lunes_miembros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingStart="20dp">
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_lunes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="@string/lunes" />
 
                 <LinearLayout
+                    android:id="@+id/layout_lunes_miembros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingStart="20dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Samuel Vega"
-                        android:textColor="@color/black"/>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                    <Switch
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Samuel Vega"
+                            android:textColor="@color/black"/>
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
-                </LinearLayout>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Oscar Minarez"
+                            android:textColor="@color/black"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Oscar Minarez"
-                        android:textColor="@color/black"/>
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- Martes -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <CheckBox
-                android:id="@+id/cb_martes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/martes" />
-
+            <!-- Martes -->
             <LinearLayout
-                android:id="@+id/layout_martes_miembros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingStart="20dp">
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_martes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="@string/martes" />
 
                 <LinearLayout
+                    android:id="@+id/layout_martes_miembros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingStart="20dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Samuel Vega"
-                        android:textColor="@color/black"/>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                    <Switch
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Samuel Vega"
+                            android:textColor="@color/black"/>
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
-                </LinearLayout>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Oscar Minarez"
+                            android:textColor="@color/black"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Oscar Minarez"
-                        android:textColor="@color/black"/>
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- Miércoles -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <CheckBox
-                android:id="@+id/cb_miercoles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/miercoles" />
-
+            <!-- Miércoles -->
             <LinearLayout
-                android:id="@+id/layout_miercoles_miembros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingStart="20dp">
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_miercoles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="@string/miercoles" />
 
                 <LinearLayout
+                    android:id="@+id/layout_miercoles_miembros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingStart="20dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Samuel Vega"
-                        android:textColor="@color/black"/>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                    <Switch
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Samuel Vega"
+                            android:textColor="@color/black"/>
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
-                </LinearLayout>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Oscar Minarez"
+                            android:textColor="@color/black"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Oscar Minarez"
-                        android:textColor="@color/black"/>
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- Jueves -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <CheckBox
-                android:id="@+id/cb_jueves"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/jueves" />
-
+            <!-- Jueves -->
             <LinearLayout
-                android:id="@+id/layout_jueves_miembros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingStart="20dp">
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_jueves"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="@string/jueves" />
 
                 <LinearLayout
+                    android:id="@+id/layout_jueves_miembros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingStart="20dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Samuel Vega"
-                        android:textColor="@color/black"/>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                    <Switch
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Samuel Vega"
+                            android:textColor="@color/black"/>
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
-                </LinearLayout>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Oscar Minarez"
+                            android:textColor="@color/black"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Oscar Minarez"
-                        android:textColor="@color/black"/>
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- Viernes -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <CheckBox
-                android:id="@+id/cb_viernes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/viernes" />
-
+            <!-- Viernes -->
             <LinearLayout
-                android:id="@+id/layout_viernes_miembros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingStart="20dp">
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_viernes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="@string/viernes" />
 
                 <LinearLayout
+                    android:id="@+id/layout_viernes_miembros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingStart="20dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Samuel Vega"
-                        android:textColor="@color/black"/>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                    <Switch
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Samuel Vega"
+                            android:textColor="@color/black"/>
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
-                </LinearLayout>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Oscar Minarez"
+                            android:textColor="@color/black"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Oscar Minarez"
-                        android:textColor="@color/black"/>
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- Sábado -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <CheckBox
-                android:id="@+id/cb_sabado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sabado" />
-
+            <!-- Sábado -->
             <LinearLayout
-                android:id="@+id/layout_sabado_miembros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingStart="20dp">
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_sabado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="@string/sabado" />
 
                 <LinearLayout
+                    android:id="@+id/layout_sabado_miembros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingStart="20dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Samuel Vega"
-                        android:textColor="@color/black"/>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                    <Switch
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Samuel Vega"
+                            android:textColor="@color/black"/>
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
-                </LinearLayout>
+                        android:orientation="horizontal"
+                        android:paddingVertical="5dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="5dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:text="Oscar Minarez"
+                            android:textColor="@color/black"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Oscar Minarez"
-                        android:textColor="@color/black"/>
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:thumbTint="@color/black"
-                        android:trackTint="@color/black"/>
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:thumbTint="@color/black"
+                            android:trackTint="@color/black"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- Domingo -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            <!-- Domingo -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
 
             <CheckBox
                 android:id="@+id/cb_domingo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:text="@string/domingo" />
 
             <LinearLayout
@@ -481,6 +502,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:textSize="18sp"
                         android:layout_weight="1"
                         android:text="Samuel Vega"
                         android:textColor="@color/black"/>
@@ -501,6 +523,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:textSize="18sp"
                         android:layout_weight="1"
                         android:text="Oscar Minarez"
                         android:textColor="@color/black"/>
@@ -515,16 +538,21 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_agregar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:backgroundTint="@color/black"
+        android:minWidth="120dp"
+        android:minHeight="48dp"
+        android:backgroundTint="@android:color/black"
         android:text="@string/agregar_tarea"
+        android:textSize="16sp"
         android:textColor="@android:color/white"
+        android:paddingHorizontal="24dp"
+        style="@style/Widget.AppCompat.Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

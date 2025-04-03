@@ -1,12 +1,12 @@
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.semanal
 
-
-
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.DetalleTareaActivity
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentSemanalBinding
 
 class SemanalFragment : Fragment() {
@@ -28,23 +28,37 @@ class SemanalFragment : Fragment() {
 
         // Configurar los botones de navegación de semana
         binding.apply {
-            // Botón anterior
-            buttonPreviousWeek.setOnClickListener {
-                // Lógica para ir a la semana anterior
-                updateWeekNumber(false)
-            }
+            buttonPreviousWeek.setOnClickListener { updateWeekNumber(false) }
+            buttonNextWeek.setOnClickListener { updateWeekNumber(true) }
+        }
 
-            // Botón siguiente
-            buttonNextWeek.setOnClickListener {
-                // Lógica para ir a la semana siguiente
-                updateWeekNumber(true)
-            }
+        // Configurar listeners solo para las tareas del lunes
+        setupMondayTaskClickListeners()
+    }
+
+    private fun setupMondayTaskClickListeners() {
+        // Asignar listeners solo a las tareas del lunes
+        binding.taskLunes1.setOnClickListener {
+            openTaskDetail("Limpiar cocina")
+        }
+
+        binding.taskLunes2.setOnClickListener {
+            openTaskDetail("Lavar porche")
+        }
+
+        binding.taskLunes3.setOnClickListener {
+            openTaskDetail("Bañar perro")
         }
     }
 
+    private fun openTaskDetail(taskName: String) {
+        val intent = Intent(activity, DetalleTareaActivity::class.java).apply {
+            putExtra("TASK_NAME", taskName)
+        }
+        startActivity(intent)
+    }
+
     private fun updateWeekNumber(isNext: Boolean) {
-        // Aquí iría la lógica para actualizar el número de semana
-        // Por ahora solo es un ejemplo
         val currentWeek = binding.textWeekNumber.text.toString()
             .replace("Semana ", "").toIntOrNull() ?: 1
 
@@ -52,9 +66,6 @@ class SemanalFragment : Fragment() {
         if (newWeek > 0) {
             binding.textWeekNumber.text = "Semana $newWeek"
         }
-
-        // También deberías actualizar las tareas según la semana seleccionada
-        // updateTasksForWeek(newWeek)
     }
 
     override fun onDestroyView() {
