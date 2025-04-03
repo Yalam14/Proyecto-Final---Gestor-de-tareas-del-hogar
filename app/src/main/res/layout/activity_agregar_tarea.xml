@@ -45,7 +45,7 @@
 
             <EditText
                 android:id="@+id/et_nombre"
-                android:layout_width="match_parent"
+                android:layout_width="340dp"
                 android:layout_height="60dp"
                 android:textSize="18sp"
                 android:background="@drawable/edit_text_border"
@@ -61,7 +61,7 @@
 
             <EditText
                 android:id="@+id/et_descripcion"
-                android:layout_width="match_parent"
+                android:layout_width="340dp"
                 android:layout_height="120dp"
                 android:textSize="18sp"
                 android:background="@drawable/edit_text_border"
