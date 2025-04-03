@@ -11,4 +11,5 @@
     <color name="red_error">#FF5252</color>
     <color name="green_success">#4CAF50</color>
     <color name="divider">#F5F5F5</color>
+    <color name="gray">#FF757575</color>
 </resources>

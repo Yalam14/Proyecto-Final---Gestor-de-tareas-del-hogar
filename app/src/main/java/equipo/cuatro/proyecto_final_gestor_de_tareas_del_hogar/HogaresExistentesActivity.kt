@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -33,16 +34,24 @@ class HogaresExistentesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_hogares_existentes)
+
+        // Configuración del edge-to-edge (tu código existente)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        // Configuración del FAB para navegar a HogarActivity
+        val fabMenu: FloatingActionButton = findViewById(R.id.fabMenu)
+        fabMenu.setOnClickListener {
+            val intent = Intent(this, HogarActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Tu código existente para cargar hogares
         homeRef = FirebaseDatabase.getInstance().getReference("homes")
-
         containerHogares = findViewById(R.id.container_hogares)
-
         cargarHogares()
     }
 

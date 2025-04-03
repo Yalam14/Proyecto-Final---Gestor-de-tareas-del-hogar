@@ -4,6 +4,23 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+    <style name="BottomNavigationTheme" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@android:color/white</item>
+        <item name="itemIconTint">@drawable/bottom_nav_colors</item>
+        <item name="itemTextColor">@drawable/bottom_nav_colors</item>
+        <item name="itemTextAppearanceActive">@style/BottomNavigationTextActive</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationTextInactive</item>
+        <item name="itemBackground">@android:color/white</item>
+        <item name="android:elevation">8dp</item>
+    </style>
 
+    <style name="BottomNavigationTextActive">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BottomNavigationTextInactive">
+        <item name="android:textSize">12sp</item>
+    </style>
     <style name="Theme.Proyecto_final_gestor_de_tareas_del_hogar" parent="Base.Theme.Proyecto_final_gestor_de_tareas_del_hogar" />
 </resources>
