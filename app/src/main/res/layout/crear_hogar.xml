@@ -10,10 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nuevo hogar"
-        android:textSize="45sp"
+        android:textSize="@dimen/titles"
         android:layout_gravity="center"
         android:layout_marginBottom="24dp"
-        android:textColor="#212121" />
+        android:textColor="#212121"
+        android:textStyle="bold"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,17 +27,14 @@
         android:id="@+id/editTextNombreHogar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/edit_text"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"
-        />
+        android:background="@drawable/edit_text_background"        android:padding="@dimen/labels"
+        android:layout_marginBottom="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Selecciona icono:"
-        android:textSize="19sp"
-        />
+        android:textSize="@dimen/input_text_size" />
 
     <!-- Contenedor para los iconos -->
     <LinearLayout
@@ -91,13 +89,14 @@
             android:layout_margin="8dp"/>
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/botonConfigurar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Configurar"
+        android:paddingHorizontal="20dp"
         android:layout_gravity="center"
-        android:backgroundTint="@color/black"
+        android:background="@drawable/boton_oscuro"
         android:textColor="@color/white"
         android:layout_marginTop="24dp"/>
 </LinearLayout>

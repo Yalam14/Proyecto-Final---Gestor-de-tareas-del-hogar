@@ -9,4 +9,10 @@
     <dimen name="separator_margin">4dp</dimen>
     <dimen name="activity_horizontal_margin_home">16dp</dimen>
     <dimen name="activity_vertical_margin_home">8dp</dimen>
+
+    <dimen name="titles">28sp</dimen>
+    <dimen name="labels">18sp</dimen>
+    <dimen name="input_text_size">16sp</dimen>
+    <dimen name="input_height">48dp</dimen>
+    <dimen name="home_title_option">24sp</dimen>
 </resources>

@@ -12,4 +12,5 @@
     <color name="green_success">#4CAF50</color>
     <color name="divider">#F5F5F5</color>
     <color name="gray">#FF757575</color>
+    <color name="botonOscuro">#2C2C2C</color>
 </resources>

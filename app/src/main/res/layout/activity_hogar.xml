@@ -1,52 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context=".HogarActivity">
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="24dp">
 
     <TextView
         android:id="@+id/id_Title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Hogares"
         android:textColor="@android:color/black"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="@dimen/titles"
+        android:textAlignment="center"
+        android:textStyle="bold"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCrearHogar"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="198dp"
-        android:backgroundTint="@color/black"
-        android:drawableStart="@drawable/ic_create"
-        android:text="Crear hogar"
-        android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_Title" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnUnirseHogar"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/black"
-        android:drawableStart="@drawable/ic_join"
-        android:text="Unirse a hogar"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toTopOf="@+id/btnCrearHogar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnUnirseHogar"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/boton_oscuro"
+            android:drawableStart="@drawable/ic_join"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp"
+            android:text="Unirse a hogar"
+            android:textColor="@android:color/white" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCrearHogar"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/boton_oscuro"
+            android:drawableStart="@drawable/ic_create"
+            android:padding="16dp"
+            android:text="Crear hogar"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</LinearLayout>

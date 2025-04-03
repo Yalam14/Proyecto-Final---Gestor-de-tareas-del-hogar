@@ -4,95 +4,111 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/white"
-    android:padding="24dp">
+    android:background="@color/white"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewRegistrarse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="Registrarse"
-        android:textSize="45sp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="24dp" />
-
-    <!-- Campo Usuario -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Usuario:"
-        android:textStyle="bold"
-        android:textSize="30sp" />
-
-    <EditText
-        android:id="@+id/editTextUsuario"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/edit_text"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="wrap_content">
 
-    <!-- Campo Email -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email:"
-        android:textStyle="bold"
-        android:textSize="30sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingVertical="16dp">
 
-    <EditText
-        android:id="@+id/editTextMail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/edit_text"
-        android:padding="12dp"
-        android:inputType="textEmailAddress"
-        android:layout_marginBottom="16dp" />
+            <TextView
+                android:id="@+id/textViewRegistrarse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Registrarse"
+                android:textSize="@dimen/titles"
+                android:layout_gravity="center"
+                android:layout_marginBottom="32dp"/>
+            <!-- Campo Usuario -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Usuario:"
+                android:textSize="@dimen/labels"
+                android:layout_marginBottom="12dp" />
 
-    <!-- Campo Contraseña -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Contraseña:"
-        android:textStyle="bold"
-        android:textSize="30sp" />
+            <EditText
+                android:id="@+id/editTextUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"
+                android:textSize="@dimen/input_text_size"
+                android:layout_marginBottom="16dp" />
 
-    <EditText
-        android:id="@+id/editTextContrasenia"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/edit_text"
-        android:padding="12dp"
-        android:inputType="textPassword"
-        android:layout_marginBottom="16dp" />
+            <!-- Campo Email -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email:"
+                android:textSize="@dimen/labels"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/editTextMail"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:background="@drawable/edit_text_background"
+                android:textSize="@dimen/input_text_size"
+                android:padding="12dp"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Campo Contraseña -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contraseña:"
+                android:textSize="@dimen/labels"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/editTextContrasenia"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:background="@drawable/edit_text_background"
+                android:textSize="@dimen/input_text_size"
+                android:padding="12dp"
+                android:inputType="textPassword"
+                android:layout_marginBottom="16dp" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Confirmar contraseña:"
-        android:textStyle="bold"
-        android:textSize="30sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirmar contraseña:"
+                android:textSize="@dimen/labels"
+                android:layout_marginBottom="12dp"/>
 
-    <EditText
-        android:id="@+id/editTextConfirmarContrasena"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/edit_text"
-        android:padding="12dp"
-        android:inputType="textPassword"
-        android:layout_marginBottom="24dp" />
+            <EditText
+                android:id="@+id/editTextConfirmarContrasena"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:background="@drawable/edit_text_background"
+                android:textSize="@dimen/input_text_size"
+                android:padding="12dp"
+                android:inputType="textPassword"
+                android:layout_marginBottom="24dp" />
 
 
-    <Button
-        android:id="@+id/buttonRegistrarse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:backgroundTint="@color/black"
-        android:padding="12dp"
-        android:text="Registrarse"
-        android:textColor="@color/white" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonRegistrarse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/boton_oscuro"
+                android:padding="12dp"
+                android:text="Registrarse"
+                android:textSize="@dimen/input_text_size"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
