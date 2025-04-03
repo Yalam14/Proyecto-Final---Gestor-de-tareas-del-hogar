@@ -3,6 +3,7 @@ package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,10 +18,9 @@ class HogarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_hogar)
+        Log.d("INFO HOGAR", "funciono")
 
-       
         val layout = findViewById<ConstraintLayout>(R.id.main)
-
 
         layout?.let {
             ViewCompat.setOnApplyWindowInsetsListener(it) { v, insets ->

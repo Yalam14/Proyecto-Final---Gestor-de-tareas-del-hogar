@@ -23,6 +23,8 @@ class HogaresExistentesActivity : AppCompatActivity() {
             insets
         }
 
+        Log.d("INFO HOGARES EXISTENTES", "funciono")
+
         val dp1: LinearLayout = findViewById(R.id.dp1)
 
         dp1.setOnClickListener {
