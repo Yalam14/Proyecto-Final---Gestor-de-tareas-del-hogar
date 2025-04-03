@@ -1,16 +1,19 @@
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.diario
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.DetalleTareaActivity
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.R
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentDiarioBinding
 
 class DiarioFragment : Fragment() {
@@ -28,6 +31,18 @@ class DiarioFragment : Fragment() {
         _binding = FragmentDiarioBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        // Configuración inicial
+        setupViews()
+        setupObservers()
+
+        return root
+    }
+
+    private fun setupViews() {
+        // Configuración adicional de vistas si es necesaria
+    }
+
+    private fun setupObservers() {
         diarioViewModel.text.observe(viewLifecycleOwner) {
             binding.texthome.text = it
         }
@@ -35,64 +50,63 @@ class DiarioFragment : Fragment() {
         diarioViewModel.tasks.observe(viewLifecycleOwner) { tasks ->
             updateTaskList(tasks)
         }
-
-        return root
     }
 
     private fun updateTaskList(tasks: List<Task>) {
         binding.taskContainer.removeAllViews()
 
-        for ((index, task) in tasks.withIndex()) {
+        for (task in tasks) {
+            // Crear contenedor principal de la tarea
             val taskLayout = LinearLayout(requireContext()).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                orientation = LinearLayout.HORIZONTAL
-                setPadding(16, 16, 16, 16)
-                setBackgroundResource(android.R.drawable.dialog_holo_light_frame)
+                ).apply {
+                    setMargins(0, 0, 0, 16)
+                }
+                orientation = LinearLayout.VERTICAL
+                setPadding(24, 24, 24, 24)
+                background = ContextCompat.getDrawable(requireContext(), R.drawable.task_background)
                 setOnClickListener {
-                    val intent = Intent(requireContext(), DetalleTareaActivity::class.java).apply {
-                        putExtra("taskName", task.name)
-                        putExtra("assignedTo", task.assignedTo.joinToString(", "))
-                        putExtra("completed", task.completed)
-                    }
-                    startActivity(intent)
+                    navigateToTaskDetail(task)
                 }
             }
 
-            val checkBox = CheckBox(requireContext()).apply {
-                isChecked = task.completed
-                setOnCheckedChangeListener { _, _ ->
-                    diarioViewModel.toggleTaskCompletion(index)
-                }
-            }
-
-            val taskDetails = LinearLayout(requireContext()).apply {
+            // TextView para el título de la tarea
+            val taskTitle = TextView(requireContext()).apply {
+                text = task.name
+                textSize = 20f
+                setTextColor(Color.WHITE)
+                setTypeface(null, Typeface.BOLD)
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                orientation = LinearLayout.VERTICAL
+                ).apply {
+                    setMargins(0, 0, 0, 8)
+                }
             }
 
-            val taskTitle = TextView(requireContext()).apply {
-                text = task.name
-                textSize = 24f
-                setTypeface(null, android.graphics.Typeface.BOLD)
-            }
-
+            // TextView para los asignados
             val taskAssigned = TextView(requireContext()).apply {
-                text = task.assignedTo.joinToString(", ")
-                textSize = 18f
+                text = "Asignado a: ${task.assignedTo.joinToString(", ")}"
+                textSize = 16f
+                setTextColor(Color.WHITE)
             }
 
-            taskDetails.addView(taskTitle)
-            taskDetails.addView(taskAssigned)
-            taskLayout.addView(checkBox)
-            taskLayout.addView(taskDetails)
+            // Añadir vistas al layout
+            taskLayout.addView(taskTitle)
+            taskLayout.addView(taskAssigned)
             binding.taskContainer.addView(taskLayout)
         }
+    }
+
+    private fun navigateToTaskDetail(task: Task) {
+        val intent = Intent(requireContext(), DetalleTareaActivity::class.java).apply {
+            putExtra("taskName", task.name)
+            putExtra("assignedTo", task.assignedTo.joinToString(", "))
+            putExtra("completed", task.completed)
+        }
+        startActivity(intent)
     }
 
     override fun onDestroyView() {
