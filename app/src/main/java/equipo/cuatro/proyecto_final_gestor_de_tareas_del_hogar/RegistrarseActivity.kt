@@ -8,16 +8,24 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.User
 
 
 class RegistrarseActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
+    private lateinit var userRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.registrarse)
+        setContentView(R.layout.activity_registrarse)
 
         auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
+        userRef = database.getReference("users")
 
         val user: EditText = findViewById(R.id.editTextUsuario)
         val mail: EditText = findViewById(R.id.editTextMail)
@@ -35,11 +43,14 @@ class RegistrarseActivity : AppCompatActivity() {
                     .show()
             } else {
                 signIn(mail.text.toString(), password.text.toString())
+                saveUser(User(user.text.toString(), mail.text.toString(), mutableListOf()))
+                Toast.makeText(baseContext, "Registro realizado correctamente", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
 
-    fun signIn(email: String, password: String) {
+    private fun signIn(email: String, password: String) {
         Log.d("INFO REGISTRO", "email: ${email}, password: ${password}")
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
@@ -53,6 +64,10 @@ class RegistrarseActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, "El registro falló", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun saveUser(user: User) {
+        userRef.push().setValue(user)
     }
 
 }
