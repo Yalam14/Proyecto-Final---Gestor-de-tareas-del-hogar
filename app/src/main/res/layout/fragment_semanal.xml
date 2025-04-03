@@ -5,424 +5,501 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@android:color/white"
     tools:context=".ui.semanal.SemanalFragment">
 
-    <TextView
-        android:id="@+id/textDashboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="para que no truene"
-        android:textSize="28sp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
-    <ScrollView
+    <!-- Encabezado -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackground">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:text="Tareas del Hogar"/>
+
+        <!-- Selector de semana -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/buttonPreviousWeek"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_arrow_left"
+                android:contentDescription="Semana anterior"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="28sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:text="@string/titulo_hogar"/>
-
-            <LinearLayout
+                android:id="@+id/textWeekNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_marginHorizontal="16dp"
+                android:text="Semana 1"
+                android:textColor="#212121"
+                android:textSize="18sp" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&lt;"
-                    />
+            <ImageButton
+                android:id="@+id/buttonNextWeek"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_arrow_right"
+                android:contentDescription="Semana siguiente"
+                android:background="?attr/selectableItemBackgroundBorderless"
+               />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:layout_marginHorizontal="30dp"
-                    android:text="Semana 1"/>
+        <!-- Barra de progreso -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=">"
-                    />
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Progreso semanal"
+                android:textSize="14sp"
+                android:textColor="#616161"/>
 
             <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="4dp"
+                android:progressDrawable="@drawable/progress_bar_black"
                 android:progress="50"/>
+        </LinearLayout>
+    </LinearLayout>
 
+    <!-- Separador -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE"/>
+
+    <!-- Lista de días -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Lunes -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="24dp"
-                    android:text="Lunes"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="18sp"
+                    android:textColor="#212121"
+                    android:text="Lunes"/>
 
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Limpiar cocina"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Limpiar la cocina"
-                            android:gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Lavar porche"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Lavar el porche"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Bañar al perro"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Jugar Roblox"
-                            android:gravity="center_vertical"/>
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Bañar perro"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Martes -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="24dp"
-                    android:text="Martes"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="18sp"
+                    android:textColor="#212121"
+                    android:text="Martes"/>
 
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Limpiar baños"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Limpiar la cocina"
-                            android:gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Regar plantas"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Lavar el porche"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Bañar al perro"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Jugar Roblox"
-                            android:gravity="center_vertical"/>
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sacar basura"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Miércoles -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="24dp"
-                    android:text="Miércoles"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="18sp"
+                    android:textColor="#212121"
+                    android:text="Miércoles"/>
 
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Aspirar alfombras"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Limpiar la cocina"
-                            android:gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Limpiar ventanas"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Lavar el porche"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Bañar al perro"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Jugar Roblox"
-                            android:gravity="center_vertical"/>
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ordenar closet"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Jueves -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="24dp"
-                    android:text="Jueves"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="18sp"
+                    android:textColor="#212121"
+                    android:text="Jueves"/>
 
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Limpiar cocina"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Limpiar la cocina"
-                            android:gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Lavar ropa"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Lavar el porche"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Bañar al perro"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Jugar Roblox"
-                            android:gravity="center_vertical"/>
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Planchar"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Viernes -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="24dp"
-                    android:text="Viernes"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="18sp"
+                    android:textColor="#212121"
+                    android:text="Viernes"/>
 
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Comprar víveres"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Limpiar la cocina"
-                            android:gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Limpiar cocina"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Lavar el porche"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Bañar al perro"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Jugar Roblox"
-                            android:gravity="center_vertical"/>
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sacar mascotas"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Sábado -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="24dp"
-                    android:text="Sábado"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="18sp"
+                    android:textColor="#212121"
+                    android:text="Sábado"/>
 
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Lavar auto"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Limpiar la cocina"
-                            android:gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Jardinería"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Lavar el porche"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Bañar al perro"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Jugar Roblox"
-                            android:gravity="center_vertical"/>
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Día de descanso"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Domingo -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="24dp"
-                    android:text="Domingo"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center_vertical"/>
+                    android:textSize="18sp"
+                    android:textColor="#212121"
+                    android:text="Domingo"/>
 
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Planificar semana"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Limpiar la cocina"
-                            android:gravity="center_vertical"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Día familiar"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
 
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Lavar el porche"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Bañar al perro"
-                            android:gravity="center_vertical"/>
-
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:text="Jugar Roblox"
-                            android:gravity="center_vertical"/>
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Descanso"
+                        android:textSize="14sp"
+                        android:textColor="#424242"
+                        android:padding="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#F5F5F5"/>
+                </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

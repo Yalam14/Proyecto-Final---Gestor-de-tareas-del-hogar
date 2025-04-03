@@ -4,4 +4,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="darkGray">#212121</color>
     <color name="lightGray">#999999</color>
+    <color name="checkbox_selected">#FF000000</color>
+    <color name="checkbox_unselected">#A8A8A8</color>
+    <color name="gray_dark">#212121</color>
+    <color name="gray_medium">#757575</color>
+    <color name="red_error">#FF5252</color>
+    <color name="green_success">#4CAF50</color>
+    <color name="divider">#F5F5F5</color>
 </resources>

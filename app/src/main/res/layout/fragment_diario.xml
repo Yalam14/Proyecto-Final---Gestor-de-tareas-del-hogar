@@ -5,75 +5,105 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@android:color/white"
     tools:context=".ui.diario.DiarioFragment">
 
-    <ScrollView
+    <!-- Encabezado -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackground">
 
+        <TextView
+            android:id="@+id/texthome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:text="@string/titulo_hogar" />
+
+        <!-- Selector de día -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_prev_day"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_arrow_left"
+                android:contentDescription="Ir al día anterior"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                />
+
+            <TextView
+                android:id="@+id/txt_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="16dp"
+                android:textColor="#212121"
+                android:text="Lunes 10 Ene"/>
+
+            <ImageButton
+                android:id="@+id/btn_next_day"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_arrow_right"
+                android:contentDescription="Ir al día siguiente"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                />
+        </LinearLayout>
+
+        <!-- Barra de progreso -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_marginTop="16dp">
 
             <TextView
-                android:id="@+id/texthome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="28sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:text="@string/titulo_hogar" />
-
-            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_gravity="center_horizontal">
-
-                <Button
-                    android:id="@+id/btn_prev_day"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&lt;"
-                    android:contentDescription="Ir al día anterior"
-                    android:background="?attr/selectableItemBackground"
-                    android:textColor="@android:color/black"
-                    android:padding="8dp"/>
-
-                <TextView
-                    android:id="@+id/txt_day"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:layout_marginHorizontal="30dp"
-                    android:text="Lunes"/>
-
-                <Button
-                    android:id="@+id/btn_next_day"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&gt;"
-                    android:contentDescription="Ir al día siguiente"
-                    android:background="?attr/selectableItemBackground"
-                    android:textColor="@android:color/black"
-                    android:padding="8dp"/>
-
-            </LinearLayout>
+                android:text="Progreso diario"
+                android:textSize="14sp"
+                android:textColor="#616161"/>
 
             <ProgressBar
                 android:id="@+id/progress_tasks"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:progress="50" />
-
-            <LinearLayout
-                android:id="@+id/task_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_height="8dp"
+                android:layout_marginTop="4dp"
+                android:progressDrawable="@drawable/progress_bar_black"
+                android:progress="50"/>
         </LinearLayout>
+    </LinearLayout>
+
+    <!-- Separador -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE"/>
+
+    <!-- Lista de tareas -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/task_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"/>
     </ScrollView>
 </LinearLayout>

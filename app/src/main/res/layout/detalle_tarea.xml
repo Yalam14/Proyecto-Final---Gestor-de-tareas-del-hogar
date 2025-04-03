@@ -1,115 +1,245 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/boton_editable"
-    android:elevation="4dp"
-    android:layout_margin="8dp">
+    android:background="@android:color/white"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:padding="20dp">
 
+        <!-- Header con título y botón de editar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvTitulo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Limpiar la cocina"
+                android:textSize="22sp"
+                android:textColor="#212121"
+                android:textStyle="bold"/>
+
+            <ImageButton
+                android:id="@+id/btnEditar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_edit"
+                android:background="?android:attr/selectableItemBackground"/>
+        </LinearLayout>
+
+        <!-- Subtítulo Descripción -->
         <TextView
-            android:id="@+id/textViewTituloTarea"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Título de la tarea"
-            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:text="Descripción"
             android:textColor="#212121"
-            android:textStyle="bold"
-            android:layout_weight="1" />
+            android:textSize="15sp" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/baseline_auto_fix_high_24"
-            android:contentDescription="Editar"
-            android:tint="#212121"
-            android:padding="4dp"
-            android:background="@drawable/icono_editable"
-            tools:ignore="UseAppTint" />
-    </LinearLayout>
+        <!-- Campo de descripción editable -->
+        <EditText
+            android:id="@+id/et_descripcion"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_border"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:padding="8dp"
+            android:text="- Barrer, trapear, limpiar los platos, el refrigerador y la estufa."/>
 
-    <TextView
-        android:id="@+id/textViewDescripcion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Descripción:"
-        android:textColor="#757575"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp" />
+        <!-- Separador -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="16dp"
+            android:background="#F5F5F5"/>
 
-    <EditText
-        android:id="@+id/editTextDescripcion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Descripción de la tarea"
-        android:text="Descripción de la tarea aquí..."
-        android:background="@drawable/edit_text_background"
-        android:textColor="#212121"
-        android:textSize="14sp"
-        android:layout_marginTop="4dp"
-        android:padding="8dp" />
-
-    <TextView
-        android:id="@+id/textViewAsignados"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Asignado a:"
-        android:textColor="#212121"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp" />
-
-    <TextView
-        android:id="@+id/textViewEstado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Estado de la tarea"
-        android:textColor="#757575"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginTop="16dp">
-
-        <Button
-            android:id="@+id/btnEliminar"
+        <!-- Título miembros -->
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Eliminar"
-            android:backgroundTint="#FF5252"
-            android:textColor="#FFFFFF"
-            android:drawablePadding="8dp"
-            android:paddingHorizontal="16dp"
-            android:elevation="2dp"
-            android:layout_marginEnd="8dp" />
+            android:text="Miembros asignados"
+            android:textSize="18sp"
+            android:textColor="#212121"
+            android:textStyle="bold"/>
 
-        <Button
-            android:id="@+id/btnTerminar"
-            android:layout_width="wrap_content"
+        <!-- Lista de miembros -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Terminar"
-            android:backgroundTint="#212121"
-            android:textColor="#FFFFFF"
-            android:drawablePadding="8dp"
-            android:paddingHorizontal="16dp"
-            android:elevation="2dp" />
-    </LinearLayout>
+            android:orientation="vertical"
+            android:layout_marginTop="12dp">
 
-</LinearLayout>
+            <!-- Miembro 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <!-- Avatar circular -->
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/avatar_placeholder"
+                    android:background="@drawable/circle_bg"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Samuel Vega"
+                    android:textSize="17sp"
+                    android:textColor="#212121"
+                    android:layout_marginStart="16dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkBoxSamuel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@android:color/black"/>
+            </LinearLayout>
+
+            <!-- Miembro 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/avatar_placeholder"
+                    android:background="@drawable/circle_bg"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Oscar Minjarez"
+                    android:textSize="17sp"
+                    android:textColor="#212121"
+                    android:layout_marginStart="16dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkBoxOscar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@android:color/black"/>
+            </LinearLayout>
+
+            <!-- Miembro 3 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/avatar_placeholder"
+                    android:background="@drawable/circle_bg"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Arturo Luna"
+                    android:textSize="17sp"
+                    android:textColor="#212121"
+                    android:layout_marginStart="16dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkBoxArturo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@android:color/black"/>
+            </LinearLayout>
+
+            <!-- Miembro 4 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/avatar_placeholder"
+                    android:background="@drawable/circle_bg"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Jesus Villa"
+                    android:textSize="17sp"
+                    android:textColor="#212121"
+                    android:layout_marginStart="16dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkBoxJesus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@android:color/black"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Botones de acción -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="24dp">
+
+            <Button
+                android:id="@+id/btnEliminar"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginEnd="12dp"
+                android:backgroundTint="#FF5252"
+                android:text="Eliminar"
+                android:textColor="@android:color/white"
+                android:drawableStart="@drawable/ic_delate"
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnTerminar"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Terminar"
+                android:textColor="@android:color/white"
+                android:backgroundTint="#4CAF50"
+                android:paddingHorizontal="20dp"
+                android:drawableStart="@drawable/ic_check"
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

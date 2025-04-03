@@ -11,8 +11,7 @@
     <string name="agregar_tarea">Agregar Tarea</string>
     <string name="lbl_tarea_nombre">Nombre de la tarea:</string>
     <string name="lbl_tarea_descripcion">Descripción:</string>
-    <string name="seleccion_dias">Seleccionar por días de la semana:</string>
-    <string name="nothing">…</string>
+    <string name="seleccion_dias">Seleccionar por día de semana:</string>
     <string name="lunes">Lunes</string>
     <string name="martes">Martes</string>
     <string name="miercoles">Miércoles</string>

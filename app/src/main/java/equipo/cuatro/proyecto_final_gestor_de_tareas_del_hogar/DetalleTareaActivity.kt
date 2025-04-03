@@ -2,7 +2,8 @@ package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
+import android.widget.CheckBox
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -12,27 +13,27 @@ class DetalleTareaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.detalle_tarea)
 
-        val taskName = intent.getStringExtra("taskName") ?: "Sin título"
-        val assignedTo = intent.getStringExtra("assignedTo") ?: "Nadie"
-        val completed = intent.getBooleanExtra("completed", false)
-
-        val textViewTitulo = findViewById<TextView>(R.id.textViewTituloTarea)
-        val textViewAsignados = findViewById<TextView>(R.id.textViewAsignados)
-        val textViewEstado = findViewById<TextView>(R.id.textViewEstado)
-        val editTextDescripcion = findViewById<EditText>(R.id.editTextDescripcion)
+        // Configuración estática de ejemplo
+        val tvTitulo = findViewById<TextView>(R.id.tvTitulo)
+        val tvDescripcion = findViewById<TextView>(R.id.et_descripcion)
         val btnEliminar = findViewById<Button>(R.id.btnEliminar)
         val btnTerminar = findViewById<Button>(R.id.btnTerminar)
+        val btnEditar = findViewById<ImageButton>(R.id.btnEditar)
 
-        textViewTitulo.text = taskName
-        textViewAsignados.text = "Asignado a: $assignedTo"
-        textViewEstado.text = if (completed) "Estado: Completada" else "Estado: Pendiente"
+        // Datos de ejemplo
+        tvTitulo.text = "Limpiar la cocina "
+        tvDescripcion.text = "- Barrer, trapear, limpiar los platos, el refrigerador y la estufa."
 
+
+
+        // Configuración visual de botones
         btnTerminar.setOnClickListener {
-            textViewEstado.text = "Estado: Completada"
+            btnTerminar.text = "Completado"
+            btnTerminar.isEnabled = false
+            btnTerminar.backgroundTintList = getColorStateList(android.R.color.darker_gray)
         }
 
-        btnEliminar.setOnClickListener {
-            finish()
-        }
+        btnEliminar.setOnClickListener { finish() }
+        btnEditar.setOnClickListener { /* Simular edición sin funcionalidad */ }
     }
 }
