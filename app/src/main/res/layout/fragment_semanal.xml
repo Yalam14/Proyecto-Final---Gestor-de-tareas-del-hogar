@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
         android:paddingTop="8dp"
-    android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground">
 
         <!-- Título más grande y mejor espaciado -->
         <TextView
@@ -131,6 +131,7 @@
                     android:layout_marginTop="8dp">
 
                     <TextView
+                        android:id="@+id/task_lunes_1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -143,6 +144,7 @@
                         android:gravity="center"/>
 
                     <TextView
+                        android:id="@+id/task_lunes_2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -156,6 +158,7 @@
                         android:gravity="center"/>
 
                     <TextView
+                        android:id="@+id/task_lunes_3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -167,6 +170,66 @@
                         android:background="#212121"
                         android:minHeight="100dp"
                         android:gravity="center"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Martes (sin funcionalidad de clic) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#212121"
+                    android:text="Martes"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Limpiar baños"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Regar plantas"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sacar basura"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:padding="12dp"
+                        android:layout_marginLeft="8dp"
+                        android:background="#212121"
+                        android:minHeight="80dp"/>
                 </LinearLayout>
             </LinearLayout>
 
