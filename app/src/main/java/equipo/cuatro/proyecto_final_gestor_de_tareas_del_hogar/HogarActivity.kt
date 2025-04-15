@@ -18,7 +18,6 @@ class HogarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_hogar)
-        Log.d("INFO HOGAR", "funciono")
 
         val layout = findViewById<ConstraintLayout>(R.id.main)
 

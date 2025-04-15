@@ -64,8 +64,10 @@ class HogaresExistentesActivity : AppCompatActivity() {
                 for (hogarSnapshot in snapshot.children) {
                     val hogar = hogarSnapshot.getValue(Home::class.java)
                     hogar?.let {
-                        if (hogar.createdBy == FirebaseAuth.getInstance().currentUser?.uid)
-                            agregarHogarALista(it, hogarSnapshot.key)
+                        for (participant in hogar.participants) {
+                            if (participant == FirebaseAuth.getInstance().currentUser?.uid)
+                                agregarHogarALista(it, hogarSnapshot.key)
+                        }
                     }
                 }
             }

@@ -76,13 +76,15 @@ class CrearHogarActivity : AppCompatActivity() {
                 icons.forEach { it.isSelected = false }
             }
 
-            saveHomeToDatabase(
-                Home(
-                    nombreHogar,
-                    iconoDatabase,
-                    createdBy = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-                )
+            val hogar = Home(
+                nombreHogar,
+                iconoDatabase,
+                createdBy = FirebaseAuth.getInstance().currentUser?.uid ?: "",
             )
+
+            hogar.participants += FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
+            saveHomeToDatabase(hogar)
             val intent = Intent(this, HogaresExistentesActivity::class.java)
             startActivity(intent)
         }
