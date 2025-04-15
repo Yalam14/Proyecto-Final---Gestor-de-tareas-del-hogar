@@ -18,6 +18,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -63,7 +64,8 @@ class HogaresExistentesActivity : AppCompatActivity() {
                 for (hogarSnapshot in snapshot.children) {
                     val hogar = hogarSnapshot.getValue(Home::class.java)
                     hogar?.let {
-                        agregarHogarALista(it, hogarSnapshot.key)
+                        if (hogar.createdBy == FirebaseAuth.getInstance().currentUser?.uid)
+                            agregarHogarALista(it, hogarSnapshot.key)
                     }
                 }
             }
