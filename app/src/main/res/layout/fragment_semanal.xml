@@ -237,360 +237,259 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="12dp">
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/task_martes_1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="#212121"
-                    android:text="Martes"/>
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/task_martes_2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Limpiar baños"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Regar plantas"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Sacar basura"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/task_martes_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
             </LinearLayout>
 
             <!-- Miércoles -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="12dp">
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/task_miercoles_1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="#212121"
-                    android:text="Miércoles"/>
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/task_miercoles_2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Aspirar alfombras"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Limpiar ventanas"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Ordenar closet"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/task_miercoles_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
             </LinearLayout>
 
             <!-- Jueves -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="12dp">
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/task_jueves_1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="#212121"
-                    android:text="Jueves"/>
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/task_jueves_2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Limpiar cocina"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Lavar ropa"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Planchar"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/task_jueves_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
             </LinearLayout>
 
             <!-- Viernes -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="12dp">
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/task_viernes_1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="#212121"
-                    android:text="Viernes"/>
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/task_viernes_2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Comprar víveres"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Limpiar cocina"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Sacar mascotas"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/task_viernes_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
             </LinearLayout>
 
             <!-- Sábado -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="12dp">
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/task_sabado_1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="#212121"
-                    android:text="Sábado"/>
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/task_sabado_2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Lavar auto"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Jardinería"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Día de descanso"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/task_sabado_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
             </LinearLayout>
 
             <!-- Domingo -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="12dp">
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/task_domingo_1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="#212121"
-                    android:text="Domingo"/>
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/task_domingo_2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Planificar semana"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
+                <TextView
+                    android:id="@+id/task_domingo_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="12dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="#212121"
+                    android:minHeight="80dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Día familiar"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Descanso"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="12dp"
-                        android:layout_marginLeft="8dp"
-                        android:background="#212121"
-                        android:minHeight="80dp"/>
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

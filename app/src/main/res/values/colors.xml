@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colores base del diseño original -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="darkGray">#212121</color>
-    <color name="lightGray">#999999</color>
-    <color name="checkbox_selected">#FF000000</color>
-    <color name="checkbox_unselected">#A8A8A8</color>
-    <color name="gray_dark">#212121</color>
-    <color name="gray_medium">#757575</color>
-    <color name="red_error">#FF5252</color>
-    <color name="green_success">#4CAF50</color>
-    <color name="divider">#F5F5F5</color>
-    <color name="gray">#FF757575</color>
-    <color name="botonOscuro">#2C2C2C</color>
+
+
+    <color name="gray">#FF9E9E9E</color>
+    <color name="darkGray">#FF616161</color>
+    <color name="lightGray">#FFEEEEEE</color>
+
+    <!-- Colores específicos de tu diseño -->
+    <color name="text_primary">#FF212121</color>
+    <color name="text_secondary">#FF757575</color>
+
+    <!-- Colores para la barra de progreso -->
+    <color name="progress_background">#FFE0E0E0</color>
+    <color name="progress_foreground">#FF212121</color>
+
+    <!-- Colores para la navegación inferior -->
+    <color name="bottom_nav_background">#FFFFFFFF</color>
+    <color name="bottom_nav_icon_active">#FF000000</color>
+    <color name="bottom_nav_icon_inactive">#FF9E9E9E</color>
+
+
+    <!-- Colores para tareas completadas -->
+    <color name="green_500">#FF4CAF50</color>
+    <color name="green_700">#FF388E3C</color>
+    <color name="blue_grey_800">#FF37474F</color>
+    <color name="blue_grey_900">#FF263238</color>
 </resources>

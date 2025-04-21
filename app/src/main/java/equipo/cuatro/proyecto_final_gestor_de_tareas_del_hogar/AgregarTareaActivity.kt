@@ -1,68 +1,112 @@
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.LinearLayout
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AgregarTareaActivity : AppCompatActivity() {
 
-    private var diaSeleccionado: CheckBox? = null
+    private lateinit var database: FirebaseDatabase
+    private lateinit var tasksRef: DatabaseReference
+    private lateinit var homeId: String
+    private lateinit var currentUser: String
+
+    // CheckBoxes para los días
+    private lateinit var cbLunes: CheckBox
+    private lateinit var cbMartes: CheckBox
+    private lateinit var cbMiercoles: CheckBox
+    private lateinit var cbJueves: CheckBox
+    private lateinit var cbViernes: CheckBox
+    private lateinit var cbSabado: CheckBox
+    private lateinit var cbDomingo: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_tarea)
 
-        // Configurar listeners para todos los días
-        setupDayCheckBox(R.id.cb_lunes, R.id.layout_lunes_miembros)
-        setupDayCheckBox(R.id.cb_martes, R.id.layout_martes_miembros)
-        setupDayCheckBox(R.id.cb_miercoles, R.id.layout_miercoles_miembros)
-        setupDayCheckBox(R.id.cb_jueves, R.id.layout_jueves_miembros)
-        setupDayCheckBox(R.id.cb_viernes, R.id.layout_viernes_miembros)
-        setupDayCheckBox(R.id.cb_sabado, R.id.layout_sabado_miembros)
-        setupDayCheckBox(R.id.cb_domingo, R.id.layout_domingo_miembros)
+        // Inicializar Firebase
+        database = FirebaseDatabase.getInstance()
+        tasksRef = database.getReference("tasks")
 
+        // Obtener el ID del hogar del Intent
+        homeId = intent.getStringExtra("HOME_ID") ?: ""
+        currentUser = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
+        // Inicializar vistas
+        cbLunes = findViewById(R.id.cb_lunes)
+        cbMartes = findViewById(R.id.cb_martes)
+        cbMiercoles = findViewById(R.id.cb_miercoles)
+        cbJueves = findViewById(R.id.cb_jueves)
+        cbViernes = findViewById(R.id.cb_viernes)
+        cbSabado = findViewById(R.id.cb_sabado)
+        cbDomingo = findViewById(R.id.cb_domingo)
+
+        // Configurar el botón de agregar
         val btnAgregar: Button = findViewById(R.id.btn_agregar)
         btnAgregar.setOnClickListener {
-            val intent = Intent(this, TareasActivity::class.java)
-            startActivity(intent)
+            agregarTarea()
         }
     }
 
-    private fun setupDayCheckBox(checkBoxId: Int, layoutId: Int) {
-        val checkBox: CheckBox = findViewById(checkBoxId)
-        val layout: LinearLayout = findViewById(layoutId)
+    private fun agregarTarea() {
+        val nombre = findViewById<EditText>(R.id.et_nombre).text.toString()
+        val descripcion = findViewById<EditText>(R.id.et_descripcion).text.toString()
 
-        // Estilo inicial
-        checkBox.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.checkbox_unselected))
-
-        checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                // Deseleccionar el día anterior
-                diaSeleccionado?.isChecked = false
-                diaSeleccionado = buttonView as CheckBox
-
-                // Cambiar color a negro
-                buttonView.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.checkbox_selected))
-
-                // Mostrar miembros
-                layout.visibility = LinearLayout.VISIBLE
-            } else {
-                // Cambiar color a gris
-                buttonView.buttonTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.checkbox_unselected))
-
-                // Ocultar miembros
-                layout.visibility = LinearLayout.GONE
-
-                // Si era el día seleccionado, limpiar referencia
-                if (buttonView == diaSeleccionado) {
-                    diaSeleccionado = null
-                }
-            }
+        // Validar campos obligatorios
+        if (nombre.isEmpty() || descripcion.isEmpty()) {
+            Toast.makeText(this, "Nombre y descripción son obligatorios", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        // Obtener días seleccionados
+        val diasSeleccionados = mutableListOf<String>()
+        if (cbLunes.isChecked) diasSeleccionados.add("Lunes")
+        if (cbMartes.isChecked) diasSeleccionados.add("Martes")
+        if (cbMiercoles.isChecked) diasSeleccionados.add("Miércoles")
+        if (cbJueves.isChecked) diasSeleccionados.add("Jueves")
+        if (cbViernes.isChecked) diasSeleccionados.add("Viernes")
+        if (cbSabado.isChecked) diasSeleccionados.add("Sábado")
+        if (cbDomingo.isChecked) diasSeleccionados.add("Domingo")
+
+        // Validar que se seleccionó al menos un día
+        if (diasSeleccionados.isEmpty()) {
+            Toast.makeText(this, "Selecciona al menos un día", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Obtener la fecha actual
+        val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+        // Crear la tarea
+        val nuevaTarea = Task(
+            name = nombre,
+            description = descripcion,
+            days = diasSeleccionados,
+            assignedTo = listOf("Samuel Vega", "Oscar Minarez"), // Puedes cambiarlo después
+            homeId = homeId,
+            createdBy = currentUser,
+            creationDate = fechaActual,
+            completed = false
+        )
+
+        // Guardar en Firebase
+        tasksRef.push().setValue(nuevaTarea)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Tarea agregada correctamente", Toast.LENGTH_SHORT).show()
+                finish() // Cierra la actividad y regresa a TareasActivity
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error al agregar tarea: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 }

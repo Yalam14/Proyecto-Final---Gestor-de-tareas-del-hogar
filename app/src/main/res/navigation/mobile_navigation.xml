@@ -3,17 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_diario">
+    app:startDestination="@id/navigation_semanal">
 
     <fragment
         android:id="@+id/navigation_diario"
         android:name="equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.diario.DiarioFragment"
-        android:label="@string/pestaña_diario"
+        android:label="@string/title_diario"
         tools:layout="@layout/fragment_diario" />
 
     <fragment
         android:id="@+id/navigation_semanal"
         android:name="equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.semanal.SemanalFragment"
-        android:label="@string/pestaña_semanal"
-        tools:layout="@layout/fragment_semanal" />
+        android:label="@string/title_semanal"
+        tools:layout="@layout/fragment_semanal">
+        <argument
+            android:name="HOME_ID"
+            app:argType="string" />
+    </fragment>
 </navigation>

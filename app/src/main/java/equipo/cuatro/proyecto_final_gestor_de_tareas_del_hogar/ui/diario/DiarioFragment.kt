@@ -9,101 +9,142 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.DetalleTareaActivity
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.R
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentDiarioBinding
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
 
 class DiarioFragment : Fragment() {
 
     private var _binding: FragmentDiarioBinding? = null
     private val binding get() = _binding!!
-    private lateinit var diarioViewModel: DiarioViewModel
+    private lateinit var viewModel: DiarioViewModel
+    private var homeId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        diarioViewModel = ViewModelProvider(this).get(DiarioViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(DiarioViewModel::class.java)
         _binding = FragmentDiarioBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        // Configuración inicial
-        setupViews()
+        homeId = arguments?.getString("HOME_ID") ?: ""
+        val homeName = arguments?.getString("HOME_NAME") ?: ""
+
+        // Mantener diseño original
+        binding.texthome.text = homeName
+        setupDayNavigation()
         setupObservers()
+        loadInitialTasks()
 
-        return root
+        return binding.root
     }
 
-    private fun setupViews() {
-        // Configuración adicional de vistas si es necesaria
+    private fun setupDayNavigation() {
+        binding.btnPrevDay.setOnClickListener {
+            viewModel.loadPreviousDayTasks(homeId)
+        }
+
+        binding.btnNextDay.setOnClickListener {
+            viewModel.loadNextDayTasks(homeId)
+        }
     }
 
     private fun setupObservers() {
-        diarioViewModel.text.observe(viewLifecycleOwner) {
-            binding.texthome.text = it
+        viewModel.currentDay.observe(viewLifecycleOwner) { day ->
+            binding.txtDay.text = day
         }
 
-        diarioViewModel.tasks.observe(viewLifecycleOwner) { tasks ->
+        viewModel.tasks.observe(viewLifecycleOwner) { tasks ->
             updateTaskList(tasks)
+            updateProgressBar(tasks)
         }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressTasks.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun loadInitialTasks() {
+        viewModel.loadTasksForCurrentDay(homeId)
     }
 
     private fun updateTaskList(tasks: List<Task>) {
         binding.taskContainer.removeAllViews()
 
-        for (task in tasks) {
-            // Crear contenedor principal de la tarea
-            val taskLayout = LinearLayout(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(0, 0, 0, 16)
-                }
-                orientation = LinearLayout.VERTICAL
-                setPadding(24, 24, 24, 24)
-                background = ContextCompat.getDrawable(requireContext(), R.drawable.task_background)
-                setOnClickListener {
-                    navigateToTaskDetail(task)
-                }
-            }
+        tasks.forEach { task ->
+            val taskView = createTaskView(task)
+            binding.taskContainer.addView(taskView)
 
-            // TextView para el título de la tarea
-            val taskTitle = TextView(requireContext()).apply {
+            // Añadir separador si no es el último elemento
+            if (task != tasks.last()) {
+                val divider = View(requireContext()).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        2
+                    ).apply {
+                        setMargins(0, 16, 0, 16)
+                    }
+                    setBackgroundColor(Color.parseColor("#EEEEEE"))
+                }
+                binding.taskContainer.addView(divider)
+            }
+        }
+    }
+
+    private fun createTaskView(task: Task): View {
+        return LinearLayout(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            orientation = LinearLayout.VERTICAL
+            setPadding(0, 8, 0, 8)
+
+            // Título de la tarea
+            TextView(requireContext()).apply {
                 text = task.name
-                textSize = 20f
-                setTextColor(Color.WHITE)
+                textSize = 18f
+                setTextColor(Color.parseColor("#212121"))
                 setTypeface(null, Typeface.BOLD)
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(0, 0, 0, 8)
-                }
+                addView(this)
             }
 
-            // TextView para los asignados
-            val taskAssigned = TextView(requireContext()).apply {
-                text = "Asignado a: ${task.assignedTo.joinToString(", ")}"
-                textSize = 16f
-                setTextColor(Color.WHITE)
+            // Asignados y estado
+            TextView(requireContext()).apply {
+                text = "Asignado a: ${task.assignedTo.joinToString(", ")} • ${if(task.completed) "✓ Completada" else "○ Pendiente"}"
+                textSize = 14f
+                setTextColor(Color.parseColor("#616161"))
+                setPadding(0, 4, 0, 0)
+                addView(this)
             }
 
-            // Añadir vistas al layout
-            taskLayout.addView(taskTitle)
-            taskLayout.addView(taskAssigned)
-            binding.taskContainer.addView(taskLayout)
+            setOnClickListener {
+                navigateToTaskDetail(task)
+            }
+        }
+    }
+
+    private fun updateProgressBar(tasks: List<Task>) {
+        if (tasks.isNotEmpty()) {
+            val completedTasks = tasks.count { it.completed }
+            val progress = (completedTasks.toFloat() / tasks.size * 100).toInt()
+            binding.progressTasks.progress = progress
+        } else {
+            binding.progressTasks.progress = 0
         }
     }
 
     private fun navigateToTaskDetail(task: Task) {
         val intent = Intent(requireContext(), DetalleTareaActivity::class.java).apply {
+            putExtra("taskId", task.id)
             putExtra("taskName", task.name)
-            putExtra("assignedTo", task.assignedTo.joinToString(", "))
+            putStringArrayListExtra("assignedTo", ArrayList(task.assignedTo))
             putExtra("completed", task.completed)
         }
         startActivity(intent)

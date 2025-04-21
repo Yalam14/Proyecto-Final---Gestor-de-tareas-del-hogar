@@ -26,5 +26,7 @@
     <string name="title_home">Inicio</string>
     <string name="title_dashboard">Tablero</string>
     <string name="title_notifications">Notificaciones</string>
+    <string name="title_diario" />
+    <string name="title_semanal" />
 
 </resources>
