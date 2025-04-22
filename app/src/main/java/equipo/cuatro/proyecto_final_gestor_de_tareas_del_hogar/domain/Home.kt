@@ -9,5 +9,6 @@ data class Home(
     val icon: String = "",
     val creationDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()),
     val createdBy: String = "",
-    var participants: MutableList<String> = mutableListOf<String>()
+    val code: String = "",
+    val participants: Map<String, Boolean> = emptyMap()
 )

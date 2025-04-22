@@ -3,7 +3,6 @@ package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -11,12 +10,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.ActionBar.LayoutParams
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.setPadding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -57,16 +54,17 @@ class HogaresExistentesActivity : AppCompatActivity() {
     }
 
     private fun cargarHogares() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
         homeRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 containerHogares.removeAllViews()
 
                 for (hogarSnapshot in snapshot.children) {
                     val hogar = hogarSnapshot.getValue(Home::class.java)
-                    hogar?.let {
-                        for (participant in hogar.participants) {
-                            if (participant == FirebaseAuth.getInstance().currentUser?.uid)
-                                agregarHogarALista(it, hogarSnapshot.key)
+                    hogar?.let { home ->
+                        if (home.participants.containsKey(userId) == true) {
+                            agregarHogarALista(home, hogarSnapshot.key)
                         }
                     }
                 }

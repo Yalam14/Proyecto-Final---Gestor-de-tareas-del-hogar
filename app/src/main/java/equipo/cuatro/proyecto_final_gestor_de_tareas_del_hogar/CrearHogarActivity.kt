@@ -62,6 +62,7 @@ class CrearHogarActivity : AppCompatActivity() {
 
         botonGuardar.setOnClickListener {
             val nombreHogar = editTextNombreHogar.text.toString().trim()
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
             if (nombreHogar.isEmpty()) {
                 Toast.makeText(this, "Por favor, ingresa el nombre del hogar.", Toast.LENGTH_SHORT)
@@ -79,10 +80,10 @@ class CrearHogarActivity : AppCompatActivity() {
             val hogar = Home(
                 nombreHogar,
                 iconoDatabase,
-                createdBy = FirebaseAuth.getInstance().currentUser?.uid ?: "",
+                code = generarCódigo(),
+                createdBy = userId,
+                participants = mapOf(userId to true)
             )
-
-            hogar.participants += FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
             saveHomeToDatabase(hogar)
             val intent = Intent(this, HogaresExistentesActivity::class.java)
@@ -96,5 +97,10 @@ class CrearHogarActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, "Hogar registrado correctamente", Toast.LENGTH_SHORT)
                     .show()
             }
+    }
+
+    private fun generarCódigo(): String {
+        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        return (1..5).map { chars.random() }.joinToString("")
     }
 }
