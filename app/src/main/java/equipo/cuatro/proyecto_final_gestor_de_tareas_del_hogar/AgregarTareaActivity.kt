@@ -68,14 +68,14 @@ class AgregarTareaActivity : AppCompatActivity() {
             return
         }
 
-        // Obtener días seleccionados
+        // Obtener días seleccionados (sin acentos para consistencia)
         val diasSeleccionados = mutableListOf<String>()
         if (cbLunes.isChecked) diasSeleccionados.add("Lunes")
         if (cbMartes.isChecked) diasSeleccionados.add("Martes")
-        if (cbMiercoles.isChecked) diasSeleccionados.add("Miércoles")
+        if (cbMiercoles.isChecked) diasSeleccionados.add("Miercoles") // Sin acento
         if (cbJueves.isChecked) diasSeleccionados.add("Jueves")
         if (cbViernes.isChecked) diasSeleccionados.add("Viernes")
-        if (cbSabado.isChecked) diasSeleccionados.add("Sábado")
+        if (cbSabado.isChecked) diasSeleccionados.add("Sabado") // Sin acento
         if (cbDomingo.isChecked) diasSeleccionados.add("Domingo")
 
         // Validar que se seleccionó al menos un día
@@ -86,21 +86,28 @@ class AgregarTareaActivity : AppCompatActivity() {
 
         // Obtener la fecha actual
         val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val timestamp = System.currentTimeMillis() // Timestamp para ordenamiento
 
-        // Crear la tarea
+        // Crear la tarea con el nuevo campo timestamp
         val nuevaTarea = Task(
             name = nombre,
             description = descripcion,
             days = diasSeleccionados,
-            assignedTo = listOf("Samuel Vega", "Oscar Minarez"), // Puedes cambiarlo después
+            assignedTo = listOf("Samuel Vega", "Oscar Minarez"),
             homeId = homeId,
             createdBy = currentUser,
             creationDate = fechaActual,
+            timestamp = timestamp,
             completed = false
         )
 
-        // Guardar en Firebase
-        tasksRef.push().setValue(nuevaTarea)
+        // Guardar en Firebase con push() para ID único
+        val nuevaKey = tasksRef.push().key ?: run {
+            Toast.makeText(this, "Error al generar clave para tarea", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        tasksRef.child(nuevaKey).setValue(nuevaTarea)
             .addOnSuccessListener {
                 Toast.makeText(this, "Tarea agregada correctamente", Toast.LENGTH_SHORT).show()
                 finish() // Cierra la actividad y regresa a TareasActivity

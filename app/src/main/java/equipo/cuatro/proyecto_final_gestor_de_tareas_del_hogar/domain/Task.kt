@@ -14,5 +14,6 @@ data class Task(
     val homeId: String = "",
     val createdBy: String = "",
     val creationDate: String = "",
+    val timestamp: Long = 0L,  // Nuevo campo
     val completed: Boolean = false
 )

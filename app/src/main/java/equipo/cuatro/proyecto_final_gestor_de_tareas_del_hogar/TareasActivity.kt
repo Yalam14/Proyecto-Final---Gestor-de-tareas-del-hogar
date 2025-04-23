@@ -2,7 +2,6 @@ package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavArgument
@@ -33,29 +32,22 @@ class TareasActivity : AppCompatActivity() {
         database = Firebase.database
         homeRef = database.getReference("homes")
 
-        // Configuración del ViewBinding
         binding = ActivityTareasBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configuración de la toolbar
         setSupportActionBar(binding.toolbar)
 
-        // Obtener el ID del hogar del intent
-        hogarId = intent.extras?.getString("HOGAR_ID").orEmpty()
-
+        // Obtener y validar el ID del hogar
+        hogarId = intent.extras?.getString("HOGAR_ID")?.trim() ?: ""
         if (hogarId.isEmpty()) {
             Toast.makeText(this, "Error: No se proporcionó ID de hogar", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
 
-        // Configuración de la barra de navegación inferior
+        // Configuraciones iniciales
         setupBottomNavigation()
-
-        // Cargar información del hogar
         loadHomeInfo()
-
-        // Configurar el botón flotante para agregar tareas
         setupFloatingActionButton()
     }
 
@@ -63,28 +55,37 @@ class TareasActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_tareas)
 
-        // Configuración básica de navegación
         val appBarConfiguration = AppBarConfiguration(
             setOf(R.id.navigation_diario, R.id.navigation_semanal)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        // Configuración del grafo de navegación con argumentos
+        // Configurar argumentos para los fragments
         val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
 
-        // Establecer argumentos para todos los destinos que lo necesiten
         navGraph.forEach { dest ->
             if (dest.arguments?.containsKey("HOME_ID") == true) {
                 dest.addArgument("HOME_ID", NavArgument.Builder()
                     .setDefaultValue(hogarId)
                     .build())
             }
+
+            if (dest.arguments?.containsKey("HOME_NAME") == true) {
+                // Puedes pasar también el nombre del hogar si es necesario
+                dest.addArgument("HOME_NAME", NavArgument.Builder()
+                    .setDefaultValue("")
+                    .build())
+            }
         }
 
-        navController.setGraph(navGraph, Bundle().apply {
+        // Pasar los argumentos a los fragments
+        val args = Bundle().apply {
             putString("HOME_ID", hogarId)
-        })
+            // Si tienes el nombre del hogar, lo pasas aquí también
+        }
+
+        navController.setGraph(navGraph, args)
     }
 
     private fun loadHomeInfo() {
@@ -93,14 +94,24 @@ class TareasActivity : AppCompatActivity() {
                 val home = snapshot.getValue(Home::class.java)
                 home?.let {
                     binding.toolbar.title = it.name
-                } ?: run {
-                    showHomeNotFoundError()
-                }
+                    // Actualizar el nombre en los fragments si es necesario
+                    updateFragmentsWithHomeInfo(it.name)
+                } ?: showHomeNotFoundError()
             } else {
                 showHomeNotFoundError()
             }
         }.addOnFailureListener {
             Toast.makeText(this, "Error al cargar información del hogar", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateFragmentsWithHomeInfo(homeName: String) {
+        // Puedes usar esto para actualizar los fragments con información del hogar
+        val navController = findNavController(R.id.nav_host_fragment_activity_tareas)
+        val currentDest = navController.currentDestination
+        currentDest?.let { dest ->
+            val args = navController.getBackStackEntry(dest.id).savedStateHandle
+            args.set("HOME_NAME", homeName)
         }
     }
 
@@ -118,7 +129,6 @@ class TareasActivity : AppCompatActivity() {
         }
     }
 
-    // Función auxiliar para obtener información del hogar
     fun getHomeById(homeId: String, callback: (Home?) -> Unit) {
         homeRef.child(homeId).get().addOnSuccessListener { snapshot ->
             callback(snapshot.getValue(Home::class.java))

@@ -1,94 +1,124 @@
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.diario
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 
 class DiarioViewModel : ViewModel() {
-    private val database = FirebaseDatabase.getInstance()
-    private val tasksRef = database.getReference("tasks")
-    private var currentListener: ValueEventListener? = null
-    private val calendar = Calendar.getInstance()
+    private val baseDatos = FirebaseDatabase.getInstance()
+    private val referenciaTareas = baseDatos.getReference("tasks")
+    private var listenerActual: ValueEventListener? = null
+    private val calendario = Calendar.getInstance()
 
-    private val _currentDay = MutableLiveData<String>().apply {
-        value = getCurrentDay()
-    }
-    val currentDay: LiveData<String> = _currentDay
+    private val _diaActual = MutableLiveData<String>()
+    val diaActual: LiveData<String> = _diaActual
 
-    private val _tasks = MutableLiveData<List<Task>>()
-    val tasks: LiveData<List<Task>> = _tasks
+    private val _tareas = MutableLiveData<List<Task>?>()
+    val tareas: LiveData<List<Task>?> = _tareas
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    private val _estaCargando = MutableLiveData<Boolean>()
+    val estaCargando: LiveData<Boolean> = _estaCargando
 
-    // Método para cargar tareas del día actual
-    fun loadTasksForCurrentDay(homeId: String) {
-        loadTasksForDay(getCurrentDay(), homeId)
+    init {
+        actualizarFecha(calendario)
     }
 
-    // Método para día anterior
-    fun loadPreviousDayTasks(homeId: String) {
-        calendar.add(Calendar.DAY_OF_YEAR, -1)
-        updateCurrentDay()
-        loadTasksForDay(getCurrentDay(), homeId)
+    fun actualizarFecha(calendario: Calendar) {
+        this.calendario.timeInMillis = calendario.timeInMillis
+        _diaActual.value = obtenerNombreDia(this.calendario)
     }
 
-    // Método para día siguiente
-    fun loadNextDayTasks(homeId: String) {
-        calendar.add(Calendar.DAY_OF_YEAR, 1)
-        updateCurrentDay()
-        loadTasksForDay(getCurrentDay(), homeId)
+    fun cargarTareasParaDiaActual(homeId: String) {
+        cargarTareasParaDia(obtenerNombreDia(calendario), homeId)
     }
 
-    private fun loadTasksForDay(day: String, homeId: String) {
-        _isLoading.value = true
-        currentListener?.let { tasksRef.removeEventListener(it) }
+    fun cargarTareasDiaAnterior(homeId: String) {
+        calendario.add(Calendar.DAY_OF_YEAR, -1)
+        actualizarFecha(calendario)
+        cargarTareasParaDia(obtenerNombreDia(calendario), homeId)
+    }
 
-        val newListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val taskList = mutableListOf<Task>()
-                for (taskSnapshot in snapshot.children) {
-                    val task = taskSnapshot.getValue<Task>()?.apply {
-                        id = taskSnapshot.key ?: ""
+    fun cargarTareasDiaSiguiente(homeId: String) {
+        calendario.add(Calendar.DAY_OF_YEAR, 1)
+        actualizarFecha(calendario)
+        cargarTareasParaDia(obtenerNombreDia(calendario), homeId)
+    }
+
+    fun cargarTareasParaDia(dia: String, homeId: String) {
+        _estaCargando.value = true
+
+        // Remover listener anterior para evitar duplicados
+        listenerActual?.let { referenciaTareas.removeEventListener(it) }
+
+        // Normalizar nombre del día
+        val diaNormalizado = normalizarNombreDia(dia)
+        Log.d("DiarioViewModel", "Buscando tareas para día: $diaNormalizado, homeId: $homeId")
+
+        listenerActual = referenciaTareas.orderByChild("homeId").equalTo(homeId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("DiarioViewModel", "Recibidos datos de Firebase")
+                    val listaTareas = mutableListOf<Task>()
+
+                    for (tareaSnapshot in snapshot.children) {
+                        try {
+                            val tarea = tareaSnapshot.getValue(Task::class.java)?.apply {
+                                id = tareaSnapshot.key ?: ""
+                            }
+
+                            if (tarea != null) {
+                                Log.d("DiarioViewModel", "Tarea encontrada: ${tarea.name}, Días: ${tarea.days}")
+                                if (tarea.days.any { normalizarNombreDia(it) == diaNormalizado }) {
+                                    listaTareas.add(tarea)
+                                    Log.d("DiarioViewModel", "Tarea añadida: ${tarea.name}")
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e("DiarioViewModel", "Error al parsear tarea: ${e.message}")
+                        }
                     }
-                    task?.takeIf { it.homeId == homeId && it.days.contains(day) }?.let {
-                        taskList.add(it)
-                    }
+
+                    _tareas.value = listaTareas.sortedByDescending { it.timestamp }
+                    _estaCargando.value = false
+                    Log.d("DiarioViewModel", "Tareas cargadas: ${listaTareas.size}")
                 }
-                _tasks.value = taskList
-                _isLoading.value = false
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                _isLoading.value = false
-            }
-        }
-
-        currentListener = newListener
-        tasksRef.addValueEventListener(newListener)
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("DiarioViewModel", "Error en Firebase: ${error.message}")
+                    _tareas.value = emptyList()
+                    _estaCargando.value = false
+                }
+            })
     }
-
-    private fun updateCurrentDay() {
-        _currentDay.value = getCurrentDay()
+    private fun normalizarNombreDia(dia: String): String {
+        return dia.lowercase()
+            .replace("á", "a")
+            .replace("é", "e")
+            .replace("í", "i")
+            .replace("ó", "o")
+            .replace("ú", "u")
     }
-
-    private fun getCurrentDay(): String {
-        val days = listOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")
-        return days[calendar.get(Calendar.DAY_OF_WEEK) - 1]
+    private fun obtenerNombreDia(calendario: Calendar): String {
+        val dias = listOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")
+        return dias[calendario.get(Calendar.DAY_OF_WEEK) - 1]
     }
 
     override fun onCleared() {
         super.onCleared()
-        currentListener?.let { tasksRef.removeEventListener(it) }
+        listenerActual?.let { referenciaTareas.removeEventListener(it) }
+    }
+    private fun actualizarListaTareas(tareas: List<Task>) {
+        Log.d("DiarioFragment", "Mostrando ${tareas.size} tareas")
+        tareas.forEach { tarea ->
+            Log.d("DiarioFragment", "Tarea: ${tarea.name}, Días: ${tarea.days}")
+        }
     }
 }
