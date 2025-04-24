@@ -19,16 +19,14 @@ import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.Activ
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
 
 class TareasActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityTareasBinding
     private lateinit var homeRef: DatabaseReference
-    private lateinit var hogarId: String
+    var hogarId: String = ""
     private lateinit var database: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inicialización de Firebase
         database = Firebase.database
         homeRef = database.getReference("homes")
 
@@ -37,55 +35,54 @@ class TareasActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        // Obtener y validar el ID del hogar
-        hogarId = intent.extras?.getString("HOGAR_ID")?.trim() ?: ""
-        if (hogarId.isEmpty()) {
-            Toast.makeText(this, "Error: No se proporcionó ID de hogar", Toast.LENGTH_SHORT).show()
+        // Validar y obtener el ID del hogar
+        hogarId = intent.getStringExtra("HOGAR_ID")?.trim() ?: run {
+            Toast.makeText(this, "Error: No se recibió ID de hogar", Toast.LENGTH_LONG).show()
             finish()
             return
         }
 
-        // Configuraciones iniciales
-        setupBottomNavigation()
-        loadHomeInfo()
-        setupFloatingActionButton()
-    }
-
-    private fun setupBottomNavigation() {
-        val navView: BottomNavigationView = binding.navView
+        // Configurar NavController
         val navController = findNavController(R.id.nav_host_fragment_activity_tareas)
-
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.navigation_diario, R.id.navigation_semanal)
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-
-        // Configurar argumentos para los fragments
         val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
 
-        navGraph.forEach { dest ->
-            if (dest.arguments?.containsKey("HOME_ID") == true) {
-                dest.addArgument("HOME_ID", NavArgument.Builder()
+        // Pasar argumentos a los destinos
+        navGraph.apply {
+            findNode(R.id.navigation_diario)?.let { node ->
+                node.addArgument("HOME_ID", NavArgument.Builder()
                     .setDefaultValue(hogarId)
                     .build())
+                node.addArgument("HOME_NAME", NavArgument.Builder()
+                    .setDefaultValue(intent.getStringExtra("HOME_NAME") ?: "")
+                    .build())
             }
 
-            if (dest.arguments?.containsKey("HOME_NAME") == true) {
-                // Puedes pasar también el nombre del hogar si es necesario
-                dest.addArgument("HOME_NAME", NavArgument.Builder()
-                    .setDefaultValue("")
+            findNode(R.id.navigation_semanal)?.let { node ->
+                node.addArgument("HOME_ID", NavArgument.Builder()
+                    .setDefaultValue(hogarId)
+                    .build())
+                node.addArgument("HOME_NAME", NavArgument.Builder()
+                    .setDefaultValue(intent.getStringExtra("HOME_NAME") ?: "")
                     .build())
             }
         }
 
-        // Pasar los argumentos a los fragments
-        val args = Bundle().apply {
-            putString("HOME_ID", hogarId)
-            // Si tienes el nombre del hogar, lo pasas aquí también
-        }
+        navController.graph = navGraph
 
-        navController.setGraph(navGraph, args)
+        // Configurar BottomNavigationView
+        val navView: BottomNavigationView = binding.navView
+        navView.setupWithNavController(navController)
+
+        // Cargar información del hogar
+        loadHomeInfo()
+
+        // Configurar FAB
+        binding.fab.setOnClickListener {
+            val intent = Intent(this, AgregarTareaActivity::class.java).apply {
+                putExtra("HOME_ID", hogarId)
+            }
+            startActivity(intent)
+        }
     }
 
     private fun loadHomeInfo() {
@@ -94,8 +91,6 @@ class TareasActivity : AppCompatActivity() {
                 val home = snapshot.getValue(Home::class.java)
                 home?.let {
                     binding.toolbar.title = it.name
-                    // Actualizar el nombre en los fragments si es necesario
-                    updateFragmentsWithHomeInfo(it.name)
                 } ?: showHomeNotFoundError()
             } else {
                 showHomeNotFoundError()
@@ -105,28 +100,9 @@ class TareasActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateFragmentsWithHomeInfo(homeName: String) {
-        // Puedes usar esto para actualizar los fragments con información del hogar
-        val navController = findNavController(R.id.nav_host_fragment_activity_tareas)
-        val currentDest = navController.currentDestination
-        currentDest?.let { dest ->
-            val args = navController.getBackStackEntry(dest.id).savedStateHandle
-            args.set("HOME_NAME", homeName)
-        }
-    }
-
     private fun showHomeNotFoundError() {
         Toast.makeText(this, "Hogar no encontrado", Toast.LENGTH_SHORT).show()
         finish()
-    }
-
-    private fun setupFloatingActionButton() {
-        binding.fab.setOnClickListener {
-            val intent = Intent(this, AgregarTareaActivity::class.java).apply {
-                putExtra("HOME_ID", hogarId)
-            }
-            startActivity(intent)
-        }
     }
 
     fun getHomeById(homeId: String, callback: (Home?) -> Unit) {

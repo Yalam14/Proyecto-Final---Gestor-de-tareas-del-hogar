@@ -36,36 +36,18 @@ class DiarioViewModel : ViewModel() {
         _diaActual.value = obtenerNombreDia(this.calendario)
     }
 
-    fun cargarTareasParaDiaActual(homeId: String) {
-        cargarTareasParaDia(obtenerNombreDia(calendario), homeId)
-    }
-
-    fun cargarTareasDiaAnterior(homeId: String) {
-        calendario.add(Calendar.DAY_OF_YEAR, -1)
-        actualizarFecha(calendario)
-        cargarTareasParaDia(obtenerNombreDia(calendario), homeId)
-    }
-
-    fun cargarTareasDiaSiguiente(homeId: String) {
-        calendario.add(Calendar.DAY_OF_YEAR, 1)
-        actualizarFecha(calendario)
-        cargarTareasParaDia(obtenerNombreDia(calendario), homeId)
-    }
-
     fun cargarTareasParaDia(dia: String, homeId: String) {
         _estaCargando.value = true
-
-        // Remover listener anterior para evitar duplicados
         listenerActual?.let { referenciaTareas.removeEventListener(it) }
 
-        // Normalizar nombre del día
         val diaNormalizado = normalizarNombreDia(dia)
-        Log.d("DiarioViewModel", "Buscando tareas para día: $diaNormalizado, homeId: $homeId")
+        Log.d("DiarioVM", "Consultando tareas para homeId: $homeId, día: $diaNormalizado")
 
-        listenerActual = referenciaTareas.orderByChild("homeId").equalTo(homeId)
+        listenerActual = referenciaTareas
+            .orderByChild("homeId")
+            .equalTo(homeId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("DiarioViewModel", "Recibidos datos de Firebase")
                     val listaTareas = mutableListOf<Task>()
 
                     for (tareaSnapshot in snapshot.children) {
@@ -74,30 +56,29 @@ class DiarioViewModel : ViewModel() {
                                 id = tareaSnapshot.key ?: ""
                             }
 
-                            if (tarea != null) {
-                                Log.d("DiarioViewModel", "Tarea encontrada: ${tarea.name}, Días: ${tarea.days}")
-                                if (tarea.days.any { normalizarNombreDia(it) == diaNormalizado }) {
-                                    listaTareas.add(tarea)
-                                    Log.d("DiarioViewModel", "Tarea añadida: ${tarea.name}")
+                            tarea?.takeIf {
+                                it.days.any { day ->
+                                    normalizarNombreDia(day) == diaNormalizado
                                 }
-                            }
+                            }?.let { listaTareas.add(it) }
                         } catch (e: Exception) {
-                            Log.e("DiarioViewModel", "Error al parsear tarea: ${e.message}")
+                            Log.e("DiarioVM", "Error al parsear tarea", e)
                         }
                     }
 
                     _tareas.value = listaTareas.sortedByDescending { it.timestamp }
                     _estaCargando.value = false
-                    Log.d("DiarioViewModel", "Tareas cargadas: ${listaTareas.size}")
+                    Log.d("DiarioVM", "Tareas encontradas: ${listaTareas.size}")
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.e("DiarioViewModel", "Error en Firebase: ${error.message}")
-                    _tareas.value = emptyList()
+                    Log.e("DiarioVM", "Error en Firebase", error.toException())
+                    _tareas.value = null
                     _estaCargando.value = false
                 }
             })
     }
+
     private fun normalizarNombreDia(dia: String): String {
         return dia.lowercase()
             .replace("á", "a")
@@ -105,20 +86,18 @@ class DiarioViewModel : ViewModel() {
             .replace("í", "i")
             .replace("ó", "o")
             .replace("ú", "u")
+            .replace("miercoles", "miércoles")
+            .replace("sabado", "sábado")
     }
+
     private fun obtenerNombreDia(calendario: Calendar): String {
-        val dias = listOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")
-        return dias[calendario.get(Calendar.DAY_OF_WEEK) - 1]
+        return listOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")[
+            calendario.get(Calendar.DAY_OF_WEEK) - 1
+        ]
     }
 
     override fun onCleared() {
         super.onCleared()
         listenerActual?.let { referenciaTareas.removeEventListener(it) }
-    }
-    private fun actualizarListaTareas(tareas: List<Task>) {
-        Log.d("DiarioFragment", "Mostrando ${tareas.size} tareas")
-        tareas.forEach { tarea ->
-            Log.d("DiarioFragment", "Tarea: ${tarea.name}, Días: ${tarea.days}")
-        }
     }
 }

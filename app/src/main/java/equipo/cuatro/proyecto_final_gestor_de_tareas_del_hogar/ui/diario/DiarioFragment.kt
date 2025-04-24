@@ -6,27 +6,30 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.DetalleTareaActivity
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.R
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.TareasActivity
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentDiarioBinding
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
 import java.util.*
 
 class DiarioFragment : Fragment() {
-
     private var _binding: FragmentDiarioBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: DiarioViewModel
     private lateinit var homeId: String
     private val calendar = Calendar.getInstance()
+    private var nombreHogar: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,21 +39,49 @@ class DiarioFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(DiarioViewModel::class.java)
         _binding = FragmentDiarioBinding.inflate(inflater, container, false)
 
-        homeId = arguments?.getString("HOME_ID") ?: run {
-            Log.e("DiarioFragment", "No se recibió HOME_ID en los argumentos")
+        // Obtener HOME_ID con validación robusta - FORMA CORRECTA
+        homeId = arguments?.getString("HOME_ID")?.takeIf { it.isNotEmpty() } ?:
+                (activity as? TareasActivity)?.hogarId?.takeIf { it.isNotEmpty() } ?: run {
+            Toast.makeText(context, "Error: No se identificó el hogar", Toast.LENGTH_LONG).show()
             requireActivity().finish()
             return binding.root
         }
 
-        val nombreHogar = arguments?.getString("HOME_NAME") ?: ""
+        nombreHogar = arguments?.getString("HOME_NAME") ?: "Mi Hogar"
         binding.texthome.text = nombreHogar
 
-        configurarNavegacionDias()
-        configurarSelectorFecha()
+        Log.d("DiarioFragment", "HOME_ID válido: $homeId")
+
+        configurarUI()
         configurarObservadores()
         cargarTareasIniciales()
 
         return binding.root
+
+        nombreHogar = arguments?.getString("HOME_NAME") ?: "Mi Hogar"
+        binding.texthome.text = nombreHogar
+
+        Log.d("DiarioFragment", "HOME_ID válido: $homeId")
+
+        configurarUI()
+        configurarObservadores()
+        cargarTareasIniciales()
+
+        return binding.root
+    }
+
+    private fun configurarUI() {
+        configurarNavegacionDias()
+        configurarSelectorFecha()
+        configurarBarraProgreso()
+    }
+
+    private fun configurarBarraProgreso() {
+        binding.progressTasks.apply {
+            max = 100
+            progress = 0
+            progressTintList = ContextCompat.getColorStateList(requireContext(), R.color.black)
+        }
     }
 
     private fun configurarSelectorFecha() {
@@ -60,7 +91,7 @@ class DiarioFragment : Fragment() {
                 { _, year, month, day ->
                     calendar.set(year, month, day)
                     viewModel.actualizarFecha(calendar)
-                    viewModel.cargarTareasParaDia(obtenerNombreDia(calendar), homeId)
+                    cargarTareasParaDia(obtenerNombreDia(calendar))
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -70,22 +101,28 @@ class DiarioFragment : Fragment() {
     }
 
     private fun obtenerNombreDia(calendar: Calendar): String {
-        val dias = listOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")
-        return dias[calendar.get(Calendar.DAY_OF_WEEK) - 1]
+        return listOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")[
+            calendar.get(Calendar.DAY_OF_WEEK) - 1
+        ]
     }
 
     private fun configurarNavegacionDias() {
         binding.btnPrevDay.setOnClickListener {
             calendar.add(Calendar.DAY_OF_YEAR, -1)
             viewModel.actualizarFecha(calendar)
-            viewModel.cargarTareasDiaAnterior(homeId)
+            cargarTareasParaDia(obtenerNombreDia(calendar))
         }
 
         binding.btnNextDay.setOnClickListener {
             calendar.add(Calendar.DAY_OF_YEAR, 1)
             viewModel.actualizarFecha(calendar)
-            viewModel.cargarTareasDiaSiguiente(homeId)
+            cargarTareasParaDia(obtenerNombreDia(calendar))
         }
+    }
+
+    private fun cargarTareasParaDia(dia: String) {
+        Log.d("DiarioFragment", "Cargando tareas para: $dia, homeId: $homeId")
+        viewModel.cargarTareasParaDia(dia, homeId)
     }
 
     private fun configurarObservadores() {
@@ -95,40 +132,42 @@ class DiarioFragment : Fragment() {
 
         viewModel.tareas.observe(viewLifecycleOwner) { tareas ->
             when {
-                tareas == null -> mostrarErrorCarga()
+                tareas == null -> mostrarErrorCarga("Error al cargar tareas")
                 tareas.isEmpty() -> mostrarMensajeSinTareas()
                 else -> mostrarTareas(tareas)
             }
+            actualizarBarraProgreso(tareas ?: emptyList())
         }
 
         viewModel.estaCargando.observe(viewLifecycleOwner) { estaCargando ->
             binding.progressTasks.visibility = if (estaCargando) View.VISIBLE else View.INVISIBLE
+            if (estaCargando) binding.taskContainer.removeAllViews()
         }
     }
 
     private fun cargarTareasIniciales() {
         val diaActual = obtenerNombreDia(calendar)
-        Log.d("DiarioFragment", "Cargando tareas para día: $diaActual, homeId: $homeId")
         viewModel.cargarTareasParaDia(diaActual, homeId)
     }
 
-    private fun mostrarErrorCarga() {
+    private fun mostrarErrorCarga(mensaje: String = "Error al cargar datos") {
         binding.taskContainer.removeAllViews()
         TextView(requireContext()).apply {
-            text = "Error al cargar tareas"
+            text = mensaje
             textSize = 16f
             setTextColor(Color.RED)
-            gravity = View.TEXT_ALIGNMENT_CENTER
+            gravity = Gravity.CENTER
+            setPadding(0, 32, 0, 32)
         }.also { binding.taskContainer.addView(it) }
     }
 
     private fun mostrarMensajeSinTareas() {
         binding.taskContainer.removeAllViews()
         TextView(requireContext()).apply {
-            text = "No hay tareas para este día"
+            text = "No hay tareas programadas para hoy"
             textSize = 16f
-            setTextColor(Color.BLACK)
-            gravity = View.TEXT_ALIGNMENT_CENTER
+            setTextColor(ContextCompat.getColor(context, R.color.gray))
+            gravity = Gravity.CENTER
             setPadding(0, 32, 0, 32)
         }.also { binding.taskContainer.addView(it) }
     }
@@ -137,12 +176,9 @@ class DiarioFragment : Fragment() {
         binding.taskContainer.removeAllViews()
         Log.d("DiarioFragment", "Mostrando ${tareas.size} tareas")
 
-        tareas.forEachIndexed { index, tarea ->
+        tareas.sortedByDescending { it.timestamp }.forEachIndexed { index, tarea ->
             binding.taskContainer.addView(crearVistaTarea(tarea))
-
-            if (index < tareas.size - 1) {
-                agregarSeparador()
-            }
+            if (index < tareas.size - 1) agregarSeparador()
         }
     }
 
@@ -154,7 +190,7 @@ class DiarioFragment : Fragment() {
             ).apply {
                 setMargins(16, 8, 16, 8)
             }
-            setBackgroundColor(Color.parseColor("#EEEEEE"))
+            background = ContextCompat.getDrawable(requireContext(), R.color.light_gray)
         }.also { binding.taskContainer.addView(it) }
     }
 
@@ -183,7 +219,7 @@ class DiarioFragment : Fragment() {
 
             // Descripción de la tarea
             TextView(requireContext()).apply {
-                text = tarea.description
+                text = tarea.description.takeIf { it.isNotEmpty() } ?: "Sin descripción"
                 textSize = 14f
                 setTextColor(Color.WHITE)
                 setPadding(0, 8, 0, 0)
@@ -192,7 +228,12 @@ class DiarioFragment : Fragment() {
 
             // Asignados y estado
             TextView(requireContext()).apply {
-                text = "Asignado a: ${tarea.assignedTo.joinToString(", ")} • ${if(tarea.completed) "✓ Completada" else "○ Pendiente"}"
+                text = buildString {
+                    append("Asignado a: ")
+                    append(tarea.assignedTo.joinToString(", ").takeIf { it.isNotEmpty() } ?: "Sin asignar")
+                    append(" • ")
+                    append(if (tarea.completed) "✓ Completada" else "○ Pendiente")
+                }
                 textSize = 12f
                 setTextColor(Color.WHITE)
                 setPadding(0, 8, 0, 0)
@@ -202,27 +243,35 @@ class DiarioFragment : Fragment() {
     }
 
     private fun actualizarBarraProgreso(tareas: List<Task>) {
-        binding.progressTasks.progress = if (tareas.isNotEmpty()) {
-            val tareasCompletadas = tareas.count { it.completed }
-            (tareasCompletadas.toFloat() / tareas.size * 100).toInt().also { progreso ->
-                binding.progressTasks.progressTintList = ContextCompat.getColorStateList(
-                    requireContext(),
-                    if (progreso == 100) R.color.green else R.color.black
-                )
-            }
-        } else {
-            0
+        val progreso = if (tareas.isNotEmpty()) {
+            val completadas = tareas.count { it.completed }
+            (completadas.toFloat() / tareas.size * 100).toInt()
+        } else 0
+
+        binding.progressTasks.apply {
+            this.progress = progreso
+            progressTintList = ContextCompat.getColorStateList(
+                requireContext(),
+                if (progreso == 100) R.color.green else R.color.black
+            )
         }
     }
 
     private fun navegarADetalleTarea(tarea: Task) {
-        Intent(requireContext(), DetalleTareaActivity::class.java).apply {
-            putExtra("taskId", tarea.id)
-            putExtra("taskName", tarea.name)
-            putExtra("taskDescription", tarea.description)
-            putStringArrayListExtra("assignedTo", ArrayList(tarea.assignedTo))
-            putExtra("completed", tarea.completed)
-        }.also { startActivity(it) }
+        try {
+            Intent(requireContext(), DetalleTareaActivity::class.java).apply {
+                putExtra("taskId", tarea.id)
+                putExtra("taskName", tarea.name)
+                putExtra("taskDescription", tarea.description)
+                putStringArrayListExtra("assignedTo", ArrayList(tarea.assignedTo))
+                putExtra("completed", tarea.completed)
+                putExtra("homeId", homeId)
+                putExtra("homeName", nombreHogar)
+            }.also { startActivity(it) }
+        } catch (e: Exception) {
+            Log.e("DiarioFragment", "Error al navegar a detalle", e)
+            Toast.makeText(context, "Error al abrir la tarea", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

@@ -33,21 +33,18 @@ class HogaresExistentesActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_hogares_existentes)
 
-        // Configuración del edge-to-edge (tu código existente)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Configuración del FAB para navegar a HogarActivity
         val fabMenu: FloatingActionButton = findViewById(R.id.fabMenu)
         fabMenu.setOnClickListener {
             val intent = Intent(this, HogarActivity::class.java)
             startActivity(intent)
         }
 
-        // Tu código existente para cargar hogares
         homeRef = FirebaseDatabase.getInstance().getReference("homes")
         containerHogares = findViewById(R.id.container_hogares)
         cargarHogares()
@@ -135,8 +132,7 @@ class HogaresExistentesActivity : AppCompatActivity() {
                 topMargin = resources.getDimensionPixelSize(R.dimen.separator_margin)
                 bottomMargin = resources.getDimensionPixelSize(R.dimen.separator_margin)
             }
-            background =
-                ContextCompat.getDrawable(this@HogaresExistentesActivity, R.color.lightGray)
+            background = ContextCompat.getDrawable(this@HogaresExistentesActivity, R.color.lightGray)
         }
 
         containerHogares.addView(hogarLayout)
@@ -157,8 +153,11 @@ class HogaresExistentesActivity : AppCompatActivity() {
         hogarId?.let {
             val intent = Intent(this, TareasActivity::class.java).apply {
                 putExtra("HOGAR_ID", it)
+                putExtra("HOME_NAME", "Casa Samuel") // Puedes obtener esto de tu objeto Home si lo necesitas
             }
             startActivity(intent)
+        } ?: run {
+            Toast.makeText(this, "Error: ID de hogar inválido", Toast.LENGTH_SHORT).show()
         }
     }
 }
