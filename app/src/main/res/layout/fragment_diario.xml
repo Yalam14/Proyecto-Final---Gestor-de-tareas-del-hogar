@@ -9,7 +9,7 @@
     android:paddingTop="8dp"
     tools:context=".ui.diario.DiarioFragment">
 
-    <!-- Encabezado -->
+    <!-- Encabezado mejorado -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,32 +18,37 @@
         android:paddingTop="8dp"
         android:background="?attr/selectableItemBackground">
 
+        <!-- Título más grande y mejor espaciado -->
         <TextView
             android:id="@+id/texthome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
+            android:textSize="40sp"
             android:textAlignment="center"
             android:textStyle="bold"
             android:textColor="#212121"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp"
+            android:text="Tareas del Hogar"/>
 
-        <!-- Selector de fecha -->
+        <!-- Selector de fecha con estilo negro -->
         <Button
             android:id="@+id/btn_select_date"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Seleccionar fecha"
-            android:layout_marginBottom="16dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#212121"
+            android:textColor="@android:color/white"
             style="@style/Widget.AppCompat.Button.Colored"/>
 
-        <!-- Selector de día -->
+        <!-- Selector de día con mejor espaciado -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="16dp">
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp">
 
             <ImageButton
                 android:id="@+id/btn_prev_day"
@@ -51,16 +56,19 @@
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_left"
                 android:contentDescription="Día anterior"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="#212121"
+                tools:ignore="UseAppTint" />
 
             <TextView
                 android:id="@+id/txt_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
                 android:layout_marginHorizontal="16dp"
-                android:textColor="#212121"/>
+                android:text="Hoy"
+                android:textColor="#212121"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
             <ImageButton
                 android:id="@+id/btn_next_day"
@@ -68,10 +76,12 @@
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_right"
                 android:contentDescription="Día siguiente"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="#212121"
+                tools:ignore="UseAppTint" />
         </LinearLayout>
 
-        <!-- Barra de progreso -->
+        <!-- Barra de progreso con mejor espaciado -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,6 +104,7 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Separador más grueso -->
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"

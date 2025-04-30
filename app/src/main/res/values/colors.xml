@@ -28,12 +28,8 @@
     <color name="green_700">#FF388E3C</color>
     <color name="blue_grey_800">#FF37474F</color>
     <color name="blue_grey_900">#FF263238</color>
-
     <color name="green">#4CAF50</color>
-
-
-    <!-- O si prefieres otros tonos: -->
-    <color name="verde_completado">#2E7D32</color>
-    <color name="negro_pendiente">#212121</color>
-    <color name="light_gray">#E0E0E0</color>
+    <color name="orange">#FF9800</color>
+    <color name="green_completed">#4CAF50</color>
+    <color name="task_pending">#212121</color>
 </resources>

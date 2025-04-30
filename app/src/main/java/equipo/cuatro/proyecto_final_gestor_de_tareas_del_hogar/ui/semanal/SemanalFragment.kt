@@ -1,206 +1,139 @@
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.semanal
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import androidx.lifecycle.ViewModelProvider
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.DetalleTareaActivity
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.R
-import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.adapters.TaskAdapter
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentSemanalBinding
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
 
 class SemanalFragment : Fragment() {
+    private var _binding: FragmentSemanalBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var viewModel: SemanalViewModel
     private lateinit var homeId: String
-
-    // Views para Lunes
-    private lateinit var taskLunes1: TextView
-    private lateinit var taskLunes2: TextView
-    private lateinit var taskLunes3: TextView
-
-    // Views para Martes
-    private lateinit var taskMartes1: TextView
-    private lateinit var taskMartes2: TextView
-    private lateinit var taskMartes3: TextView
-
-    // Views para Miércoles
-    private lateinit var taskMiercoles1: TextView
-    private lateinit var taskMiercoles2: TextView
-    private lateinit var taskMiercoles3: TextView
-
-    // Views para Jueves
-    private lateinit var taskJueves1: TextView
-    private lateinit var taskJueves2: TextView
-    private lateinit var taskJueves3: TextView
-
-    // Views para Viernes
-    private lateinit var taskViernes1: TextView
-    private lateinit var taskViernes2: TextView
-    private lateinit var taskViernes3: TextView
-
-    // Views para Sábado
-    private lateinit var taskSabado1: TextView
-    private lateinit var taskSabado2: TextView
-    private lateinit var taskSabado3: TextView
-
-    // Views para Domingo
-    private lateinit var taskDomingo1: TextView
-    private lateinit var taskDomingo2: TextView
-    private lateinit var taskDomingo3: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_semanal, container, false)
+    ): View {
+        viewModel = ViewModelProvider(this).get(SemanalViewModel::class.java)
+        _binding = FragmentSemanalBinding.inflate(inflater, container, false)
+
         homeId = arguments?.getString("HOME_ID") ?: ""
+        setupWeekNavigation()
+        setupObservers()
+        loadInitialTasks()
 
-        // Inicializar todas las vistas
-        initViews(view)
-
-        // Cargar tareas desde Firebase
-        loadTasks()
-
-        return view
+        return binding.root
     }
 
-    private fun initViews(view: View) {
-        // Lunes
-        taskLunes1 = view.findViewById(R.id.task_lunes_1)
-        taskLunes2 = view.findViewById(R.id.task_lunes_2)
-        taskLunes3 = view.findViewById(R.id.task_lunes_3)
+    private fun setupWeekNavigation() {
+        binding.buttonPreviousWeek.setOnClickListener {
+            viewModel.loadPreviousWeekTasks(homeId)
+        }
 
-        // Martes
-        taskMartes1 = view.findViewById(R.id.task_martes_1)
-        taskMartes2 = view.findViewById(R.id.task_martes_2)
-        taskMartes3 = view.findViewById(R.id.task_martes_3)
-
-        // Miércoles
-        taskMiercoles1 = view.findViewById(R.id.task_miercoles_1)
-        taskMiercoles2 = view.findViewById(R.id.task_miercoles_2)
-        taskMiercoles3 = view.findViewById(R.id.task_miercoles_3)
-
-        // Jueves
-        taskJueves1 = view.findViewById(R.id.task_jueves_1)
-        taskJueves2 = view.findViewById(R.id.task_jueves_2)
-        taskJueves3 = view.findViewById(R.id.task_jueves_3)
-
-        // Viernes
-        taskViernes1 = view.findViewById(R.id.task_viernes_1)
-        taskViernes2 = view.findViewById(R.id.task_viernes_2)
-        taskViernes3 = view.findViewById(R.id.task_viernes_3)
-
-        // Sábado
-        taskSabado1 = view.findViewById(R.id.task_sabado_1)
-        taskSabado2 = view.findViewById(R.id.task_sabado_2)
-        taskSabado3 = view.findViewById(R.id.task_sabado_3)
-
-        // Domingo
-        taskDomingo1 = view.findViewById(R.id.task_domingo_1)
-        taskDomingo2 = view.findViewById(R.id.task_domingo_2)
-        taskDomingo3 = view.findViewById(R.id.task_domingo_3)
+        binding.buttonNextWeek.setOnClickListener {
+            viewModel.loadNextWeekTasks(homeId)
+        }
     }
 
-    private fun loadTasks() {
-        val database = FirebaseDatabase.getInstance()
-        val tasksRef = database.getReference("tasks")
+    private fun setupObservers() {
+        viewModel.currentWeek.observe(viewLifecycleOwner) { week ->
+            binding.textWeekNumber.text = "Semana $week"
+        }
 
-        tasksRef.orderByChild("homeId").equalTo(homeId)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    // Limpiar todas las vistas primero
-                    clearAllTaskViews()
-
-                    // Agrupar tareas por día
-                    val tasksByDay = mutableMapOf<String, MutableList<Task>>().withDefault { mutableListOf() }
-
-                    for (taskSnapshot in snapshot.children) {
-                        val task = taskSnapshot.getValue(Task::class.java)
-                        task?.days?.forEach { day ->
-                            tasksByDay[day]?.add(task)
-                        }
-                    }
-
-                    // Asignar tareas a cada día
-                    assignTasksToDay("Lunes", tasksByDay["Lunes"] ?: emptyList())
-                    assignTasksToDay("Martes", tasksByDay["Martes"] ?: emptyList())
-                    assignTasksToDay("Miércoles", tasksByDay["Miércoles"] ?: emptyList())
-                    assignTasksToDay("Jueves", tasksByDay["Jueves"] ?: emptyList())
-                    assignTasksToDay("Viernes", tasksByDay["Viernes"] ?: emptyList())
-                    assignTasksToDay("Sábado", tasksByDay["Sábado"] ?: emptyList())
-                    assignTasksToDay("Domingo", tasksByDay["Domingo"] ?: emptyList())
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(context, "Error al cargar tareas", Toast.LENGTH_SHORT).show()
-                }
-            })
-    }
-
-    private fun clearAllTaskViews() {
-        // Limpiar todas las vistas de tareas
-        val allTaskViews = listOf(
-            taskLunes1, taskLunes2, taskLunes3,
-            taskMartes1, taskMartes2, taskMartes3,
-            taskMiercoles1, taskMiercoles2, taskMiercoles3,
-            taskJueves1, taskJueves2, taskJueves3,
-            taskViernes1, taskViernes2, taskViernes3,
-            taskSabado1, taskSabado2, taskSabado3,
-            taskDomingo1, taskDomingo2, taskDomingo3
-        )
-
-        allTaskViews.forEach { it.text = "" }
-    }
-
-    private fun assignTasksToDay(day: String, tasks: List<Task>) {
-        val dayTasks = tasks.take(3) // Solo mostramos hasta 3 tareas por día
-
-        when (day) {
-            "Lunes" -> {
-                dayTasks.getOrNull(0)?.let { taskLunes1.text = it.name }
-                dayTasks.getOrNull(1)?.let { taskLunes2.text = it.name }
-                dayTasks.getOrNull(2)?.let { taskLunes3.text = it.name }
-            }
-            "Martes" -> {
-                dayTasks.getOrNull(0)?.let { taskMartes1.text = it.name }
-                dayTasks.getOrNull(1)?.let { taskMartes2.text = it.name }
-                dayTasks.getOrNull(2)?.let { taskMartes3.text = it.name }
-            }
-            "Miércoles" -> {
-                dayTasks.getOrNull(0)?.let { taskMiercoles1.text = it.name }
-                dayTasks.getOrNull(1)?.let { taskMiercoles2.text = it.name }
-                dayTasks.getOrNull(2)?.let { taskMiercoles3.text = it.name }
-            }
-            "Jueves" -> {
-                dayTasks.getOrNull(0)?.let { taskJueves1.text = it.name }
-                dayTasks.getOrNull(1)?.let { taskJueves2.text = it.name }
-                dayTasks.getOrNull(2)?.let { taskJueves3.text = it.name }
-            }
-            "Viernes" -> {
-                dayTasks.getOrNull(0)?.let { taskViernes1.text = it.name }
-                dayTasks.getOrNull(1)?.let { taskViernes2.text = it.name }
-                dayTasks.getOrNull(2)?.let { taskViernes3.text = it.name }
-            }
-            "Sábado" -> {
-                dayTasks.getOrNull(0)?.let { taskSabado1.text = it.name }
-                dayTasks.getOrNull(1)?.let { taskSabado2.text = it.name }
-                dayTasks.getOrNull(2)?.let { taskSabado3.text = it.name }
-            }
-            "Domingo" -> {
-                dayTasks.getOrNull(0)?.let { taskDomingo1.text = it.name }
-                dayTasks.getOrNull(1)?.let { taskDomingo2.text = it.name }
-                dayTasks.getOrNull(2)?.let { taskDomingo3.text = it.name }
+        viewModel.tasksByDay.observe(viewLifecycleOwner) { tasksByDay ->
+            tasksByDay?.let {
+                updateTaskViews(it)
             }
         }
+
+        viewModel.progress.observe(viewLifecycleOwner) { progress ->
+            binding.progressBar.progress = progress
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressTasks.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.scrollView.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+        }
+    }
+
+    private fun loadInitialTasks() {
+        viewModel.loadTasksForCurrentWeek(homeId)
+    }
+
+    private fun updateTaskViews(tasksByDay: Map<String, List<Task>>) {
+        // Lunes
+        updateDayTasks(tasksByDay["Lunes"] ?: emptyList(),
+            binding.taskLunes1, binding.taskLunes2, binding.taskLunes3)
+
+        // Martes
+        updateDayTasks(tasksByDay["Martes"] ?: emptyList(),
+            binding.taskMartes1, binding.taskMartes2, binding.taskMartes3)
+
+        // Miércoles
+        updateDayTasks(tasksByDay["Miércoles"] ?: emptyList(),
+            binding.taskMiercoles1, binding.taskMiercoles2, binding.taskMiercoles3)
+
+        // Jueves
+        updateDayTasks(tasksByDay["Jueves"] ?: emptyList(),
+            binding.taskJueves1, binding.taskJueves2, binding.taskJueves3)
+
+        // Viernes
+        updateDayTasks(tasksByDay["Viernes"] ?: emptyList(),
+            binding.taskViernes1, binding.taskViernes2, binding.taskViernes3)
+
+        // Sábado
+        updateDayTasks(tasksByDay["Sábado"] ?: emptyList(),
+            binding.taskSabado1, binding.taskSabado2, binding.taskSabado3)
+
+        // Domingo
+        updateDayTasks(tasksByDay["Domingo"] ?: emptyList(),
+            binding.taskDomingo1, binding.taskDomingo2, binding.taskDomingo3)
+    }
+
+    private fun updateDayTasks(tasks: List<Task>, vararg taskViews: View) {
+        taskViews.forEachIndexed { index, view ->
+            val textView = view as TextView
+            if (index < tasks.size) {
+                val task = tasks[index]
+                textView.apply {
+                    text = task.name
+                    setBackgroundColor(
+                        if (task.completed) resources.getColor(R.color.green_completed)
+                        else resources.getColor(R.color.task_pending)
+                    )
+                    setOnClickListener { navigateToTaskDetail(task) }
+                    visibility = View.VISIBLE
+                }
+            } else {
+                textView.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    private fun navigateToTaskDetail(task: Task) {
+        val intent = Intent(requireContext(), DetalleTareaActivity::class.java).apply {
+            putExtra("taskId", task.id)
+            putExtra("taskName", task.name)
+            putExtra("taskDescription", task.description)
+            putStringArrayListExtra("assignedTo", ArrayList(task.assignedTo))
+            putExtra("completed", task.completed)
+        }
+        startActivity(intent)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Header con título y botón de editar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvTitulo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="22sp"
+                android:textColor="#212121"
+                android:textStyle="bold"/>
+
+            <ImageButton
+                android:id="@+id/btnEditar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_edit"
+                android:background="?android:attr/selectableItemBackground"/>
+        </LinearLayout>
+
+        <!-- Subtítulo Descripción -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Descripción"
+            android:textColor="#212121"
+            android:textSize="15sp" />
+
+        <!-- Campo de descripción -->
+        <EditText
+            android:id="@+id/etDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_border"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:padding="8dp"
+        android:editable="false"/>
+
+        <!-- Separador -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="16dp"
+            android:background="#F5F5F5"/>
+
+        <!-- Título miembros -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Miembros asignados"
+            android:textSize="18sp"
+            android:textColor="#212121"
+            android:textStyle="bold"/>
+
+        <!-- Lista de miembros -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp">
+
+            <!-- Miembro 1 -->
+            <LinearLayout
+                android:id="@+id/miembro1"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/avatar_placeholder"
+                    android:background="@drawable/circle_bg"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/miembro1Nombre"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="17sp"
+                    android:textColor="#212121"
+                    android:layout_marginStart="16dp" />
+
+                <CheckBox
+                    android:id="@+id/miembro1Checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@android:color/black" />
+            </LinearLayout>
+
+            <!-- Miembro 2 -->
+            <LinearLayout
+                android:id="@+id/miembro2"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/avatar_placeholder"
+                    android:background="@drawable/circle_bg"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/miembro2Nombre"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="17sp"
+                    android:textColor="#212121"
+                    android:layout_marginStart="16dp" />
+
+                <CheckBox
+                    android:id="@+id/miembro2Checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@android:color/black" />
+            </LinearLayout>
+
+            <!-- Miembro 3 -->
+            <LinearLayout
+                android:id="@+id/miembro3"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/avatar_placeholder"
+                    android:background="@drawable/circle_bg"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/miembro3Nombre"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="17sp"
+                    android:textColor="#212121"
+                    android:layout_marginStart="16dp" />
+
+                <CheckBox
+                    android:id="@+id/miembro3Checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@android:color/black" />
+            </LinearLayout>
+
+            <!-- Miembro 4 -->
+            <LinearLayout
+                android:id="@+id/miembro4"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/avatar_placeholder"
+                    android:background="@drawable/circle_bg"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/miembro4Nombre"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="17sp"
+                    android:textColor="#212121"
+                    android:layout_marginStart="16dp" />
+
+                <CheckBox
+                    android:id="@+id/miembro4Checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@android:color/black" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!-- Botones de acción -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="24dp">
+
+            <Button
+                android:id="@+id/btnEliminar"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginEnd="12dp"
+                android:backgroundTint="#FF5252"
+                android:text="Eliminar"
+                android:textColor="@android:color/white"
+                android:drawableStart="@drawable/ic_delate"
+            android:drawablePadding="8dp"
+            android:drawableTint="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnTerminar"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Terminar"
+                android:textColor="@android:color/white"
+                android:backgroundTint="#4CAF50"
+                android:paddingHorizontal="20dp"
+                android:drawableStart="@drawable/ic_check"
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
