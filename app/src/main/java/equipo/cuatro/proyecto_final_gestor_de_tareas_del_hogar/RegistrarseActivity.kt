@@ -42,18 +42,18 @@ class RegistrarseActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, "Las contraseñas no coinciden", Toast.LENGTH_SHORT)
                     .show()
             } else {
-                signIn(mail.text.toString(), password.text.toString())
-                saveUser(User(auth.currentUser?.uid?: "", user.text.toString(), mail.text.toString()))
                 Toast.makeText(baseContext, "Registro realizado correctamente", Toast.LENGTH_SHORT)
                     .show()
+                signIn(user.text.toString(), mail.text.toString(), password.text.toString())
             }
         }
     }
 
-    private fun signIn(email: String, password: String) {
+    private fun signIn(user: String, email: String, password: String) {
         Log.d("INFO REGISTRO", "email: ${email}, password: ${password}")
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
+                saveUser(User(auth.currentUser?.uid?: "", user, email))
                 Log.d("INFO REGISTRO", "signInWithEmail:success")
                 val user = auth.currentUser
                 val intent = Intent(this, HogarActivity::class.java)
