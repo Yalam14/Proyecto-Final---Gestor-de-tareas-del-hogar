@@ -43,7 +43,7 @@ class RegistrarseActivity : AppCompatActivity() {
                     .show()
             } else {
                 signIn(mail.text.toString(), password.text.toString())
-                saveUser(User(user.text.toString(), mail.text.toString(), mutableListOf()))
+                saveUser(User(auth.currentUser?.uid?: "", user.text.toString(), mail.text.toString()))
                 Toast.makeText(baseContext, "Registro realizado correctamente", Toast.LENGTH_SHORT)
                     .show()
             }

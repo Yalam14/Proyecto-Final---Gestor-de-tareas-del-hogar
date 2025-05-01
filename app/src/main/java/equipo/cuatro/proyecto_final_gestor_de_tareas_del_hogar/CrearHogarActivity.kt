@@ -2,17 +2,23 @@ package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.CrearHogarBinding
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.User
 
 class CrearHogarActivity : AppCompatActivity() {
     private lateinit var homeRef: DatabaseReference
+    private lateinit var userRef: DatabaseReference
     private var iconoDatabase: String = "baseline_add_home_24"
     private var iconoSeleccionado: Int = -1
 
@@ -22,6 +28,7 @@ class CrearHogarActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         homeRef = FirebaseDatabase.getInstance().getReference("homes")
+        userRef = FirebaseDatabase.getInstance().getReference("users")
 
         val editTextNombreHogar = binding.editTextNombreHogar
 
@@ -67,8 +74,10 @@ class CrearHogarActivity : AppCompatActivity() {
             if (nombreHogar.isEmpty()) {
                 Toast.makeText(this, "Por favor, ingresa el nombre del hogar.", Toast.LENGTH_SHORT)
                     .show()
+                return@setOnClickListener
             } else if (iconoSeleccionado == -1) {
                 Toast.makeText(this, "Por favor, selecciona un icono.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             } else {
                 Toast.makeText(this, "Hogar guardado: $nombreHogar", Toast.LENGTH_SHORT).show()
 
@@ -77,17 +86,28 @@ class CrearHogarActivity : AppCompatActivity() {
                 icons.forEach { it.isSelected = false }
             }
 
-            val hogar = Home(
-                nombreHogar,
-                iconoDatabase,
-                code = generarCódigo(),
-                createdBy = userId,
-                participants = mapOf(userId to true)
-            )
+           getNameUser(userId) { username ->
+                if (username.isEmpty()) {
+                    Toast.makeText(
+                        this,
+                        "Error al obtener información del usuario",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@getNameUser
+                }
 
-            saveHomeToDatabase(hogar)
-            val intent = Intent(this, HogaresExistentesActivity::class.java)
-            startActivity(intent)
+                val hogar = Home(
+                    nombreHogar,
+                    iconoDatabase,
+                    code = generarCódigo(),
+                    createdBy = userId,
+                    participants = mapOf(userId to username)
+                )
+
+                saveHomeToDatabase(hogar)
+                val intent = Intent(this, HogaresExistentesActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -97,6 +117,31 @@ class CrearHogarActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, "Hogar registrado correctamente", Toast.LENGTH_SHORT)
                     .show()
             }
+    }
+
+    private fun getNameUser(userId: String, callback: (String) -> Unit): String {
+        var username = ""
+
+        userRef.orderByChild("id").equalTo(userId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (userSnap in snapshot.children) {
+                            val user = userSnap.getValue(User::class.java)
+                            username = user?.user.toString()
+                            callback(username)
+                        }
+                    }
+                    callback("")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("Firebase", "Error en la consulta: ${error.message}")
+                    callback("")
+                }
+            })
+
+        return username
     }
 
     private fun generarCódigo(): String {
