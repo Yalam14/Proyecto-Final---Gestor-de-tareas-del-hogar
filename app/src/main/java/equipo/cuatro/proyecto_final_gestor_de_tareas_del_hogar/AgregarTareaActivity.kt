@@ -3,11 +3,16 @@ package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -32,43 +37,69 @@ class AgregarTareaActivity : AppCompatActivity() {
     private lateinit var homeRef: DatabaseReference
     private lateinit var homeId: String
     private lateinit var currentUser: String
-    private var miembrosHogar = mutableListOf<String>()
 
-    // CheckBoxes para los días
-    private lateinit var cbLunes: CheckBox
-    private lateinit var cbMartes: CheckBox
-    private lateinit var cbMiercoles: CheckBox
-    private lateinit var cbJueves: CheckBox
-    private lateinit var cbViernes: CheckBox
-    private lateinit var cbSabado: CheckBox
-    private lateinit var cbDomingo: CheckBox
+    private lateinit var containerDias: LinearLayout
+    private lateinit var templateDia: LinearLayout
+    private lateinit var templateMiembro: LinearLayout
+    private var miembrosHogar = mutableListOf<String>()
+    private val asignacionesPorDia = mutableMapOf<String, MutableList<String>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_tarea)
 
-        // Inicializar Firebase
         database = FirebaseDatabase.getInstance()
         tasksRef = database.getReference("tasks")
         usersRef = database.getReference("users")
         homeRef = database.getReference("homes")
 
-        // Obtener el ID del hogar del Intent
         homeId = intent.getStringExtra("HOME_ID") ?: ""
         currentUser = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        // Inicializar vistas
-        cbLunes = findViewById(R.id.cb_lunes)
-        cbMartes = findViewById(R.id.cb_martes)
-        cbMiercoles = findViewById(R.id.cb_miercoles)
-        cbJueves = findViewById(R.id.cb_jueves)
-        cbViernes = findViewById(R.id.cb_viernes)
-        cbSabado = findViewById(R.id.cb_sabado)
-        cbDomingo = findViewById(R.id.cb_domingo)
+        containerDias = findViewById(R.id.container_dias)
+        templateDia = findViewById(R.id.template_dia)
+        templateMiembro = findViewById(R.id.template_miembro)
+
+        templateDia.visibility = View.GONE
+        templateMiembro.visibility = View.GONE
 
         agregarMiembrosHogar()
 
-        // Configurar el botón de agregar
+        val diasSemana = listOf(
+            "Lunes" to R.string.lunes,
+            "Martes" to R.string.martes,
+            "Miércoles" to R.string.miercoles,
+            "Jueves" to R.string.jueves,
+            "Viernes" to R.string.viernes,
+            "Sábado" to R.string.sabado,
+            "Domingo" to R.string.domingo
+        )
+
+        diasSemana.forEach { (diaKey, diaStringRes) ->
+            val diaView = LayoutInflater.from(this).inflate(
+                R.layout.template_dia,
+                containerDias,
+                false
+            ) as LinearLayout
+
+            val cbDia = diaView.findViewById<CheckBox>(R.id.template_cb_dia)
+            val layoutMiembros = diaView.findViewById<LinearLayout>(R.id.template_layout_miembros)
+
+            cbDia.text = getString(diaStringRes)
+
+            cbDia.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    mostrarMiembrosParaDia(diaKey, layoutMiembros)
+                } else {
+                    layoutMiembros.visibility = View.GONE
+                    asignacionesPorDia.remove(diaKey)
+                }
+            }
+
+            containerDias.addView(diaView)
+        }
+
+
         val btnAgregar: Button = findViewById(R.id.btn_agregar)
         btnAgregar.setOnClickListener {
             agregarTarea()
@@ -79,40 +110,27 @@ class AgregarTareaActivity : AppCompatActivity() {
         val nombre = findViewById<EditText>(R.id.et_nombre).text.toString()
         val descripcion = findViewById<EditText>(R.id.et_descripcion).text.toString()
 
-        // Validar campos obligatorios
         if (nombre.isEmpty() || descripcion.isEmpty()) {
             Toast.makeText(this, "Nombre y descripción son obligatorios", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Obtener días seleccionados (sin acentos para consistencia)
-        val diasSeleccionados = mutableListOf<String>()
-        if (cbLunes.isChecked) diasSeleccionados.add("Lunes")
-        if (cbMartes.isChecked) diasSeleccionados.add("Martes")
-        if (cbMiercoles.isChecked) diasSeleccionados.add("Miercoles") // Sin acento
-        if (cbJueves.isChecked) diasSeleccionados.add("Jueves")
-        if (cbViernes.isChecked) diasSeleccionados.add("Viernes")
-        if (cbSabado.isChecked) diasSeleccionados.add("Sabado") // Sin acento
-        if (cbDomingo.isChecked) diasSeleccionados.add("Domingo")
-
-        val miembrosSeleccionados = mutableListOf<String>()
-
-        // Validar que se seleccionó al menos un día
-        if (diasSeleccionados.isEmpty()) {
+        if (asignacionesPorDia.isEmpty()) {
             Toast.makeText(this, "Selecciona al menos un día", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Obtener la fecha actual
         val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        val timestamp = System.currentTimeMillis() // Timestamp para ordenamiento
+        val timestamp = System.currentTimeMillis()
 
-        // Crear la tarea con el nuevo campo timestamp
+        val diasConAsignaciones = asignacionesPorDia.mapValues { (_, miembros) ->
+            miembros.toList()
+        }
+
         val nuevaTarea = Task(
             name = nombre,
             description = descripcion,
-            days = diasSeleccionados,
-            assignedTo = miembrosSeleccionados,
+            days = diasConAsignaciones,
             homeId = homeId,
             createdBy = currentUser,
             creationDate = fechaActual,
@@ -120,20 +138,55 @@ class AgregarTareaActivity : AppCompatActivity() {
             completed = false
         )
 
-        // Guardar en Firebase con push() para ID único
-        val nuevaKey = tasksRef.push().key ?: run {
-            Toast.makeText(this, "Error al generar clave para tarea", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        tasksRef.child(nuevaKey).setValue(nuevaTarea)
+        tasksRef.push().setValue(nuevaTarea)
             .addOnSuccessListener {
                 Toast.makeText(this, "Tarea agregada correctamente", Toast.LENGTH_SHORT).show()
-                finish() // Cierra la actividad y regresa a TareasActivity
+                finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error al agregar tarea: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun mostrarMiembrosParaDia(dia: String, container: LinearLayout) {
+        container.removeAllViews() // Limpiar contenedor
+
+        miembrosHogar.forEach { miembro ->
+            val miembroView = LayoutInflater.from(this).inflate(
+                R.layout.template_miembro,
+                container,
+                false
+            ) as LinearLayout
+
+            val tvMiembro = miembroView.findViewById<TextView>(R.id.template_tv_miembro)
+            val switchMiembro = miembroView.findViewById<MaterialSwitch>(R.id.template_switch_miembro)
+
+            tvMiembro.text = miembro
+            switchMiembro.isChecked = asignacionesPorDia[dia]?.contains(miembro) ?: false
+
+            switchMiembro.setOnCheckedChangeListener { _, isChecked ->
+                val miembrosDia = asignacionesPorDia.getOrPut(dia) { mutableListOf() }
+                if (isChecked) {
+                    if (!miembrosDia.contains(miembro)) {
+                        miembrosDia.add(miembro)
+                    }
+                } else {
+                    miembrosDia.remove(miembro)
+                }
+            }
+
+            container.addView(miembroView)
+        }
+
+        container.visibility = View.VISIBLE
+    }
+
+    private fun View.clone(): View {
+        val inflater = LayoutInflater.from(context)
+        return when (this) {
+            is LinearLayout -> inflater.inflate(R.layout.template_dia, null) as LinearLayout
+            else -> inflater.inflate(R.layout.template_miembro, null)
+        }
     }
 
     fun agregarMiembrosHogar() {

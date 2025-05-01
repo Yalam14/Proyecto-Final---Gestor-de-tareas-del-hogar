@@ -71,12 +71,10 @@ class SemanalViewModel : ViewModel() {
                             id = taskSnapshot.key ?: ""
                         }
 
-                        task?.let { t ->
-                            t.days?.forEach { day ->
-                                tasksByDay[day]?.add(t)
-                                totalTasks++
-                                if (t.completed) completedTasks++
-                            }
+                        task?.days?.forEach { (day, _) ->
+                            tasksByDay.getOrPut(day) { mutableListOf() }.add(task)
+                            totalTasks++
+                            if (task.completed) completedTasks++
                         }
                     }
 

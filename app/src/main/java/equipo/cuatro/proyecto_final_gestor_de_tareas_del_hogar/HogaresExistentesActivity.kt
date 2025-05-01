@@ -22,10 +22,13 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.User
 
 class HogaresExistentesActivity : AppCompatActivity() {
     private lateinit var homeRef: DatabaseReference
     private lateinit var containerHogares: LinearLayout
+
+    var name: String = ""
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,7 +135,8 @@ class HogaresExistentesActivity : AppCompatActivity() {
                 topMargin = resources.getDimensionPixelSize(R.dimen.separator_margin)
                 bottomMargin = resources.getDimensionPixelSize(R.dimen.separator_margin)
             }
-            background = ContextCompat.getDrawable(this@HogaresExistentesActivity, R.color.lightGray)
+            background =
+                ContextCompat.getDrawable(this@HogaresExistentesActivity, R.color.lightGray)
         }
 
         containerHogares.addView(hogarLayout)
@@ -151,13 +155,29 @@ class HogaresExistentesActivity : AppCompatActivity() {
 
     private fun abrirHogar(hogarId: String?) {
         hogarId?.let {
-            val intent = Intent(this, TareasActivity::class.java).apply {
-                putExtra("HOGAR_ID", it)
-                putExtra("HOME_NAME", "Casa Samuel") // Puedes obtener esto de tu objeto Home si lo necesitas
+            getHomeName(hogarId) { homename ->
+                val intent = Intent(this, TareasActivity::class.java).apply {
+                    putExtra("HOGAR_ID", it)
+                    putExtra("HOME_NAME", homename)
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
         } ?: run {
             Toast.makeText(this, "Error: ID de hogar inválido", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun getHomeName(hogarId: String, callback: (String) -> Unit) {
+        homeRef.child(hogarId).get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                val home = snapshot.getValue(Home::class.java)
+                callback(home?.name ?: "Nombre no disponible")
+            } else {
+                callback("Hogar no encontrado")
+            }
+        }.addOnFailureListener {
+            callback("Error al obtener nombre")
+        }
+    }
+
 }
