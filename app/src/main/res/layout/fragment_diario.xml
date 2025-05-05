@@ -23,24 +23,12 @@
             android:id="@+id/texthome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="40sp"
+            android:textSize="24sp"
             android:textAlignment="center"
             android:textStyle="bold"
             android:textColor="#212121"
-            android:layout_marginBottom="8dp"
-            android:text="Tareas del Hogar"/>
-
-        <!-- Selector de fecha con estilo negro -->
-        <Button
-            android:id="@+id/btn_select_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Seleccionar fecha"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"
-            android:backgroundTint="#212121"
-            android:textColor="@android:color/white"
-            style="@style/Widget.AppCompat.Button.Colored"/>
+            android:text="Tareas del Hogar"
+            android:layout_marginBottom="8dp"/>
 
         <!-- Selector de día con mejor espaciado -->
         <LinearLayout
@@ -111,16 +99,22 @@
         android:background="#EEEEEE"
         android:layout_marginBottom="8dp"/>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-        <LinearLayout
+<!--        <LinearLayout-->
+<!--            android:id="@+id/task_container"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:padding="16dp"/>-->
+
+        <ListView
             android:id="@+id/task_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"/>
-    </ScrollView>
+            android:layout_margin="8dp"/>
+    </LinearLayout>
 </LinearLayout>

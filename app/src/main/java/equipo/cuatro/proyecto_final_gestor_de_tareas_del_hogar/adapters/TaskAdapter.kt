@@ -1,32 +1,46 @@
-// adapters/TaskAdapter.kt
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.R
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
 
-class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter(
+    context: Context,
+    private val tasks: List<Task>
+) : ArrayAdapter<Task>(context, R.layout.task_item_daily, tasks) {
 
-    class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val name: TextView = view.findViewById(R.id.tv_task_name)
-        val description: TextView = view.findViewById(R.id.tv_task_description)
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val view = convertView ?: LayoutInflater.from(context)
+            .inflate(R.layout.task_item_daily, parent, false)
+        val task = getItem(position) ?: return view
+//        val checkBox = view.findViewById<CheckBox>(R.id.checkBox)
+        val title = view.findViewById<TextView>(R.id.taskTitle)
+        val description = view.findViewById<TextView>(R.id.taskDescription)
+        val assignedTo = view.findViewById<TextView>(R.id.assignedTo)
+        title.text = task.name
+        description.text = task.description?.split("\n")?.firstOrNull() ?: ""
+        val assignedText = task.days.values.flatten().joinToString(", ")
+        assignedTo.text = if (assignedText.isNotEmpty()) "Asignado a: $assignedText" else "Sin asignar"
+//        checkBox.isChecked = task.completed
+//        checkBox.setOnCheckedChangeListener { _, isChecked ->
+//            task.completed = isChecked
+//        }
+
+        return view
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_task, parent, false)
-        return TaskViewHolder(view)
+    // Para mejor rendimiento con ListView
+    override fun getItemId(position: Int): Long {
+        return getItem(position)?.id?.hashCode()?.toLong() ?: super.getItemId(position)
     }
 
-    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val task = tasks[position]
-        holder.name.text = task.name
-        holder.description.text = task.description
+    override fun hasStableIds(): Boolean {
+        return true
     }
-
-    override fun getItemCount() = tasks.size
 }

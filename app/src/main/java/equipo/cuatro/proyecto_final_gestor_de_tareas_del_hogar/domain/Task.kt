@@ -10,7 +10,7 @@ data class Task(
     val createdBy: String = "",
     val creationDate: String = "",
     val timestamp: Long = 0,
-    val completed: Boolean = false
+    var completed: Boolean = false
 ) {
     constructor() : this("", "", "", emptyMap(), "", "", "", 0, false)
 }
