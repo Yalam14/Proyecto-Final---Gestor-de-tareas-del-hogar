@@ -72,35 +72,35 @@ class SemanalFragment : Fragment() {
 
     private fun updateTaskViews(tasksByDay: Map<String, List<Task>>) {
         // Lunes
-        updateDayTasks(tasksByDay["Lunes"] ?: emptyList(),
+        updateDayTasks("Lunes", tasksByDay["Lunes"] ?: emptyList(),
             binding.taskLunes1, binding.taskLunes2, binding.taskLunes3)
 
         // Martes
-        updateDayTasks(tasksByDay["Martes"] ?: emptyList(),
+        updateDayTasks("Martes", tasksByDay["Martes"] ?: emptyList(),
             binding.taskMartes1, binding.taskMartes2, binding.taskMartes3)
 
         // Miércoles
-        updateDayTasks(tasksByDay["Miércoles"] ?: emptyList(),
+        updateDayTasks("Miércoles", tasksByDay["Miércoles"] ?: emptyList(),
             binding.taskMiercoles1, binding.taskMiercoles2, binding.taskMiercoles3)
 
         // Jueves
-        updateDayTasks(tasksByDay["Jueves"] ?: emptyList(),
+        updateDayTasks("Jueves", tasksByDay["Jueves"] ?: emptyList(),
             binding.taskJueves1, binding.taskJueves2, binding.taskJueves3)
 
         // Viernes
-        updateDayTasks(tasksByDay["Viernes"] ?: emptyList(),
+        updateDayTasks("Viernes", tasksByDay["Viernes"] ?: emptyList(),
             binding.taskViernes1, binding.taskViernes2, binding.taskViernes3)
 
         // Sábado
-        updateDayTasks(tasksByDay["Sábado"] ?: emptyList(),
+        updateDayTasks("Sábado", tasksByDay["Sábado"] ?: emptyList(),
             binding.taskSabado1, binding.taskSabado2, binding.taskSabado3)
 
         // Domingo
-        updateDayTasks(tasksByDay["Domingo"] ?: emptyList(),
+        updateDayTasks("Domingo", tasksByDay["Domingo"] ?: emptyList(),
             binding.taskDomingo1, binding.taskDomingo2, binding.taskDomingo3)
     }
 
-    private fun updateDayTasks(tasks: List<Task>, vararg taskViews: View) {
+    private fun updateDayTasks(dia: String, tasks: List<Task>, vararg taskViews: View) {
         taskViews.forEachIndexed { index, view ->
             val textView = view as TextView
             if (index < tasks.size) {
@@ -111,7 +111,7 @@ class SemanalFragment : Fragment() {
                         if (task.completed) resources.getColor(R.color.green_completed)
                         else resources.getColor(R.color.task_pending)
                     )
-                    setOnClickListener { navigateToTaskDetail(task) }
+                    setOnClickListener { navigateToTaskDetail(task, dia) }
                     visibility = View.VISIBLE
                 }
             } else {
@@ -120,16 +120,18 @@ class SemanalFragment : Fragment() {
         }
     }
 
-    private fun navigateToTaskDetail(task: Task) {
+    private fun navigateToTaskDetail(task: Task, dia: String) {
         val intent = Intent(requireContext(), DetalleTareaActivity::class.java).apply {
             putExtra("taskId", task.id)
             putExtra("taskName", task.name)
             putExtra("taskDescription", task.description)
-            val diasBundle = Bundle().apply {
-                task.days.forEach { (dia, miembros) ->
-                    putStringArrayList(dia, ArrayList(miembros))
+            val diasBundle = ArrayList<String>()
+            task.days.forEach { (day, miembros) ->
+                if (dia.equals(day)) {
+                    diasBundle.addAll(miembros)
                 }
             }
+            putStringArrayListExtra("assignedTo", diasBundle)
             putExtra("assignedTo", diasBundle)
             putExtra("completed", task.completed)
         }

@@ -1,20 +1,14 @@
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.diario
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.DetalleTareaActivity
-import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.R
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.adapters.TaskAdapter
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentDiarioBinding
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
@@ -108,12 +102,13 @@ class DiarioFragment : Fragment() {
             putExtra("taskId", task.id)
             putExtra("taskName", task.name)
             putExtra("taskDescription", task.description)
-            val diasBundle = Bundle().apply {
-                task.days.forEach { (dia, miembros) ->
-                    putStringArrayList(dia, ArrayList(miembros))
+            val diasBundle = ArrayList<String>()
+            task.days.forEach { (dia, miembros) ->
+                if (binding.txtDay.text.equals(dia)) {
+                    diasBundle.addAll(miembros)
                 }
             }
-            putExtra("assignedTo", diasBundle)
+            putStringArrayListExtra("assignedTo", diasBundle)
             putExtra("completed", task.completed)
         }
         startActivity(intent)
