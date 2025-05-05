@@ -29,10 +29,12 @@ class DetalleTareaActivity : AppCompatActivity() {
         // Configurar estado de completado
         if (isCompleted) {
             binding.btnTerminar.text = "Marcar como pendiente"
-            binding.btnTerminar.backgroundTintList = ContextCompat.getColorStateList(this, R.color.orange)
+            binding.btnTerminar.backgroundTintList =
+                ContextCompat.getColorStateList(this, R.color.orange)
         } else {
             binding.btnTerminar.text = "Marcar como completada"
-            binding.btnTerminar.backgroundTintList = ContextCompat.getColorStateList(this, R.color.green)
+            binding.btnTerminar.backgroundTintList =
+                ContextCompat.getColorStateList(this, R.color.green)
         }
 
         // Configurar miembros
@@ -73,14 +75,17 @@ class DetalleTareaActivity : AppCompatActivity() {
                     // Configurar checkbox si es necesario
                     // binding.miembro1Checkbox.isChecked = ...
                 }
+
                 1 -> {
                     binding.miembro2.visibility = View.VISIBLE
                     binding.miembro2Nombre.text = memberName
                 }
+
                 2 -> {
                     binding.miembro3.visibility = View.VISIBLE
                     binding.miembro3Nombre.text = memberName
                 }
+
                 3 -> {
                     binding.miembro4.visibility = View.VISIBLE
                     binding.miembro4Nombre.text = memberName

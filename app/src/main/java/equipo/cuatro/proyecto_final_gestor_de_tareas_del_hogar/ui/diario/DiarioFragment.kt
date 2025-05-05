@@ -147,7 +147,8 @@ class DiarioFragment : Fragment() {
 
             // Asignados y estado
             TextView(requireContext()).apply {
-                text = "Asignado a: ${task.days.values.joinToString(", ")} • ${if(task.completed) "✓ Completada" else "○ Pendiente"}"
+                text =
+                    "Asignado a: ${task.days.values.joinToString(", ")} • ${if (task.completed) "✓ Completada" else "○ Pendiente"}"
                 textSize = 12f
                 setTextColor(if (task.completed) Color.parseColor("#4CAF50") else Color.parseColor("#FF9800"))
                 setPadding(0, 8, 0, 0)
@@ -161,12 +162,13 @@ class DiarioFragment : Fragment() {
             putExtra("taskId", task.id)
             putExtra("taskName", task.name)
             putExtra("taskDescription", task.description)
-            val diasBundle = Bundle().apply {
-                task.days.forEach { (dia, miembros) ->
-                    putStringArrayList(dia, ArrayList(miembros))
+            val diasBundle = ArrayList<String>()
+            task.days.forEach { (dia, miembros) ->
+                if (binding.txtDay.text.equals(dia)) {
+                    diasBundle.addAll(miembros)
                 }
             }
-            putExtra("assignedTo", diasBundle)
+            putStringArrayListExtra("assignedTo", diasBundle)
             putExtra("completed", task.completed)
         }
         startActivity(intent)
