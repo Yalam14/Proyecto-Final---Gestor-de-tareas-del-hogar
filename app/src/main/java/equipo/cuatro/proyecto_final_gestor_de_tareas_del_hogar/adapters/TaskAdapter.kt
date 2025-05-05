@@ -19,19 +19,16 @@ class TaskAdapter(
         val view = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.task_item_daily, parent, false)
         val task = getItem(position) ?: return view
-//        val checkBox = view.findViewById<CheckBox>(R.id.checkBox)
         val title = view.findViewById<TextView>(R.id.taskTitle)
         val description = view.findViewById<TextView>(R.id.taskDescription)
         val assignedTo = view.findViewById<TextView>(R.id.assignedTo)
         title.text = task.name
         description.text = task.description?.split("\n")?.firstOrNull() ?: ""
-        val assignedText = task.days.values.flatten().joinToString(", ")
-        assignedTo.text = if (assignedText.isNotEmpty()) "Asignado a: $assignedText" else "Sin asignar"
-//        checkBox.isChecked = task.completed
-//        checkBox.setOnCheckedChangeListener { _, isChecked ->
-//            task.completed = isChecked
-//        }
-
+        val assignedMembers = task.days.values
+            .flatten()
+            .distinct()
+            .joinToString(", ")
+        assignedTo.text = if (assignedMembers.isNotEmpty()) "Asignado a: $assignedMembers" else "Sin asignar"
         return view
     }
 
