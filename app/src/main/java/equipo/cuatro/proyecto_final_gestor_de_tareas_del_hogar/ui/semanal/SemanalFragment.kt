@@ -125,14 +125,13 @@ class SemanalFragment : Fragment() {
             putExtra("taskId", task.id)
             putExtra("taskName", task.name)
             putExtra("taskDescription", task.description)
+
             val diasBundle = ArrayList<String>()
-            task.days.forEach { (day, miembros) ->
-                if (dia.equals(day)) {
-                    diasBundle.addAll(miembros)
-                }
+            task.schedule[dia]?.let { scheduledDay ->
+                diasBundle.addAll(scheduledDay.assignedTo)
             }
+
             putStringArrayListExtra("assignedTo", diasBundle)
-            putExtra("assignedTo", diasBundle)
             putExtra("completed", task.completed)
         }
         startActivity(intent)

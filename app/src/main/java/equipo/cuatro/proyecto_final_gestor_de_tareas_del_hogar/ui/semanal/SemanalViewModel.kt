@@ -71,10 +71,14 @@ class SemanalViewModel : ViewModel() {
                             id = taskSnapshot.key ?: ""
                         }
 
-                        task?.days?.forEach { (day, _) ->
-                            tasksByDay.getOrPut(day) { mutableListOf() }.add(task)
-                            totalTasks++
-                            if (task.completed) completedTasks++
+                        // Reemplazar task.days por task.schedule
+                        task?.schedule?.forEach { (day, scheduledDay) ->
+                            // Suponiendo que `scheduledDay.members` es una lista de miembros
+                            if (scheduledDay.assignedTo.isNotEmpty()) {
+                                tasksByDay.getOrPut(day) { mutableListOf() }.add(task)
+                                totalTasks++
+                                if (task.completed) completedTasks++
+                            }
                         }
                     }
 

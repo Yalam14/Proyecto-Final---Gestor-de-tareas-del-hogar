@@ -1,6 +1,5 @@
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,17 +13,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.UnirseActivity
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.ScheduledDay
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
-import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.User
-import kotlinx.coroutines.awaitAll
-import org.checkerframework.checker.units.qual.s
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.jvm.java
@@ -106,6 +99,28 @@ class AgregarTareaActivity : AppCompatActivity() {
         }
     }
 
+    private fun getNextDateForDay(dayOfWeek: String): String {
+        val calendar = Calendar.getInstance()
+        val today = calendar.get(Calendar.DAY_OF_WEEK)
+
+        val dayMap = mapOf(
+            "Domingo" to Calendar.SUNDAY,
+            "Lunes" to Calendar.MONDAY,
+            "Martes" to Calendar.TUESDAY,
+            "Miércoles" to Calendar.WEDNESDAY,
+            "Jueves" to Calendar.THURSDAY,
+            "Viernes" to Calendar.FRIDAY,
+            "Sábado" to Calendar.SATURDAY
+        )
+
+        val targetDay = dayMap[dayOfWeek] ?: return ""
+
+        val daysUntil = (targetDay + 7 - today) % 7
+        calendar.add(Calendar.DAY_OF_YEAR, if (daysUntil == 0) 7 else daysUntil)
+
+        return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+    }
+
     private fun agregarTarea() {
         val nombre = findViewById<EditText>(R.id.et_nombre).text.toString()
         val descripcion = findViewById<EditText>(R.id.et_descripcion).text.toString()
@@ -123,14 +138,16 @@ class AgregarTareaActivity : AppCompatActivity() {
         val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val timestamp = System.currentTimeMillis()
 
-        val diasConAsignaciones = asignacionesPorDia.mapValues { (_, miembros) ->
-            miembros.toList()
+        val diasConFechas: Map<String, ScheduledDay> = asignacionesPorDia.mapKeys { (dia) ->
+            getNextDateForDay(dia)
+        }.mapValues { (_, miembros) ->
+            ScheduledDay(assignedTo = miembros)
         }
 
         val nuevaTarea = Task(
             name = nombre,
             description = descripcion,
-            days = diasConAsignaciones,
+            schedule = diasConFechas,
             homeId = homeId,
             createdBy = currentUser,
             creationDate = fechaActual,
@@ -147,6 +164,7 @@ class AgregarTareaActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error al agregar tarea: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
 
     private fun mostrarMiembrosParaDia(dia: String, container: LinearLayout) {
         container.removeAllViews() // Limpiar contenedor

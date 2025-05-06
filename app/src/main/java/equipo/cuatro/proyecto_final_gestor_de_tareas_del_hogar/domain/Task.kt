@@ -5,7 +5,7 @@ data class Task(
     var id: String = "",
     val name: String = "",
     val description: String = "",
-    val days: Map<String, List<String>> = emptyMap(), // Día -> Lista de miembros
+    val schedule: Map<String, ScheduledDay> = emptyMap(),
     val homeId: String = "",
     val createdBy: String = "",
     val creationDate: String = "",

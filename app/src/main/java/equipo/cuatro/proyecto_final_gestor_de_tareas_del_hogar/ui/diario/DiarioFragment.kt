@@ -2,6 +2,7 @@ package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.diario
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,6 @@ class DiarioFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: DiarioViewModel
     private var homeId: String = ""
-
     private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreateView(
@@ -29,10 +29,20 @@ class DiarioFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(DiarioViewModel::class.java)
         _binding = FragmentDiarioBinding.inflate(inflater, container, false)
 
-        homeId = arguments?.getString("HOME_ID") ?: ""
-        val homeName = arguments?.getString("HOME_NAME") ?: ""
+        // Inicialización con lista vacía
         taskAdapter = TaskAdapter(requireContext(), emptyList())
         binding.taskContainer.adapter = taskAdapter
+
+        setupEmptyView()
+        setupArguments()
+        setupClickListeners()
+        setupObservers()
+        loadInitialTasks()
+
+        return binding.root
+    }
+
+    private fun setupEmptyView() {
         val emptyView = TextView(requireContext()).apply {
             text = "No hay tareas para hoy"
             textSize = 16f
@@ -41,21 +51,26 @@ class DiarioFragment : Fragment() {
         }
         (binding.taskContainer.parent as ViewGroup).addView(emptyView)
         binding.taskContainer.emptyView = emptyView
+    }
+
+    private fun setupArguments() {
+        arguments?.let {
+            homeId = it.getString("HOME_ID") ?: ""
+            val homeName = it.getString("HOME_NAME") ?: ""
+            binding.texthome.text = homeName
+            Log.d("DiarioFragment", "Home ID recibido: $homeId")
+        } ?: run {
+            Log.e("DiarioFragment", "No se recibieron argumentos")
+        }
+    }
+
+    private fun setupClickListeners() {
         binding.taskContainer.setOnItemClickListener { _, _, position, _ ->
-            val task = taskAdapter.getItem(position)
-            if (task != null) {
+            taskAdapter.getItem(position)?.let { task ->
                 navigateToTaskDetail(task)
             }
         }
-        binding.texthome.text = homeName
-        setupDayNavigation()
-        setupObservers()
-        loadInitialTasks()
 
-        return binding.root
-    }
-
-    private fun setupDayNavigation() {
         binding.btnPrevDay.setOnClickListener {
             viewModel.loadPreviousDayTasks(homeId)
         }
@@ -68,11 +83,13 @@ class DiarioFragment : Fragment() {
     private fun setupObservers() {
         viewModel.currentDay.observe(viewLifecycleOwner) { day ->
             binding.txtDay.text = day
+            Log.d("DiarioFragment", "Día actualizado: $day")
         }
 
         viewModel.tasks.observe(viewLifecycleOwner) { tasks ->
-            updateTaskList(tasks)
-            updateProgressBar(tasks)
+            Log.d("DiarioFragment", "Tareas recibidas: ${tasks?.size ?: 0}")
+            updateTaskList(tasks ?: emptyList())
+            updateProgressBar(tasks ?: emptyList())
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -80,47 +97,40 @@ class DiarioFragment : Fragment() {
         }
     }
 
-    private fun loadInitialTasks() {
-        viewModel.loadTasksForCurrentDay(homeId)
-    }
-
     private fun updateTaskList(tasks: List<Task>) {
         taskAdapter = TaskAdapter(requireContext(), tasks)
         binding.taskContainer.adapter = taskAdapter
-        if (tasks.isEmpty()) {
-            binding.taskContainer.emptyView = TextView(requireContext()).apply {
-                text = "No hay tareas para hoy"
-                textSize = 16f
-                gravity = android.view.Gravity.CENTER
-                setTextColor(android.graphics.Color.parseColor("#616161"))
-            }
+        Log.d("DiarioFragment", "Lista actualizada con ${tasks.size} tareas")
+    }
+
+    private fun loadInitialTasks() {
+        if (homeId.isNotEmpty()) {
+            viewModel.loadTasksForCurrentDay(homeId)
+        } else {
+            Log.e("DiarioFragment", "Home ID vacío, no se pueden cargar tareas")
         }
     }
 
     private fun navigateToTaskDetail(task: Task) {
-        val intent = Intent(requireContext(), DetalleTareaActivity::class.java).apply {
+        Intent(requireContext(), DetalleTareaActivity::class.java).apply {
             putExtra("taskId", task.id)
             putExtra("taskName", task.name)
             putExtra("taskDescription", task.description)
-            val diasBundle = ArrayList<String>()
-            task.days.forEach { (dia, miembros) ->
-                if (binding.txtDay.text.equals(dia)) {
-                    diasBundle.addAll(miembros)
-                }
-            }
-            putStringArrayListExtra("assignedTo", diasBundle)
+
+            val diaActual = binding.txtDay.text.toString()
+            val asignados = task.schedule[diaActual]?.assignedTo ?: emptyList()
+
+            putStringArrayListExtra("assignedTo", ArrayList(asignados))
             putExtra("completed", task.completed)
+            startActivity(this)
         }
-        startActivity(intent)
     }
 
     private fun updateProgressBar(tasks: List<Task>) {
-        if (tasks.isNotEmpty()) {
-            val completedTasks = tasks.count { it.completed }
-            val progress = (completedTasks.toFloat() / tasks.size * 100).toInt()
-            binding.progressTasks.progress = progress
+        binding.progressTasks.progress = if (tasks.isNotEmpty()) {
+            (tasks.count { it.completed }.toFloat() / tasks.size * 100).toInt()
         } else {
-            binding.progressTasks.progress = 0
+            0
         }
     }
 
