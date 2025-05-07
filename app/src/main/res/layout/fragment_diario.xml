@@ -18,6 +18,12 @@
         android:paddingTop="8dp"
         android:background="?attr/selectableItemBackground">
 
+        <ImageView
+            android:id="@+id/btn_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_ios_share_24" />
+
         <!-- Título más grande y mejor espaciado -->
         <TextView
             android:id="@+id/texthome"
