@@ -60,15 +60,13 @@ class DiarioViewModel : ViewModel() {
         _isLoading.value = true
         currentListener?.let { tasksRef.removeEventListener(it) }
 
-        // Obtener rango del día actual (desde 00:00 hasta 23:59)
-        val (startOfDay, endOfDay) = getDayRange()
+        val currentDateFormatted = _currentDay.value ?: return
+        val currentDayNameValue = _currentDayName.value ?: ""
 
         currentListener = tasksRef.orderByChild("homeId").equalTo(homeId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("DiarioViewModel", "Datos recibidos. Total hijos: ${snapshot.childrenCount}")
                     val tasksList = mutableListOf<Task>()
-                    val currentDayNameValue = _currentDayName.value ?: ""
 
                     for (taskSnapshot in snapshot.children) {
                         val task = taskSnapshot.getValue(Task::class.java)?.apply {
@@ -76,30 +74,33 @@ class DiarioViewModel : ViewModel() {
                         }
 
                         task?.let { t ->
-                            // Filtrar por día usando timestamp y día de la semana
-                            if (t.timestamp in startOfDay..endOfDay) {
-                                val englishDay = when (currentDayNameValue) {
-                                    "Lunes" -> "MONDAY"
-                                    "Martes" -> "TUESDAY"
-                                    "Miércoles" -> "WEDNESDAY"
-                                    "Jueves" -> "THURSDAY"
-                                    "Viernes" -> "FRIDAY"
-                                    "Sábado" -> "SATURDAY"
-                                    "Domingo" -> "SUNDAY"
-                                    else -> ""
+                            val isScheduled = when {
+                                t.schedule.containsKey(currentDateFormatted) -> true
+                                else -> {
+                                    val englishDay = when (currentDayNameValue) {
+                                        "Lunes" -> "MONDAY"
+                                        "Martes" -> "TUESDAY"
+                                        "Miércoles" -> "WEDNESDAY"
+                                        "Jueves" -> "THURSDAY"
+                                        "Viernes" -> "FRIDAY"
+                                        "Sábado" -> "SATURDAY"
+                                        "Domingo" -> "SUNDAY"
+                                        else -> ""
+                                    }
+                                    t.schedule.containsKey(englishDay)
                                 }
+                            }
 
-                                if (t.schedule.containsKey(englishDay)) {
-                                    tasksList.add(t)
-                                    Log.d("DiarioViewModel", "Tarea añadida: ${t.name} para $currentDayNameValue")
-                                }
+                            if (isScheduled) {
+                                tasksList.add(t)
+                                Log.d("DiarioViewModel", "Tarea añadida: ${t.name} para $currentDateFormatted")
                             }
                         }
                     }
 
                     _tasks.value = tasksList
                     _isLoading.value = false
-                    Log.d("DiarioViewModel", "Tareas cargadas: ${tasksList.size} para $currentDayNameValue")
+                    Log.d("DiarioViewModel", "Tareas cargadas: ${tasksList.size} para $currentDateFormatted")
                 }
 
                 override fun onCancelled(error: DatabaseError) {
