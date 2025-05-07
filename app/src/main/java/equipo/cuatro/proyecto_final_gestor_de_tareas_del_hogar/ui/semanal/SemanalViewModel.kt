@@ -1,5 +1,6 @@
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.ui.semanal
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -68,11 +69,15 @@ class SemanalViewModel : ViewModel() {
         _isLoading.value = true
         currentListener?.let { tasksRef.removeEventListener(it) }
 
+        // Obtener el rango de fechas de la semana actual
+        val (startOfWeek, endOfWeek) = getWeekRange()
+
         tasksRef.orderByChild("homeId").equalTo(homeId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("SemanalViewModel", "Datos recibidos. Total hijos: ${snapshot.childrenCount}")
+                    Log.d("SemanalViewModel", "Rango de semana: $startOfWeek - $endOfWeek")
                     val tasksByDay = HashMap<String, MutableList<Task>>().apply {
-                        // Inicializar todos los días
                         listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo").forEach {
                             put(it, mutableListOf())
                         }
@@ -86,13 +91,27 @@ class SemanalViewModel : ViewModel() {
                             id = taskSnapshot.key ?: ""
                         }
 
-                        // Reemplazar task.days por task.schedule
-                        task?.schedule?.forEach { (day, scheduledDay) ->
-                            // Suponiendo que `scheduledDay.members` es una lista de miembros
-                            if (scheduledDay.assignedTo.isNotEmpty()) {
-                                tasksByDay.getOrPut(day) { mutableListOf() }.add(task)
-                                totalTasks++
-                                if (task.completed) completedTasks++
+                        task?.let { t ->
+                            // Filtrar por semana usando el timestamp
+                            if (t.timestamp in startOfWeek..endOfWeek) {
+                                t.schedule.keys.forEach { englishDay ->
+                                    val spanishDay = when (englishDay.uppercase()) {
+                                        "MONDAY" -> "Lunes"
+                                        "TUESDAY" -> "Martes"
+                                        "WEDNESDAY" -> "Miércoles"
+                                        "THURSDAY" -> "Jueves"
+                                        "FRIDAY" -> "Viernes"
+                                        "SATURDAY" -> "Sábado"
+                                        "SUNDAY" -> "Domingo"
+                                        else -> englishDay
+                                    }
+
+                                    if (t.schedule[englishDay]?.assignedTo?.isNotEmpty() == true) {
+                                        tasksByDay[spanishDay]?.add(t)
+                                        totalTasks++
+                                        if (t.completed) completedTasks++
+                                    }
+                                }
                             }
                         }
                     }
@@ -106,6 +125,29 @@ class SemanalViewModel : ViewModel() {
                     _isLoading.value = false
                 }
             })
+    }
+
+    private fun getWeekRange(): Pair<Long, Long> {
+        val cal = Calendar.getInstance().apply {
+            timeInMillis = calendar.timeInMillis
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        // Obtener inicio de la semana (Lunes)
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        val startOfWeek = cal.timeInMillis
+
+        // Obtener fin de la semana (Domingo)
+        cal.add(Calendar.DAY_OF_WEEK, 6)
+        cal.set(Calendar.HOUR_OF_DAY, 23)
+        cal.set(Calendar.MINUTE, 59)
+        cal.set(Calendar.SECOND, 59)
+        val endOfWeek = cal.timeInMillis
+
+        return Pair(startOfWeek, endOfWeek)
     }
 
     override fun onCleared() {
