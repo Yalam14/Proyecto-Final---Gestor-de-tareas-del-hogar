@@ -5,12 +5,10 @@ data class Task(
     var id: String = "",
     val name: String = "",
     val description: String = "",
-    val schedule: Map<String, ScheduledDay> = emptyMap(),
+    val schedule: Map<String, ScheduledDay> = emptyMap(),  // "MONDAY", "TUESDAY", etc.
     val homeId: String = "",
     val createdBy: String = "",
     val creationDate: String = "",
     val timestamp: Long = 0,
     var completed: Boolean = false
-) {
-    constructor() : this("", "", "", emptyMap(), "", "", "", 0, false)
-}
+)

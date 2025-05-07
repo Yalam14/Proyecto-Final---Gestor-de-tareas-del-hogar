@@ -5,19 +5,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.DetalleTareaActivity
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.R
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.adapters.TaskAdapter
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.FragmentSemanalBinding
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
+import java.util.Calendar
 
 class SemanalFragment : Fragment() {
     private var _binding: FragmentSemanalBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: SemanalViewModel
     private lateinit var homeId: String
+
+    // Adapters para cada día de la semana
+    private lateinit var mondayAdapter: TaskAdapter
+    private lateinit var tuesdayAdapter: TaskAdapter
+    private lateinit var wednesdayAdapter: TaskAdapter
+    private lateinit var thursdayAdapter: TaskAdapter
+    private lateinit var fridayAdapter: TaskAdapter
+    private lateinit var saturdayAdapter: TaskAdapter
+    private lateinit var sundayAdapter: TaskAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,11 +38,38 @@ class SemanalFragment : Fragment() {
         _binding = FragmentSemanalBinding.inflate(inflater, container, false)
 
         homeId = arguments?.getString("HOME_ID") ?: ""
+
+        // Inicializar los adapters
+        initAdapters()
+
         setupWeekNavigation()
         setupObservers()
         loadInitialTasks()
 
         return binding.root
+    }
+
+    private fun initAdapters() {
+        val onTaskClick: (Task) -> Unit = { task ->
+            navigateToTaskDetail(task)
+        }
+
+        mondayAdapter = TaskAdapter(requireContext(), emptyList(), onTaskClick)
+        tuesdayAdapter = TaskAdapter(requireContext(), emptyList(), onTaskClick)
+        wednesdayAdapter = TaskAdapter(requireContext(), emptyList(), onTaskClick)
+        thursdayAdapter = TaskAdapter(requireContext(), emptyList(), onTaskClick)
+        fridayAdapter = TaskAdapter(requireContext(), emptyList(), onTaskClick)
+        saturdayAdapter = TaskAdapter(requireContext(), emptyList(), onTaskClick)
+        sundayAdapter = TaskAdapter(requireContext(), emptyList(), onTaskClick)
+
+        // Asignar los adapters a los ListViews
+        binding.listViewMonday.adapter = mondayAdapter
+        binding.listViewTuesday.adapter = tuesdayAdapter
+        binding.listViewWednesday.adapter = wednesdayAdapter
+        binding.listViewThursday.adapter = thursdayAdapter
+        binding.listViewFriday.adapter = fridayAdapter
+        binding.listViewSaturday.adapter = saturdayAdapter
+        binding.listViewSunday.adapter = sundayAdapter
     }
 
     private fun setupWeekNavigation() {
@@ -47,7 +84,8 @@ class SemanalFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.currentWeek.observe(viewLifecycleOwner) { week ->
-            binding.textWeekNumber.text = "Semana $week"
+            binding.textWeekNumber.text = getString(R.string.week_number, week)
+            binding.textYear.text = Calendar.getInstance().get(Calendar.YEAR).toString()
         }
 
         viewModel.tasksByDay.observe(viewLifecycleOwner) { tasksByDay ->
@@ -58,6 +96,7 @@ class SemanalFragment : Fragment() {
 
         viewModel.progress.observe(viewLifecycleOwner) { progress ->
             binding.progressBar.progress = progress
+            binding.textProgress.text = getString(R.string.progress_percentage, progress)
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -71,67 +110,38 @@ class SemanalFragment : Fragment() {
     }
 
     private fun updateTaskViews(tasksByDay: Map<String, List<Task>>) {
-        // Lunes
-        updateDayTasks("Lunes", tasksByDay["Lunes"] ?: emptyList(),
-            binding.taskLunes1, binding.taskLunes2, binding.taskLunes3)
+        // Actualizar los adapters con las nuevas listas de tareas
+        mondayAdapter.updateTareas(tasksByDay["Lunes"] ?: emptyList())
+        tuesdayAdapter.updateTareas(tasksByDay["Martes"] ?: emptyList())
+        wednesdayAdapter.updateTareas(tasksByDay["Miércoles"] ?: emptyList())
+        thursdayAdapter.updateTareas(tasksByDay["Jueves"] ?: emptyList())
+        fridayAdapter.updateTareas(tasksByDay["Viernes"] ?: emptyList())
+        saturdayAdapter.updateTareas(tasksByDay["Sábado"] ?: emptyList())
+        sundayAdapter.updateTareas(tasksByDay["Domingo"] ?: emptyList())
 
-        // Martes
-        updateDayTasks("Martes", tasksByDay["Martes"] ?: emptyList(),
-            binding.taskMartes1, binding.taskMartes2, binding.taskMartes3)
-
-        // Miércoles
-        updateDayTasks("Miércoles", tasksByDay["Miércoles"] ?: emptyList(),
-            binding.taskMiercoles1, binding.taskMiercoles2, binding.taskMiercoles3)
-
-        // Jueves
-        updateDayTasks("Jueves", tasksByDay["Jueves"] ?: emptyList(),
-            binding.taskJueves1, binding.taskJueves2, binding.taskJueves3)
-
-        // Viernes
-        updateDayTasks("Viernes", tasksByDay["Viernes"] ?: emptyList(),
-            binding.taskViernes1, binding.taskViernes2, binding.taskViernes3)
-
-        // Sábado
-        updateDayTasks("Sábado", tasksByDay["Sábado"] ?: emptyList(),
-            binding.taskSabado1, binding.taskSabado2, binding.taskSabado3)
-
-        // Domingo
-        updateDayTasks("Domingo", tasksByDay["Domingo"] ?: emptyList(),
-            binding.taskDomingo1, binding.taskDomingo2, binding.taskDomingo3)
+        // Asegurarse de que los ListViews se actualicen
+        mondayAdapter.notifyDataSetChanged()
+        tuesdayAdapter.notifyDataSetChanged()
+        wednesdayAdapter.notifyDataSetChanged()
+        thursdayAdapter.notifyDataSetChanged()
+        fridayAdapter.notifyDataSetChanged()
+        saturdayAdapter.notifyDataSetChanged()
+        sundayAdapter.notifyDataSetChanged()
     }
 
-    private fun updateDayTasks(dia: String, tasks: List<Task>, vararg taskViews: View) {
-        taskViews.forEachIndexed { index, view ->
-            val textView = view as TextView
-            if (index < tasks.size) {
-                val task = tasks[index]
-                textView.apply {
-                    text = task.name
-                    setBackgroundColor(
-                        if (task.completed) resources.getColor(R.color.green_completed)
-                        else resources.getColor(R.color.task_pending)
-                    )
-                    setOnClickListener { navigateToTaskDetail(task, dia) }
-                    visibility = View.VISIBLE
-                }
-            } else {
-                textView.visibility = View.INVISIBLE
-            }
-        }
-    }
-
-    private fun navigateToTaskDetail(task: Task, dia: String) {
+    private fun navigateToTaskDetail(task: Task) {
         val intent = Intent(requireContext(), DetalleTareaActivity::class.java).apply {
             putExtra("taskId", task.id)
             putExtra("taskName", task.name)
             putExtra("taskDescription", task.description)
 
-            val diasBundle = ArrayList<String>()
-            task.schedule[dia]?.let { scheduledDay ->
-                diasBundle.addAll(scheduledDay.assignedTo)
-            }
+            // Obtener todos los asignados de todos los días
+            val assignedMembers = task.schedule.values
+                .flatMap { it.assignedTo }
+                .distinct()
+                .toMutableList()
 
-            putStringArrayListExtra("assignedTo", diasBundle)
+            putStringArrayListExtra("assignedTo", ArrayList(assignedMembers))
             putExtra("completed", task.completed)
         }
         startActivity(intent)

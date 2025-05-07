@@ -9,31 +9,19 @@
     android:paddingTop="8dp"
     tools:context=".ui.semanal.SemanalFragment">
 
-    <!-- Encabezado mejorado -->
+    <!-- Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="8dp">
+        android:padding="16dp">
 
-        <!-- Título más grande y mejor espaciado -->
-        <TextView
+        <!-- Week Navigation -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textColor="#212121"
-            android:text="Tareas del Hogar"
-            android:layout_marginBottom="8dp"/>
-
-        <!-- Selector de semana con mejor espaciado -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:layout_marginBottom="16dp">
 
             <ImageButton
@@ -41,523 +29,296 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_left"
-                android:contentDescription="Semana anterior"
+                android:contentDescription="@string/previous_week"
                 android:background="?attr/selectableItemBackgroundBorderless"/>
 
-            <TextView
-                android:id="@+id/textWeekNumber"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:text="Semana 1"
-                android:textColor="#212121"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/textWeekNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/week_number_default"
+                    android:textColor="#212121"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#616161"
+                    android:textSize="16sp"/>
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/buttonNextWeek"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_right"
-                android:contentDescription="Semana siguiente"
+                android:contentDescription="@string/next_week"
                 android:background="?attr/selectableItemBackgroundBorderless"/>
         </LinearLayout>
 
-        <!-- Barra de progreso con mejor espaciado -->
+        <!-- Progress Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Progreso semanal"
+                android:text="@string/weekly_progress"
                 android:textSize="16sp"
-                android:textColor="#616161"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="#616161"/>
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleHorizontal"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:progressDrawable="@drawable/progress_bar_black"
-                android:progress="0"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="8dp"
+                    android:layout_weight="1"
+                    android:progressDrawable="@drawable/progress_bar_black"
+                    android:progress="0"/>
+
+                <TextView
+                    android:id="@+id/textProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="0%"
+                    android:textColor="#212121"
+                    android:textSize="14sp"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Separador más grueso -->
+    <!-- Divider -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#EEEEEE"
-        android:layout_marginBottom="8dp"/>
+        android:layout_height="1dp"
+        android:background="#EEEEEE"/>
 
-    <!-- Lista de días -->
+    <!-- Days List -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:paddingBottom="24dp">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="16dp">
 
-            <!-- Lunes -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:layout_marginBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:text="@string/monday"
                     android:textColor="#212121"
-                    android:text="Lunes"
-                    android:layout_marginBottom="12dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/listViewMonday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:dividerHeight="8dp"
+                    android:nestedScrollingEnabled="true"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="16dp"/>
 
-                    <TextView
-                        android:id="@+id/task_lunes_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_lunes_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_lunes_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-                </LinearLayout>
             </LinearLayout>
 
-            <!-- Martes -->
+            <!-- Tuesday -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:layout_marginBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:text="@string/tuesday"
                     android:textColor="#212121"
-                    android:text="Martes"
-                    android:layout_marginBottom="12dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/listViewTuesday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:dividerHeight="8dp"
+                    android:nestedScrollingEnabled="true"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="16dp"/>
 
-                    <TextView
-                        android:id="@+id/task_martes_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_martes_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_martes_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-                </LinearLayout>
             </LinearLayout>
 
-            <!-- Miércoles -->
+            <!-- Wednesday -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:layout_marginBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:text="@string/wednesday"
                     android:textColor="#212121"
-                    android:text="Miércoles"
-                    android:layout_marginBottom="12dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/listViewWednesday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
-
-                    <TextView
-                        android:id="@+id/task_miercoles_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_miercoles_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_miercoles_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-                </LinearLayout>
+                    android:dividerHeight="8dp"
+                    android:nestedScrollingEnabled="true"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="16dp"/>
             </LinearLayout>
 
-            <!-- Jueves -->
+            <!-- Thursday -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:layout_marginBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:text="@string/thursday"
                     android:textColor="#212121"
-                    android:text="Jueves"
-                    android:layout_marginBottom="12dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/listViewThursday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
-
-                    <TextView
-                        android:id="@+id/task_jueves_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_jueves_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_jueves_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-                </LinearLayout>
+                    android:dividerHeight="8dp"
+                    android:nestedScrollingEnabled="true"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="16dp"/>
             </LinearLayout>
 
-            <!-- Viernes -->
+            <!-- Friday -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:layout_marginBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:text="@string/friday"
                     android:textColor="#212121"
-                    android:text="Viernes"
-                    android:layout_marginBottom="12dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/listViewFriday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
-
-                    <TextView
-                        android:id="@+id/task_viernes_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_viernes_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_viernes_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-                </LinearLayout>
+                    android:dividerHeight="8dp"
+                    android:nestedScrollingEnabled="true"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="16dp"/>
             </LinearLayout>
 
-            <!-- Sábado -->
+            <!-- Saturday -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:layout_marginBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:text="@string/saturday"
                     android:textColor="#212121"
-                    android:text="Sábado"
-                    android:layout_marginBottom="12dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/listViewSaturday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
-
-                    <TextView
-                        android:id="@+id/task_sabado_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_sabado_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_sabado_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-                </LinearLayout>
+                    android:dividerHeight="8dp"
+                    android:nestedScrollingEnabled="true"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="16dp"/>
             </LinearLayout>
 
-            <!-- Domingo -->
+            <!-- Sunday -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="12dp"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:layout_marginBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:text="@string/sunday"
                     android:textColor="#212121"
-                    android:text="Domingo"
-                    android:layout_marginBottom="12dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
 
-                <LinearLayout
+                <ListView
+                    android:id="@+id/listViewSunday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
-
-                    <TextView
-                        android:id="@+id/task_domingo_1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_domingo_2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/task_domingo_3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:padding="16dp"
-                        android:layout_marginLeft="12dp"
-                        android:background="#212121"
-                        android:minHeight="100dp"
-                        android:gravity="center"/>
-                </LinearLayout>
+                    android:dividerHeight="8dp"
+                    android:nestedScrollingEnabled="true"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="16dp"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
+    <!-- Loading Indicator -->
     <ProgressBar
         android:id="@+id/progressTasks"
         style="?android:attr/progressBarStyleLarge"

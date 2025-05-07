@@ -22,7 +22,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
-import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.User
 
 class HogaresExistentesActivity : AppCompatActivity() {
     private lateinit var homeRef: DatabaseReference
@@ -157,7 +156,7 @@ class HogaresExistentesActivity : AppCompatActivity() {
         hogarId?.let {
             getHomeName(hogarId) { homename ->
                 val intent = Intent(this, TareasActivity::class.java).apply {
-                    putExtra("HOGAR_ID", it)
+                    putExtra("HOME_ID", it)
                     putExtra("HOME_NAME", homename)
                 }
                 startActivity(intent)
