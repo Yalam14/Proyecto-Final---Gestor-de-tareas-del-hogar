@@ -32,12 +32,11 @@ class TaskAdapter(
         val title = view.findViewById<TextView>(R.id.taskTitle)
         val description = view.findViewById<TextView>(R.id.taskDescription)
         val assignedTo = view.findViewById<TextView>(R.id.assignedTo)
-//        val statusIndicator = view.findViewById<View>(R.id.statusIndicator)
 
         title.text = task.name
         description.text = task.description?.takeIf { it.isNotBlank() } ?: "Sin descripción"
 
-        // Obtener asignados para la primera fecha programada
+        // Mostrar asignados para los días relevantes
         val assignedMembers = task.schedule.values
             .flatMap { it.assignedTo }
             .distinct()
@@ -45,7 +44,13 @@ class TaskAdapter(
 
         assignedTo.text = if (assignedMembers.isNotEmpty()) "Asignado a: $assignedMembers" else "Sin asignar"
 
-        // Manejar clic en la tarea
+        // Cambiar color según estado
+        if (task.completed) {
+            view.setBackgroundColor(context.resources.getColor(R.color.green_completed))
+        } else {
+            view.setBackgroundColor(context.resources.getColor(R.color.task_pending))
+        }
+
         view.setOnClickListener {
             onTaskClick?.invoke(task)
         }

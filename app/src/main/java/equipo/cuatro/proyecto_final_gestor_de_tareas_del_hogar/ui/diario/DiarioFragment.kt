@@ -129,9 +129,14 @@ class DiarioFragment : Fragment() {
     }
 
     private fun updateTaskList(tasks: List<Task>) {
-        taskAdapter = TaskAdapter(requireContext(), tasks)
-        binding.taskContainer.adapter = taskAdapter
-        Log.d("DiarioFragment", "Lista actualizada con ${tasks.size} tareas")
+        val currentDay = binding.txtDay.text.toString()
+        Log.d("DiarioFragment", "Mostrando tareas para $currentDay - Total: ${tasks.size}")
+        taskAdapter.updateTareas(tasks)
+
+        // Mostrar mensaje si no hay tareas
+        if (tasks.isEmpty()) {
+            Toast.makeText(context, "No hay tareas programadas para $currentDay", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun loadInitialTasks() {
@@ -143,17 +148,27 @@ class DiarioFragment : Fragment() {
     }
 
     private fun navigateToTaskDetail(task: Task) {
-        Intent(requireContext(), DetalleTareaActivity::class.java).apply {
+        val intent = Intent(requireContext(), DetalleTareaActivity::class.java).apply {
             putExtra("taskId", task.id)
             putExtra("taskName", task.name)
             putExtra("taskDescription", task.description)
 
+            // En DiarioFragment
             val diaActual = binding.txtDay.text.toString()
-            val asignados = task.schedule[diaActual]?.assignedTo ?: emptyList()
+            val englishDay = when (diaActual) {
+                "Lunes" -> "MONDAY"
+                "Martes" -> "TUESDAY"
+                "Miercoles" -> "WEDNESDAY"
+                "Jueves" -> "THURSDAY"
+                "Viernes" -> "FRIDAY"
+                "Sábado" -> "SATURDAY"
+                "Domingo" -> "SUNDAY"
+                else -> diaActual
+            }
+            val asignados = task.schedule[englishDay]?.assignedTo ?: emptyList()
 
             putStringArrayListExtra("assignedTo", ArrayList(asignados))
             putExtra("completed", task.completed)
-            startActivity(this)
         }
     }
 
