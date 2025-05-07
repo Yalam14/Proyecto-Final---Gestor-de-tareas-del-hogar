@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -24,8 +25,22 @@ class DiarioViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _homeCode = MutableLiveData<String>()
+    val homeCode: LiveData<String> = _homeCode
+
     init {
         _currentDay.value = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    }
+
+    fun loadHomeCode(homeId: String) {
+        FirebaseDatabase.getInstance().getReference("homes").child(homeId).get()
+            .addOnSuccessListener { snapshot ->
+                val code = snapshot.getValue(Home::class.java)?.code ?: ""
+                _homeCode.value = code
+            }
+            .addOnFailureListener {
+                _homeCode.value = ""
+            }
     }
 
     fun loadTasksForCurrentDay(homeId: String) {
@@ -48,6 +63,21 @@ class DiarioViewModel : ViewModel() {
                     Log.e("DiarioViewModel", "Error loading tasks", error.toException())
                 }
             })
+    }
+
+    fun getHomeCode(homeId: String, callback: (String) -> Unit) {
+        FirebaseDatabase.getInstance().getReference("homes").child(homeId).get()
+            .addOnSuccessListener { snapshot ->
+                val code = if (snapshot.exists()) {
+                    snapshot.getValue(Home::class.java)?.code ?: ""
+                } else {
+                    ""
+                }
+                callback(code)
+            }
+            .addOnFailureListener {
+                callback("")
+            }
     }
 
     fun loadPreviousDayTasks(homeId: String) {

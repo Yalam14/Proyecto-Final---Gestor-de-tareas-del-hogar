@@ -7,6 +7,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
 import java.util.*
 import kotlin.collections.HashMap
@@ -32,6 +33,20 @@ class SemanalViewModel : ViewModel() {
 
     private val _progress = MutableLiveData<Int>(0)
     val progress: LiveData<Int> = _progress
+
+    private val _homeCode = MutableLiveData<String>()
+    val homeCode: LiveData<String> = _homeCode
+
+    fun loadHomeCode(homeId: String) {
+        FirebaseDatabase.getInstance().getReference("homes").child(homeId).get()
+            .addOnSuccessListener { snapshot ->
+                val code = snapshot.getValue(Home::class.java)?.code ?: ""
+                _homeCode.value = code
+            }
+            .addOnFailureListener {
+                _homeCode.value = ""
+            }
+    }
 
     fun loadTasksForCurrentWeek(homeId: String) {
         loadTasksForWeek(homeId)
