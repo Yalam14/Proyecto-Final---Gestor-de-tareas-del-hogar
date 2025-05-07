@@ -33,7 +33,7 @@ class TareasActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         // Validar y obtener el ID del hogar
-        hogarId = intent.getStringExtra("HOGAR_ID")?.trim() ?: run {
+        hogarId = intent.getStringExtra("HOME_ID")?.trim() ?: run {
             Toast.makeText(this, "Error: No se recibió ID de hogar", Toast.LENGTH_LONG).show()
             finish()
             return
