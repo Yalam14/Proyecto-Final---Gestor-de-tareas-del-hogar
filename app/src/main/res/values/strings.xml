@@ -30,4 +30,18 @@
     <string name="title_diario" />
     <string name="title_semanal" />
 
+    <string name="previous_week">Semana anterior</string>
+    <string name="next_week">Semana siguiente</string>
+    <string name="week_number_default">Semana 1</string>
+    <string name="weekly_progress">Progreso semanal</string>
+    <string name="monday">Lunes</string>
+    <string name="tuesday">Martes</string>
+    <string name="wednesday">Miércoles</string>
+    <string name="thursday">Jueves</string>
+    <string name="friday">Viernes</string>
+    <string name="saturday">Sábado</string>
+    <string name="sunday">Domingo</string>
+
+    <string name="week_number">Semana %d</string>
+    <string name="progress_percentage">%d%%</string>
 </resources>
