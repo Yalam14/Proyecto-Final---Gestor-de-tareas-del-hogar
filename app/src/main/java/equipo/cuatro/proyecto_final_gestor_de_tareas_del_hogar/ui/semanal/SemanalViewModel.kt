@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -69,22 +70,18 @@ class SemanalViewModel : ViewModel() {
         _isLoading.value = true
         currentListener?.let { tasksRef.removeEventListener(it) }
 
-        // Obtener el rango de fechas de la semana actual
-        val (startOfWeek, endOfWeek) = getWeekRange()
+        // Obtener todas las fechas de la semana actual
+        val weekDates = getWeekDates()
 
-        tasksRef.orderByChild("homeId").equalTo(homeId)
+        currentListener = tasksRef.orderByChild("homeId").equalTo(homeId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("SemanalViewModel", "Datos recibidos. Total hijos: ${snapshot.childrenCount}")
-                    Log.d("SemanalViewModel", "Rango de semana: $startOfWeek - $endOfWeek")
                     val tasksByDay = HashMap<String, MutableList<Task>>().apply {
+                        // Inicializar con los días de la semana
                         listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo").forEach {
                             put(it, mutableListOf())
                         }
                     }
-
-                    var totalTasks = 0
-                    var completedTasks = 0
 
                     for (taskSnapshot in snapshot.children) {
                         val task = taskSnapshot.getValue(Task::class.java)?.apply {
@@ -92,32 +89,36 @@ class SemanalViewModel : ViewModel() {
                         }
 
                         task?.let { t ->
-                            // Filtrar por semana usando el timestamp
-                            if (t.timestamp in startOfWeek..endOfWeek) {
-                                t.schedule.keys.forEach { englishDay ->
-                                    val spanishDay = when (englishDay.uppercase()) {
-                                        "MONDAY" -> "Lunes"
-                                        "TUESDAY" -> "Martes"
-                                        "WEDNESDAY" -> "Miércoles"
-                                        "THURSDAY" -> "Jueves"
-                                        "FRIDAY" -> "Viernes"
-                                        "SATURDAY" -> "Sábado"
-                                        "SUNDAY" -> "Domingo"
-                                        else -> englishDay
-                                    }
+                            // Verificar para cada día de la semana
+                            weekDates.forEachIndexed { index, (date, dayName) ->
+                                val isScheduled = when {
+                                    // Formato por fecha (2025-05-08)
+                                    t.schedule.containsKey(date) -> true
 
-                                    if (t.schedule[englishDay]?.assignedTo?.isNotEmpty() == true) {
-                                        tasksByDay[spanishDay]?.add(t)
-                                        totalTasks++
-                                        if (t.completed) completedTasks++
+                                    // Formato por día de semana (MONDAY)
+                                    else -> {
+                                        val englishDay = when (dayName) {
+                                            "Lunes" -> "MONDAY"
+                                            "Martes" -> "TUESDAY"
+                                            "Miércoles" -> "WEDNESDAY"
+                                            "Jueves" -> "THURSDAY"
+                                            "Viernes" -> "FRIDAY"
+                                            "Sábado" -> "SATURDAY"
+                                            "Domingo" -> "SUNDAY"
+                                            else -> ""
+                                        }
+                                        t.schedule.containsKey(englishDay)
                                     }
+                                }
+
+                                if (isScheduled) {
+                                    tasksByDay[dayName]?.add(t)
                                 }
                             }
                         }
                     }
 
                     _tasksByDay.value = tasksByDay
-                    _progress.value = if (totalTasks > 0) (completedTasks * 100 / totalTasks) else 0
                     _isLoading.value = false
                 }
 
@@ -125,6 +126,36 @@ class SemanalViewModel : ViewModel() {
                     _isLoading.value = false
                 }
             })
+    }
+
+    private fun getWeekDates(): List<Pair<String, String>> {
+        val dates = mutableListOf<Pair<String, String>>()
+        val cal = Calendar.getInstance().apply {
+            // Ajustar al inicio de la semana (Lunes)
+            set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        }
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dayNameFormat = SimpleDateFormat("EEEE", Locale.getDefault())
+
+        // Para cada día de la semana (Lunes a Domingo)
+        repeat(7) {
+            val date = dateFormat.format(cal.time)
+            val dayName = when (cal.get(Calendar.DAY_OF_WEEK)) {
+                Calendar.MONDAY -> "Lunes"
+                Calendar.TUESDAY -> "Martes"
+                Calendar.WEDNESDAY -> "Miércoles"
+                Calendar.THURSDAY -> "Jueves"
+                Calendar.FRIDAY -> "Viernes"
+                Calendar.SATURDAY -> "Sábado"
+                Calendar.SUNDAY -> "Domingo"
+                else -> ""
+            }
+            dates.add(date to dayName)
+            cal.add(Calendar.DAY_OF_YEAR, 1)
+        }
+
+        return dates
     }
 
     private fun getWeekRange(): Pair<Long, Long> {
