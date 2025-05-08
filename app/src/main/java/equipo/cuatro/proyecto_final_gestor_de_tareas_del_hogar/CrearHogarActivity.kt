@@ -72,7 +72,11 @@ class CrearHogarActivity : AppCompatActivity() {
             icon.isSelected = true
             iconoSeleccionado = iconIds[index]
             iconoDatabase = iconStrs[index]
-            Log.d("IconoSeleccionado", "Icono seleccionado: $iconoDatabase")
+            Log.d("IconSelection",
+                "Índice: $index, " +
+                        "ID recurso: ${iconIds[index]}, " +
+                        "Nombre recurso: ${iconStrs[index]}, " +
+                        "Icono DB: $iconoDatabase")
         }
 
         icons.forEachIndexed { index, icon ->

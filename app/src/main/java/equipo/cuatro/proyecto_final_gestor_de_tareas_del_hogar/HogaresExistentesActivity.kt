@@ -3,6 +3,7 @@ package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -149,7 +150,15 @@ class HogaresExistentesActivity : AppCompatActivity() {
             "baseline_add_business_24" -> R.drawable.baseline_add_business_24
             "baseline_add_home_24" -> R.drawable.baseline_add_home_24
             "baseline_bedroom_baby_24" -> R.drawable.baseline_bedroom_baby_24
+            "bar" -> R.drawable.bar
+            "dormitorio" -> R.drawable.dormitorio
+            "fabrica" -> R.drawable.fabrica
+            "factory" -> R.drawable.factory
+            "mosque" -> R.drawable.mosque
+            "templo" -> R.drawable.templo
             else -> R.drawable.baseline_add_home_24
+        }.also {
+            Log.d("IconDebug", "Icono buscado: $icono, ResID encontrado: $it")
         }
     }
 
