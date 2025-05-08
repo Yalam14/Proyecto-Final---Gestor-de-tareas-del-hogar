@@ -25,6 +25,7 @@ class SemanalFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: SemanalViewModel
     private lateinit var homeId: String
+    private lateinit var homeName: String
 
     // Adapters para cada día de la semana
     private lateinit var mondayAdapter: TaskAdapter
@@ -44,8 +45,9 @@ class SemanalFragment : Fragment() {
         _binding = FragmentSemanalBinding.inflate(inflater, container, false)
 
         homeId = arguments?.getString("HOME_ID") ?: ""
+        homeName = arguments?.getString("HOME_NAME") ?: ""
+        binding.texthome.text = homeName
 
-        // Inicializar los adapters
         initAdapters()
 
         setupWeekNavigation()
