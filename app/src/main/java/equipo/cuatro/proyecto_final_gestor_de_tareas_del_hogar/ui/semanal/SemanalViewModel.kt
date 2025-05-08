@@ -22,6 +22,11 @@ class SemanalViewModel : ViewModel() {
         firstDayOfWeek = Calendar.MONDAY
     }
 
+    private val _year = MutableLiveData<Int>().apply {
+        value = calendar.get(Calendar.YEAR)
+    }
+    val year: LiveData<Int> = _year
+
     private val _currentWeek = MutableLiveData<Int>().apply {
         value = calendar.get(Calendar.WEEK_OF_YEAR)
     }
@@ -70,14 +75,13 @@ class SemanalViewModel : ViewModel() {
         _isLoading.value = true
         currentListener?.let { tasksRef.removeEventListener(it) }
 
-        // Obtener todas las fechas de la semana actual
         val weekDates = getWeekDates()
+        Log.d("SemanalVM", "Fechas de la semana: $weekDates")
 
         currentListener = tasksRef.orderByChild("homeId").equalTo(homeId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val tasksByDay = HashMap<String, MutableList<Task>>().apply {
-                        // Inicializar con los días de la semana
                         listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo").forEach {
                             put(it, mutableListOf())
                         }
@@ -89,56 +93,68 @@ class SemanalViewModel : ViewModel() {
                         }
 
                         task?.let { t ->
-                            // Verificar para cada día de la semana
-                            weekDates.forEachIndexed { index, (date, dayName) ->
-                                val isScheduled = when {
-                                    // Formato por fecha (2025-05-08)
-                                    t.schedule.containsKey(date) -> true
+                            Log.d("SemanalVM", "Procesando tarea: ${t.name}")
+                            Log.d("SemanalVM", "Schedule keys: ${t.schedule.keys}")
 
-                                    // Formato por día de semana (MONDAY)
-                                    else -> {
-                                        val englishDay = when (dayName) {
-                                            "Lunes" -> "MONDAY"
-                                            "Martes" -> "TUESDAY"
-                                            "Miércoles" -> "WEDNESDAY"
-                                            "Jueves" -> "THURSDAY"
-                                            "Viernes" -> "FRIDAY"
-                                            "Sábado" -> "SATURDAY"
-                                            "Domingo" -> "SUNDAY"
-                                            else -> ""
-                                        }
-                                        t.schedule.containsKey(englishDay)
-                                    }
-                                }
+                            weekDates.forEach { (date, dayName) ->
+                                val englishDay = convertToEnglishDay(dayName)
 
-                                if (isScheduled) {
+                                // Verificar si es una tarea recurrente para este día
+                                val isRecurrent = englishDay?.let { day ->
+                                    t.schedule.containsKey(day) && isRecurrentTask(t)
+                                } ?: false
+
+                                // Verificar si es una tarea específica para esta fecha
+                                val isSpecificDate = t.schedule.containsKey(date)
+
+                                if (isRecurrent || isSpecificDate) {
                                     tasksByDay[dayName]?.add(t)
+                                    Log.d("SemanalVM", "Añadida tarea a $dayName: ${t.name}")
                                 }
                             }
                         }
                     }
 
                     _tasksByDay.value = tasksByDay
+                    calculateProgress(tasksByDay)
                     _isLoading.value = false
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     _isLoading.value = false
+                    Log.e("SemanalVM", "Error loading tasks", error.toException())
                 }
             })
     }
 
+    private fun isRecurrentTask(task: Task): Boolean {
+        // Una tarea es recurrente si tiene al menos un día de la semana en inglés
+        val englishDays = listOf("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY",
+            "FRIDAY", "SATURDAY", "SUNDAY")
+        return task.schedule.keys.any { it in englishDays }
+    }
+
+    private fun convertToEnglishDay(spanishDay: String): String? {
+        return when (spanishDay) {
+            "Lunes" -> "MONDAY"
+            "Martes" -> "TUESDAY"
+            "Miércoles" -> "WEDNESDAY"
+            "Jueves" -> "THURSDAY"
+            "Viernes" -> "FRIDAY"
+            "Sábado" -> "SATURDAY"
+            "Domingo" -> "SUNDAY"
+            else -> null
+        }
+    }
+
     private fun getWeekDates(): List<Pair<String, String>> {
         val dates = mutableListOf<Pair<String, String>>()
-        val cal = Calendar.getInstance().apply {
-            // Ajustar al inicio de la semana (Lunes)
-            set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-        }
+        val cal = calendar.clone() as Calendar
+        cal.firstDayOfWeek = Calendar.MONDAY
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val dayNameFormat = SimpleDateFormat("EEEE", Locale.getDefault())
 
-        // Para cada día de la semana (Lunes a Domingo)
         repeat(7) {
             val date = dateFormat.format(cal.time)
             val dayName = when (cal.get(Calendar.DAY_OF_WEEK)) {
@@ -158,27 +174,15 @@ class SemanalViewModel : ViewModel() {
         return dates
     }
 
-    private fun getWeekRange(): Pair<Long, Long> {
-        val cal = Calendar.getInstance().apply {
-            timeInMillis = calendar.timeInMillis
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
+    private fun calculateProgress(tasksByDay: Map<String, List<Task>>) {
+        val totalTasks = tasksByDay.values.sumOf { it.size }
+        val completedTasks = tasksByDay.values.flatMap { it }.count { it.completed }
+
+        _progress.value = if (totalTasks > 0) {
+            (completedTasks.toFloat() / totalTasks.toFloat() * 100).toInt()
+        } else {
+            0
         }
-
-        // Obtener inicio de la semana (Lunes)
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-        val startOfWeek = cal.timeInMillis
-
-        // Obtener fin de la semana (Domingo)
-        cal.add(Calendar.DAY_OF_WEEK, 6)
-        cal.set(Calendar.HOUR_OF_DAY, 23)
-        cal.set(Calendar.MINUTE, 59)
-        cal.set(Calendar.SECOND, 59)
-        val endOfWeek = cal.timeInMillis
-
-        return Pair(startOfWeek, endOfWeek)
     }
 
     override fun onCleared() {
