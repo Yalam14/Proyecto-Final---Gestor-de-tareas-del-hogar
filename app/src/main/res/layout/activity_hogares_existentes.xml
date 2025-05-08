@@ -73,5 +73,5 @@
             app:layout_constraintEnd_toEndOf="@id/btnUnirseHogar"
             app:layout_constraintBottom_toTopOf="@id/btnUnirseHogar"
             android:layout_marginBottom="8dp"/>
-    
+
 </androidx.constraintlayout.widget.ConstraintLayout>

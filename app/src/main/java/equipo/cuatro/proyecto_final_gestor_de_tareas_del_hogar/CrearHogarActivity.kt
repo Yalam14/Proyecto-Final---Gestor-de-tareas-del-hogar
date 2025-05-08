@@ -16,10 +16,12 @@ import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.Crear
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Home
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.User
 
+
+
 class CrearHogarActivity : AppCompatActivity() {
     private lateinit var homeRef: DatabaseReference
     private lateinit var userRef: DatabaseReference
-    private var iconoDatabase: String = "baseline_add_home_24"
+    private var iconoDatabase: String = ""
     private var iconoSeleccionado: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,27 +33,38 @@ class CrearHogarActivity : AppCompatActivity() {
         userRef = FirebaseDatabase.getInstance().getReference("users")
 
         val editTextNombreHogar = binding.editTextNombreHogar
-
-        val icon1 = binding.icon1
-        val icon2 = binding.icon2
-        val icon3 = binding.icon3
-        val icon4 = binding.icon4
-
         val botonGuardar = binding.botonConfigurar
 
-        val icons = listOf(icon1, icon2, icon3, icon4)
+        val icons = listOf(
+            binding.icon1, binding.icon2, binding.icon3, binding.icon4,
+            binding.icon5, binding.icon6, binding.icon7, binding.icon8,
+            binding.icon9, binding.icon10
+        )
+
         val iconIds = listOf(
             R.drawable.baseline_account_balance_24,
             R.drawable.baseline_add_business_24,
             R.drawable.baseline_add_home_24,
-            R.drawable.baseline_bedroom_baby_24
+            R.drawable.baseline_bedroom_baby_24,
+            R.drawable.bar,
+            R.drawable.dormitorio,
+            R.drawable.fabrica,
+            R.drawable.factory,
+            R.drawable.mosque,
+            R.drawable.templo
         )
 
         val iconStrs = listOf(
             "baseline_account_balance_24",
             "baseline_add_business_24",
             "baseline_add_home_24",
-            "baseline_bedroom_baby_24"
+            "baseline_bedroom_baby_24",
+            "bar",
+            "dormitorio",
+            "fabrica",
+            "factory",
+            "mosque",
+            "templo"
         )
 
         fun seleccionarIcono(icon: ImageView, index: Int) {
@@ -59,6 +72,7 @@ class CrearHogarActivity : AppCompatActivity() {
             icon.isSelected = true
             iconoSeleccionado = iconIds[index]
             iconoDatabase = iconStrs[index]
+            Log.d("IconoSeleccionado", "Icono seleccionado: $iconoDatabase")
         }
 
         icons.forEachIndexed { index, icon ->
@@ -72,64 +86,66 @@ class CrearHogarActivity : AppCompatActivity() {
             val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
             if (nombreHogar.isEmpty()) {
-                Toast.makeText(this, "Por favor, ingresa el nombre del hogar.", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Por favor, ingresa el nombre del hogar.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else if (iconoSeleccionado == -1) {
                 Toast.makeText(this, "Por favor, selecciona un icono.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
-            } else {
-                Toast.makeText(this, "Hogar guardado: $nombreHogar", Toast.LENGTH_SHORT).show()
-
-                editTextNombreHogar.text.clear()
-                iconoSeleccionado = -1
-                icons.forEach { it.isSelected = false }
             }
 
-           getNameUser(userId) { username ->
+            getNameUser(userId) { username ->
                 if (username.isEmpty()) {
-                    Toast.makeText(
-                        this,
-                        "Error al obtener información del usuario",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this, "Error al obtener información del usuario", Toast.LENGTH_SHORT).show()
                     return@getNameUser
                 }
 
                 val hogar = Home(
-                    nombreHogar,
-                    iconoDatabase,
+                    name = nombreHogar,
+                    icon = iconoDatabase,
                     code = generarCódigo(),
                     createdBy = userId,
                     participants = mapOf(userId to username)
                 )
 
-                saveHomeToDatabase(hogar)
-                val intent = Intent(this, HogaresExistentesActivity::class.java)
-                startActivity(intent)
+                Log.d("HomeObject", "Home a guardar: $hogar")
+
+                saveHomeToDatabase(hogar) {
+                    editTextNombreHogar.text.clear()
+                    iconoSeleccionado = -1
+                    icons.forEach { it.isSelected = false }
+
+                    val intent = Intent(this, HogaresExistentesActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             }
         }
     }
 
-    private fun saveHomeToDatabase(home: Home) {
+    private fun saveHomeToDatabase(home: Home, onComplete: () -> Unit) {
         homeRef.push().setValue(home)
             .addOnSuccessListener {
-                Toast.makeText(baseContext, "Hogar registrado correctamente", Toast.LENGTH_SHORT)
-                    .show()
+                Log.d("Firebase", "Hogar guardado correctamente")
+                Toast.makeText(baseContext, "Hogar registrado correctamente", Toast.LENGTH_SHORT).show()
+                onComplete()
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firebase", "Error al guardar hogar", e)
+                Toast.makeText(baseContext, "Error al guardar hogar", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun getNameUser(userId: String, callback: (String) -> Unit): String {
-        var username = ""
-
+    private fun getNameUser(userId: String, callback: (String) -> Unit) {
         userRef.orderByChild("id").equalTo(userId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         for (userSnap in snapshot.children) {
                             val user = userSnap.getValue(User::class.java)
-                            username = user?.user.toString()
-                            callback(username)
+                            user?.user?.let { username ->
+                                callback(username)
+                                return
+                            }
                         }
                     }
                     callback("")
@@ -140,8 +156,6 @@ class CrearHogarActivity : AppCompatActivity() {
                     callback("")
                 }
             })
-
-        return username
     }
 
     private fun generarCódigo(): String {
