@@ -99,6 +99,7 @@ class DiarioViewModel : ViewModel() {
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val tasksList = mutableListOf<Task>()
+                    val englishDay = convertToEnglishDay(currentDayNameValue)
 
                     for (taskSnapshot in snapshot.children) {
                         val task = taskSnapshot.getValue(Task::class.java)?.apply {
@@ -106,33 +107,24 @@ class DiarioViewModel : ViewModel() {
                         }
 
                         task?.let { t ->
-                            val isScheduled = when {
+                            // Verificar si la tarea está programada para hoy
+                            val isScheduledForToday = when {
+                                // Verificar por fecha exacta (yyyy-MM-dd)
                                 t.schedule.containsKey(currentDateFormatted) -> true
-                                else -> {
-                                    val englishDay = when (currentDayNameValue) {
-                                        "Lunes" -> "MONDAY"
-                                        "Martes" -> "TUESDAY"
-                                        "Miércoles" -> "WEDNESDAY"
-                                        "Jueves" -> "THURSDAY"
-                                        "Viernes" -> "FRIDAY"
-                                        "Sábado" -> "SATURDAY"
-                                        "Domingo" -> "SUNDAY"
-                                        else -> ""
-                                    }
-                                    t.schedule.containsKey(englishDay)
-                                }
+                                // Verificar por día de la semana (en inglés)
+                                englishDay?.let { day -> t.schedule.containsKey(day) } ?: false -> true
+                                else -> false
                             }
 
-                            if (isScheduled) {
+                            if (isScheduledForToday) {
                                 tasksList.add(t)
-                                Log.d("DiarioViewModel", "Tarea añadida: ${t.name} para $currentDateFormatted")
+                                Log.d("DiarioViewModel", "Tarea añadida: ${t.name} para $currentDateFormatted ($currentDayNameValue)")
                             }
                         }
                     }
 
                     _tasks.value = tasksList
                     _isLoading.value = false
-                    Log.d("DiarioViewModel", "Tareas cargadas: ${tasksList.size} para $currentDateFormatted")
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -140,6 +132,19 @@ class DiarioViewModel : ViewModel() {
                     Log.e("DiarioViewModel", "Error loading tasks", error.toException())
                 }
             })
+    }
+
+    private fun convertToEnglishDay(spanishDay: String): String? {
+        return when (spanishDay) {
+            "Lunes" -> "MONDAY"
+            "Martes" -> "TUESDAY"
+            "Miércoles" -> "WEDNESDAY"
+            "Jueves" -> "THURSDAY"
+            "Viernes" -> "FRIDAY"
+            "Sábado" -> "SATURDAY"
+            "Domingo" -> "SUNDAY"
+            else -> null
+        }
     }
 
     fun loadPreviousDayTasks(homeId: String) {
