@@ -34,8 +34,11 @@ class DiarioFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(DiarioViewModel::class.java)
         _binding = FragmentDiarioBinding.inflate(inflater, container, false)
 
-        // Inicialización con lista vacía
-        taskAdapter = TaskAdapter(requireContext(), emptyList())
+        taskAdapter = TaskAdapter(
+            requireContext(),
+            emptyList(),
+            { task -> navigateToTaskDetail(task) }
+        )
         binding.taskContainer.adapter = taskAdapter
 
         setupEmptyView()
@@ -155,27 +158,43 @@ class DiarioFragment : Fragment() {
             putExtra("taskId", task.id)
             putExtra("taskName", task.name)
             putExtra("taskDescription", task.description)
-
-            // En DiarioFragment
-            val diaActual = binding.txtDay.text.toString()
-            val englishDay = when (diaActual) {
+            putExtra("homeId", homeId)
+            putExtra("completed", task.completed)
+            val currentDate = viewModel.currentDay.value ?: ""
+            val dayName = binding.txtDay.text.toString()
+            val englishDay = when (dayName) {
                 "Lunes" -> "MONDAY"
                 "Martes" -> "TUESDAY"
-                "Miercoles" -> "WEDNESDAY"
+                "Miércoles" -> "WEDNESDAY"
                 "Jueves" -> "THURSDAY"
                 "Viernes" -> "FRIDAY"
                 "Sábado" -> "SATURDAY"
                 "Domingo" -> "SUNDAY"
-                else -> diaActual
+                else -> ""
             }
+
             val asignados = task.schedule[englishDay]?.assignedTo ?: emptyList()
 
             putStringArrayListExtra("assignedTo", ArrayList(asignados))
             putExtra("completed", task.completed)
             putExtra("canEdit", viewModel.canEdit.value)
             putExtra("creator", viewModel.creator.value)
-            startActivity(this)
+
+            val assignedMembers = when {
+                currentDate.isNotEmpty() && task.schedule.containsKey(currentDate) -> {
+                    task.schedule[currentDate]?.assignedTo ?: emptyList()
+                }
+                englishDay.isNotEmpty() && task.schedule.containsKey(englishDay) -> {
+                    task.schedule[englishDay]?.assignedTo ?: emptyList()
+                }
+                else -> {
+                    task.schedule.values.flatMap { it.assignedTo }.distinct()
+                }
+            }
+            putStringArrayListExtra("assignedTo", ArrayList(assignedMembers))
+            putExtra("isRecurrent", englishDay.isNotEmpty() && task.schedule.containsKey(englishDay))
         }
+        startActivity(intent)
     }
 
     private fun updateProgressBar(tasks: List<Task>) {

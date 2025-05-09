@@ -147,14 +147,12 @@ class SemanalViewModel : ViewModel() {
         }
     }
 
-    private fun getWeekDates(): List<Pair<String, String>> {
+    fun getWeekDates(): List<Pair<String, String>> {
         val dates = mutableListOf<Pair<String, String>>()
         val cal = calendar.clone() as Calendar
         cal.firstDayOfWeek = Calendar.MONDAY
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
         repeat(7) {
             val date = dateFormat.format(cal.time)
             val dayName = when (cal.get(Calendar.DAY_OF_WEEK)) {
@@ -170,7 +168,6 @@ class SemanalViewModel : ViewModel() {
             dates.add(date to dayName)
             cal.add(Calendar.DAY_OF_YEAR, 1)
         }
-
         return dates
     }
 
