@@ -148,6 +148,7 @@ class DiarioViewModel : ViewModel() {
         } else {
             0
         }
+        Log.d("ProgressCalc", "Tareas completadas: $completedTasks de $totalTasks - Progreso: ${_progress.value}%")
     }
 
     fun loadPreviousDayTasks(homeId: String) {
