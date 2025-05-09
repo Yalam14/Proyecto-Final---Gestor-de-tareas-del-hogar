@@ -14,9 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="8dp"
-        android:background="?attr/selectableItemBackground">
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/btn_share"
@@ -33,10 +31,10 @@
             android:textAlignment="center"
             android:textStyle="bold"
             android:textColor="#212121"
-            android:text="Tareas del Hogar"
-            android:layout_marginBottom="8dp"/>
+            android:text="Tareas del Hogar"/>
 
         <!-- Selector de día con mejor espaciado -->
+        <!-- Dentro del LinearLayout del selector de día (junto a txt_day) -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,19 +48,33 @@
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_left"
                 android:contentDescription="Día anterior"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:tint="#212121"
-                tools:ignore="UseAppTint" />
+                android:background="?attr/selectableItemBackgroundBorderless"/>
 
-            <TextView
-                android:id="@+id/txt_day"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:text="Hoy"
-                android:textColor="#212121"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginHorizontal="16dp">
+
+                <TextView
+                    android:id="@+id/txt_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hoy"
+                    android:textColor="#212121"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textDayName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lunes"
+                    android:textColor="#616161"
+                    android:textSize="16sp"/>
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/btn_next_day"
@@ -70,31 +82,50 @@
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_right"
                 android:contentDescription="Día siguiente"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:tint="#212121"
-                tools:ignore="UseAppTint" />
+                android:background="?attr/selectableItemBackgroundBorderless"/>
         </LinearLayout>
 
         <!-- Barra de progreso con mejor espaciado -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Progreso diario"
                 android:textSize="16sp"
-                android:textColor="#616161"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="#616161" />
 
-            <ProgressBar
-                android:id="@+id/progress_tasks"
-                style="?android:attr/progressBarStyleHorizontal"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:progressDrawable="@drawable/progress_bar_black"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <ProgressBar
+                    android:id="@+id/progress_tasks"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="8dp"
+                    android:layout_weight="1"
+                    android:progressDrawable="@drawable/progress_bar_black"
+                    android:progress="0"
+                    android:max="100"
+                    android:indeterminate="false" />
+
+                <TextView
+                    android:id="@+id/textProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="0%"
+                    android:textColor="#212121"
+                    android:textSize="14sp"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
