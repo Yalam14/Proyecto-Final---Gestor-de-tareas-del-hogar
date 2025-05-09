@@ -6,11 +6,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavArgument
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -36,7 +33,7 @@ class TareasActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         // Validar y obtener el ID del hogar
-        hogarId = intent.getStringExtra("HOGAR_ID")?.trim() ?: run {
+        hogarId = intent.getStringExtra("HOME_ID")?.trim() ?: run {
             Toast.makeText(this, "Error: No se recibió ID de hogar", Toast.LENGTH_LONG).show()
             finish()
             return

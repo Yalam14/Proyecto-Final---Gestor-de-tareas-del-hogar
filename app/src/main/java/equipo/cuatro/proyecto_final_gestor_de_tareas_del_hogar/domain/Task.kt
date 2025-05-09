@@ -1,4 +1,3 @@
-
 package equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain
 
 data class Task(
@@ -12,5 +11,33 @@ data class Task(
     val timestamp: Long = 0,
     var completed: Boolean = false
 ) {
-    constructor() : this("", "", "", emptyMap(), "", "", "", 0, false)
+
+    fun getScheduledDaysFormatted(): List<String> {
+        return schedule.keys.map { dayKey ->
+            when (dayKey.uppercase()) {
+                "MONDAY" -> "Lunes"
+                "TUESDAY" -> "Martes"
+                "WEDNESDAY" -> "Miércoles"
+                "THURSDAY" -> "Jueves"
+                "FRIDAY" -> "Viernes"
+                "SATURDAY" -> "Sábado"
+                "SUNDAY" -> "Domingo"
+                else -> dayKey
+            }
+        }
+    }
+
+    fun isScheduledForDay(day: String): Boolean {
+        val englishDay = when (day) {
+            "Lunes" -> "MONDAY"
+            "Martes" -> "TUESDAY"
+            "Miércoles" -> "WEDNESDAY"
+            "Jueves" -> "THURSDAY"
+            "Viernes" -> "FRIDAY"
+            "Sábado" -> "SATURDAY"
+            "Domingo" -> "SUNDAY"
+            else -> day
+        }
+        return schedule.containsKey(englishDay)
+    }
 }
