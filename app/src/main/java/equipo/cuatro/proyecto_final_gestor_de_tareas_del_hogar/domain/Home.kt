@@ -12,6 +12,7 @@ data class Home(
     val creationDate: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()),
     val createdBy: String = "",
     val code: String = "",
+    val canParticipantEdit: Boolean = false,
     val participants: Map<String, String> = emptyMap()
 ) {
     fun getIconResourceId(): Int = when (icon) {

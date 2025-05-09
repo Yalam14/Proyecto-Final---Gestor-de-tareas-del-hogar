@@ -44,6 +44,9 @@ class DiarioFragment : Fragment() {
         setupObservers()
         loadInitialTasks()
 
+        viewModel.loadCanEdit(homeId)
+        viewModel.loadCreator(homeId)
+
         return binding.root
     }
 
@@ -153,6 +156,8 @@ class DiarioFragment : Fragment() {
 
             putStringArrayListExtra("assignedTo", ArrayList(asignados))
             putExtra("completed", task.completed)
+            putExtra("canEdit", viewModel.canEdit.value)
+            putExtra("creator", viewModel.creator.value)
             startActivity(this)
         }
     }

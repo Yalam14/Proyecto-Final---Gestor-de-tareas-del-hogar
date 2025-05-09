@@ -33,6 +33,7 @@ class CrearHogarActivity : AppCompatActivity() {
         userRef = FirebaseDatabase.getInstance().getReference("users")
 
         val editTextNombreHogar = binding.editTextNombreHogar
+        val permisos = binding.permission
         val botonGuardar = binding.botonConfigurar
 
         val icons = listOf(
@@ -108,6 +109,7 @@ class CrearHogarActivity : AppCompatActivity() {
                     icon = iconoDatabase,
                     code = generarCódigo(),
                     createdBy = userId,
+                    canParticipantEdit = permisos.isChecked,
                     participants = mapOf(userId to username)
                 )
 
