@@ -35,7 +35,8 @@ class DiarioViewModel : ViewModel() {
     private val _currentDayName = MutableLiveData<String>().apply {
         value = getDayName(calendar.get(Calendar.DAY_OF_WEEK))
     }
-    val currentDayName: LiveData<String> = _currentDayName
+    private val _progress = MutableLiveData<Int>(0)
+    val progress: LiveData<Int> = _progress
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -59,10 +60,8 @@ class DiarioViewModel : ViewModel() {
     fun loadTasksForCurrentDay(homeId: String) {
         _isLoading.value = true
         currentListener?.let { tasksRef.removeEventListener(it) }
-
         val currentDateFormatted = _currentDay.value ?: return
         val currentDayNameValue = _currentDayName.value ?: ""
-
         currentListener = tasksRef.orderByChild("homeId").equalTo(homeId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -73,28 +72,22 @@ class DiarioViewModel : ViewModel() {
                         val task = taskSnapshot.getValue(Task::class.java)?.apply {
                             id = taskSnapshot.key ?: ""
                         }
-
                         task?.let { t ->
-                            // Verificar si la tarea está programada para hoy
                             val isScheduledForToday = when {
-                                // Verificar por fecha exacta (yyyy-MM-dd)
                                 t.schedule.containsKey(currentDateFormatted) -> true
-                                // Verificar por día de la semana (en inglés)
                                 englishDay?.let { day -> t.schedule.containsKey(day) } ?: false -> true
                                 else -> false
                             }
 
                             if (isScheduledForToday) {
                                 tasksList.add(t)
-                                Log.d("DiarioViewModel", "Tarea añadida: ${t.name} para $currentDateFormatted ($currentDayNameValue)")
                             }
                         }
                     }
-
                     _tasks.value = tasksList
+                    calculateProgress(tasksList)
                     _isLoading.value = false
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                     _isLoading.value = false
                     Log.e("DiarioViewModel", "Error loading tasks", error.toException())
@@ -112,6 +105,16 @@ class DiarioViewModel : ViewModel() {
             "Sábado" -> "SATURDAY"
             "Domingo" -> "SUNDAY"
             else -> null
+        }
+    }
+
+    private fun calculateProgress(tasks: List<Task>) {
+        val completedTasks = tasks.count { it.completed }
+        val totalTasks = tasks.size
+        _progress.value = if (totalTasks > 0) {
+            (completedTasks.toFloat() / totalTasks * 100).toInt()
+        } else {
+            0
         }
     }
 
