@@ -38,13 +38,18 @@ class DiarioFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(DiarioViewModel::class.java)
         _binding = FragmentDiarioBinding.inflate(inflater, container, false)
 
-        // Configurar adaptador
         taskAdapter = TaskAdapter(
             requireContext(),
             emptyList(),
             { task -> navigateToTaskDetail(task) }
         )
         binding.taskContainer.adapter = taskAdapter
+
+        binding.progressBar.apply {
+            max = 100
+            progress = 0
+            visibility = View.VISIBLE
+        }
 
         setupEmptyView()
         setupArguments()
@@ -124,13 +129,14 @@ class DiarioFragment : Fragment() {
             updateTaskList(tasks ?: emptyList())
         }
         viewModel.progress.observe(viewLifecycleOwner) { progress ->
-            binding.progressTasks.progress = progress
+            binding.progressBar.progress = progress
             binding.textProgress.text = getString(R.string.progress_percentage, progress)
+            binding.progressBar.visibility = View.VISIBLE
             Log.d("ProgressUpdate", "Progreso actualizado: $progress%")
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressTasks.visibility = if (isLoading) View.VISIBLE else View.VISIBLE // Siempre visible
-            binding.progressTasks.visibility = if (isLoading) View.VISIBLE else View.GONE // Si tienes un ProgressBar de carga
+            binding.progressTasks.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.progressBar.visibility = View.VISIBLE
         }
         viewModel.homeCode.observe(viewLifecycleOwner) { code ->
             Log.d("HomeCode", "Código actualizado: $code")

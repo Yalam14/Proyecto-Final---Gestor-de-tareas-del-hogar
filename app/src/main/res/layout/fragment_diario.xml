@@ -85,7 +85,6 @@
                 android:background="?attr/selectableItemBackgroundBorderless"/>
         </LinearLayout>
 
-        <!-- Barra de progreso con mejor espaciado -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,15 +106,12 @@
                 android:layout_marginTop="8dp">
 
                 <ProgressBar
-                    android:id="@+id/progress_tasks"
+                    android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="0dp"
                     android:layout_height="8dp"
                     android:layout_weight="1"
-                    android:progressDrawable="@drawable/progress_bar_black"
-                    android:progress="0"
-                    android:max="100"
-                    android:indeterminate="false" />
+                    android:progressDrawable="@drawable/progress_bar_black"/>
 
                 <TextView
                     android:id="@+id/textProgress"
@@ -141,17 +137,18 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-<!--        <LinearLayout-->
-<!--            android:id="@+id/task_container"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            android:padding="16dp"/>-->
-
         <ListView
             android:id="@+id/task_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"/>
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressTasks"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 </LinearLayout>
