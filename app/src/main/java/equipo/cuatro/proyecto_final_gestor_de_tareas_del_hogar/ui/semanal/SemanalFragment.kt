@@ -30,7 +30,6 @@ class SemanalFragment : Fragment() {
     private lateinit var homeId: String
     private lateinit var homeName: String
 
-    // Adapters para cada día de la semana
     private lateinit var mondayAdapter: TaskAdapter
     private lateinit var tuesdayAdapter: TaskAdapter
     private lateinit var wednesdayAdapter: TaskAdapter
@@ -52,31 +51,12 @@ class SemanalFragment : Fragment() {
         binding.texthome.text = homeName
 
         initAdapters()
-
         setupWeekNavigation()
         setupObservers()
         loadInitialTasks()
 
         binding.btnShare.setOnClickListener {
-            viewModel.loadHomeCode(homeId)
-
-            val observer = object : Observer<String> {
-                override fun onChanged(value: String) {
-                    value?.let {
-                        if (it.isNotEmpty()) {
-                            copiarCodigo(it)
-                        } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "No hay código disponible",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        viewModel.homeCode.removeObserver(this)
-                    }
-                }
-            }
-            viewModel.homeCode.observe(viewLifecycleOwner, observer)
+            // Lógica para compartir código del hogar
         }
 
         return binding.root
@@ -125,6 +105,7 @@ class SemanalFragment : Fragment() {
             { task -> navigateToTaskDetail(task, "Domingo") },
             "Domingo"
         )
+
         binding.listViewMonday.adapter = mondayAdapter
         binding.listViewTuesday.adapter = tuesdayAdapter
         binding.listViewWednesday.adapter = wednesdayAdapter
@@ -132,13 +113,6 @@ class SemanalFragment : Fragment() {
         binding.listViewFriday.adapter = fridayAdapter
         binding.listViewSaturday.adapter = saturdayAdapter
         binding.listViewSunday.adapter = sundayAdapter
-        setListViewHeightBasedOnChildren(binding.listViewMonday)
-        setListViewHeightBasedOnChildren(binding.listViewTuesday)
-        setListViewHeightBasedOnChildren(binding.listViewWednesday)
-        setListViewHeightBasedOnChildren(binding.listViewThursday)
-        setListViewHeightBasedOnChildren(binding.listViewFriday)
-        setListViewHeightBasedOnChildren(binding.listViewSaturday)
-        setListViewHeightBasedOnChildren(binding.listViewSunday)
     }
 
     private fun setupWeekNavigation() {
@@ -152,9 +126,8 @@ class SemanalFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.currentWeek.observe(viewLifecycleOwner) { week ->
-            binding.textWeekNumber.text = getString(R.string.week_number, week)
-            binding.textYear.text = Calendar.getInstance().get(Calendar.YEAR).toString()
+        viewModel.currentWeekDisplay.observe(viewLifecycleOwner) { weekDisplay ->
+            binding.textWeekNumber.text = weekDisplay
         }
 
         viewModel.tasksByDay.observe(viewLifecycleOwner) { tasksByDay ->
@@ -165,21 +138,13 @@ class SemanalFragment : Fragment() {
 
         viewModel.progress.observe(viewLifecycleOwner) { progress ->
             binding.progressBar.progress = progress
-            binding.textProgress.text = getString(R.string.progress_percentage, progress)
+            binding.textProgress.text = "${progress}%"
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressTasks.visibility = if (isLoading) View.VISIBLE else View.GONE
             binding.scrollView.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
         }
-
-        viewModel.homeCode.observe(viewLifecycleOwner) { code ->
-            Log.d("HomeCode", "Código actualizado: $code")
-        }
-    }
-
-    private fun loadInitialTasks() {
-        viewModel.loadTasksForCurrentWeek(homeId)
     }
 
     private fun updateTaskViews(tasksByDay: Map<String, List<Task>>) {
@@ -190,13 +155,18 @@ class SemanalFragment : Fragment() {
         fridayAdapter.updateTareas(tasksByDay["Viernes"] ?: emptyList())
         saturdayAdapter.updateTareas(tasksByDay["Sábado"] ?: emptyList())
         sundayAdapter.updateTareas(tasksByDay["Domingo"] ?: emptyList())
-        mondayAdapter.notifyDataSetChanged()
-        tuesdayAdapter.notifyDataSetChanged()
-        wednesdayAdapter.notifyDataSetChanged()
-        thursdayAdapter.notifyDataSetChanged()
-        fridayAdapter.notifyDataSetChanged()
-        saturdayAdapter.notifyDataSetChanged()
-        sundayAdapter.notifyDataSetChanged()
+
+        setListViewHeightBasedOnChildren(binding.listViewMonday)
+        setListViewHeightBasedOnChildren(binding.listViewTuesday)
+        setListViewHeightBasedOnChildren(binding.listViewWednesday)
+        setListViewHeightBasedOnChildren(binding.listViewThursday)
+        setListViewHeightBasedOnChildren(binding.listViewFriday)
+        setListViewHeightBasedOnChildren(binding.listViewSaturday)
+        setListViewHeightBasedOnChildren(binding.listViewSunday)
+    }
+
+    private fun loadInitialTasks() {
+        viewModel.loadTasksForCurrentWeek(homeId)
     }
 
     private fun navigateToTaskDetail(task: Task, dayName: String) {
@@ -207,6 +177,8 @@ class SemanalFragment : Fragment() {
             putExtra("homeId", homeId)
             putExtra("completed", task.completed)
             putExtra("dayOfWeek", dayName)
+
+            // Obtener miembros asignados correctamente
             val englishDay = when (dayName) {
                 "Lunes" -> "MONDAY"
                 "Martes" -> "TUESDAY"
@@ -217,27 +189,28 @@ class SemanalFragment : Fragment() {
                 "Domingo" -> "SUNDAY"
                 else -> ""
             }
-            val assignedMembers = if (englishDay.isNotEmpty()) {
-                task.schedule[englishDay]?.assignedTo ?: emptyList()
-            } else {
-                val weekDates = viewModel.getWeekDates()
-                val dateForDay = weekDates.find { it.second == dayName }?.first ?: ""
-                task.schedule[dateForDay]?.assignedTo ?: emptyList()
-            }
-            val finalAssignedMembers = if (assignedMembers.isEmpty()) {
-                task.schedule.values.flatMap { it.assignedTo }.distinct()
-            } else {
-                assignedMembers
-            }
-            putStringArrayListExtra("assignedTo", ArrayList(finalAssignedMembers))
+
+            // Buscar miembros asignados tanto por fecha como por día recurrente
+            val weekDates = viewModel.getWeekDates()
+            val dateForDay = weekDates.find { it.second == dayName }?.first ?: ""
+
+            val assignedFromDate = task.schedule[dateForDay]?.assignedTo ?: emptyList()
+            val assignedFromDay = task.schedule[englishDay]?.assignedTo ?: emptyList()
+
+            val assignedMembers = (assignedFromDate + assignedFromDay).distinct()
+
+            putStringArrayListExtra("assignedTo", ArrayList(assignedMembers))
             putExtra("isRecurrent", englishDay.isNotEmpty())
+
+            // Añadir estos parámetros esenciales para la edición
+            putExtra("creator", task.createdBy)
+            putExtra("canEdit", viewModel.canEdit.value ?: false)
         }
         startActivity(intent)
     }
 
     private fun setListViewHeightBasedOnChildren(listView: ListView) {
         val adapter = listView.adapter ?: return
-
         var totalHeight = 0
         val desiredWidth = View.MeasureSpec.makeMeasureSpec(
             listView.width,
@@ -262,34 +235,13 @@ class SemanalFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(homeId: String): SemanalFragment {
+        fun newInstance(homeId: String, homeName: String): SemanalFragment {
             return SemanalFragment().apply {
                 arguments = Bundle().apply {
                     putString("HOME_ID", homeId)
+                    putString("HOME_NAME", homeName)
                 }
             }
-        }
-    }
-
-    private fun copiarCodigo(text: String) {
-        try {
-            val clipboard =
-                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Código del Hogar", text)
-            clipboard.setPrimaryClip(clip)
-
-            Toast.makeText(
-                requireContext(),
-                "✅ Código copiado: $text",
-                Toast.LENGTH_LONG
-            ).show()
-        } catch (e: Exception) {
-            Toast.makeText(
-                requireContext(),
-                "❌ Error al copiar código",
-                Toast.LENGTH_SHORT
-            ).show()
-            Log.e("Clipboard", "Error: ${e.message}")
         }
     }
 }

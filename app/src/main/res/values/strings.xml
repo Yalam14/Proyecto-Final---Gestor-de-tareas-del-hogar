@@ -44,4 +44,5 @@
 
     <string name="week_number">Semana %d</string>
     <string name="progress_percentage">%d%%</string>
+    <string name="editar" />
 </resources>

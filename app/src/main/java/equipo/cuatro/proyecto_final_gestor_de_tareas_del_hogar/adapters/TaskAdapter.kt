@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.R
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.domain.Task
 
@@ -32,20 +33,25 @@ class TaskAdapter(
         val title = view.findViewById<TextView>(R.id.taskTitle)
         val description = view.findViewById<TextView>(R.id.taskDescription)
         val assignedTo = view.findViewById<TextView>(R.id.assignedTo)
+
         title.text = task.name
         description.text = task.description?.takeIf { it.isNotBlank() } ?: "Sin descripción"
+
         val assignedMembers = getAssignedMembersForDay(task, dayOfWeek)
         assignedTo.text = if (assignedMembers.isNotEmpty()) {
             "Asignado a: ${assignedMembers.joinToString(", ")}"
         } else {
             "Sin asignar"
         }
+
         view.setBackgroundColor(
-            context.resources.getColor(
+            ContextCompat.getColor(
+                context,
                 if (task.completed) R.color.green_completed
                 else R.color.task_pending
             )
         )
+
         view.setOnClickListener {
             onTaskClick?.invoke(task)
         }

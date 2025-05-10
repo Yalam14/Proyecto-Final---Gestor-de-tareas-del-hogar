@@ -9,7 +9,8 @@ data class Task(
     val createdBy: String = "",
     val creationDate: String = "",
     val timestamp: Long = 0,
-    var completed: Boolean = false
+    var completed: Boolean = false,
+    var assignedMembersForDay: List<String> = emptyList()
 ) {
 
     fun getScheduledDaysFormatted(): List<String> {

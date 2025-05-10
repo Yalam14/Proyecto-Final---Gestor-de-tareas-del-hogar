@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="editTextNombreHogar" type="id" />
+    <item name="icon5" type="id" />
+    <item name="icon6" type="id" />
+    <item name="icon7" type="id" />
+    <item name="icon8" type="id" />
+    <item name="icon9" type="id" />
+    <item name="icon10" type="id" />
+    <item name="permission" type="id" />
+    <item name="botonConfigurar" type="id" />
+    <item name="icon4" type="id" />
+    <item name="icon3" type="id" />
+    <item name="icon2" type="id" />
+    <item name="icon1" type="id" />
+    <item name="iconsContainer" type="id" />
+</resources>

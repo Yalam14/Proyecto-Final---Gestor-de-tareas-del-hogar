@@ -17,20 +17,14 @@ import kotlin.collections.HashMap
 class SemanalViewModel : ViewModel() {
     private val database = FirebaseDatabase.getInstance()
     private val tasksRef = database.getReference("tasks")
+    private val homesRef = database.getReference("homes")
     private var currentListener: ValueEventListener? = null
     private val calendar = Calendar.getInstance().apply {
         firstDayOfWeek = Calendar.MONDAY
     }
 
-    private val _year = MutableLiveData<Int>().apply {
-        value = calendar.get(Calendar.YEAR)
-    }
-    val year: LiveData<Int> = _year
-
-    private val _currentWeek = MutableLiveData<Int>().apply {
-        value = calendar.get(Calendar.WEEK_OF_YEAR)
-    }
-    val currentWeek: LiveData<Int> = _currentWeek
+    private val _currentWeekDisplay = MutableLiveData<String>()
+    val currentWeekDisplay: LiveData<String> = _currentWeekDisplay
 
     private val _tasksByDay = MutableLiveData<Map<String, List<Task>>>()
     val tasksByDay: LiveData<Map<String, List<Task>>> = _tasksByDay
@@ -41,18 +35,48 @@ class SemanalViewModel : ViewModel() {
     private val _progress = MutableLiveData<Int>(0)
     val progress: LiveData<Int> = _progress
 
-    private val _homeCode = MutableLiveData<String>()
-    val homeCode: LiveData<String> = _homeCode
+    private val _canEdit = MutableLiveData<Boolean>()
+    val canEdit: LiveData<Boolean> = _canEdit
 
-    fun loadHomeCode(homeId: String) {
-        FirebaseDatabase.getInstance().getReference("homes").child(homeId).get()
-            .addOnSuccessListener { snapshot ->
-                val code = snapshot.getValue(Home::class.java)?.code ?: ""
-                _homeCode.value = code
+    private val _creator = MutableLiveData<String>()
+    val creator: LiveData<String> = _creator
+
+    init {
+        updateWeekDisplay()
+    }
+
+    private fun updateWeekDisplay() {
+        val monthName = when (calendar.get(Calendar.MONTH)) {
+            Calendar.JANUARY -> "Enero"
+            Calendar.FEBRUARY -> "Febrero"
+            Calendar.MARCH -> "Marzo"
+            Calendar.APRIL -> "Abril"
+            Calendar.MAY -> "Mayo"
+            Calendar.JUNE -> "Junio"
+            Calendar.JULY -> "Julio"
+            Calendar.AUGUST -> "Agosto"
+            Calendar.SEPTEMBER -> "Septiembre"
+            Calendar.OCTOBER -> "Octubre"
+            Calendar.NOVEMBER -> "Noviembre"
+            Calendar.DECEMBER -> "Diciembre"
+            else -> ""
+        }
+        val weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH)
+        _currentWeekDisplay.value = "$monthName Semana $weekOfMonth"
+    }
+
+    fun loadEditPermissions(homeId: String) {
+        homesRef.child(homeId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                _canEdit.value = snapshot.child("canParticipantEdit").getValue(Boolean::class.java) ?: false
+                _creator.value = snapshot.child("createdBy").getValue(String::class.java) ?: ""
             }
-            .addOnFailureListener {
-                _homeCode.value = ""
+
+            override fun onCancelled(error: DatabaseError) {
+                _canEdit.value = false
+                _creator.value = ""
             }
+        })
     }
 
     fun loadTasksForCurrentWeek(homeId: String) {
@@ -61,13 +85,13 @@ class SemanalViewModel : ViewModel() {
 
     fun loadPreviousWeekTasks(homeId: String) {
         calendar.add(Calendar.WEEK_OF_YEAR, -1)
-        _currentWeek.value = calendar.get(Calendar.WEEK_OF_YEAR)
+        updateWeekDisplay()
         loadTasksForWeek(homeId)
     }
 
     fun loadNextWeekTasks(homeId: String) {
         calendar.add(Calendar.WEEK_OF_YEAR, 1)
-        _currentWeek.value = calendar.get(Calendar.WEEK_OF_YEAR)
+        updateWeekDisplay()
         loadTasksForWeek(homeId)
     }
 
@@ -76,7 +100,6 @@ class SemanalViewModel : ViewModel() {
         currentListener?.let { tasksRef.removeEventListener(it) }
 
         val weekDates = getWeekDates()
-        Log.d("SemanalVM", "Fechas de la semana: $weekDates")
 
         currentListener = tasksRef.orderByChild("homeId").equalTo(homeId)
             .addValueEventListener(object : ValueEventListener {
@@ -93,23 +116,37 @@ class SemanalViewModel : ViewModel() {
                         }
 
                         task?.let { t ->
-                            Log.d("SemanalVM", "Procesando tarea: ${t.name}")
-                            Log.d("SemanalVM", "Schedule keys: ${t.schedule.keys}")
-
                             weekDates.forEach { (date, dayName) ->
-                                val englishDay = convertToEnglishDay(dayName)
+                                val englishDay = when (dayName) {
+                                    "Lunes" -> "MONDAY"
+                                    "Martes" -> "TUESDAY"
+                                    "Miércoles" -> "WEDNESDAY"
+                                    "Jueves" -> "THURSDAY"
+                                    "Viernes" -> "FRIDAY"
+                                    "Sábado" -> "SATURDAY"
+                                    "Domingo" -> "SUNDAY"
+                                    else -> null
+                                }
 
-                                // Verificar si es una tarea recurrente para este día
-                                val isRecurrent = englishDay?.let { day ->
-                                    t.schedule.containsKey(day) && isRecurrentTask(t)
-                                } ?: false
-
-                                // Verificar si es una tarea específica para esta fecha
+                                // Verificar si es tarea recurrente o para fecha específica
+                                val isRecurrent = englishDay?.let { t.schedule.containsKey(it) } ?: false
                                 val isSpecificDate = t.schedule.containsKey(date)
 
                                 if (isRecurrent || isSpecificDate) {
-                                    tasksByDay[dayName]?.add(t)
-                                    Log.d("SemanalVM", "Añadida tarea a $dayName: ${t.name}")
+                                    // Asignar miembros específicos para este día
+                                    val assignedMembers = when {
+                                        t.schedule.containsKey(date) -> t.schedule[date]?.assignedTo ?: emptyList()
+                                        englishDay?.let { t.schedule.containsKey(it) } ?: false ->
+                                            t.schedule[englishDay]?.assignedTo ?: emptyList()
+                                        else -> emptyList()
+                                    }
+
+                                    // Crear copia de la tarea con miembros asignados específicos
+                                    val taskCopy = t.copy().apply {
+                                        this.assignedMembersForDay = assignedMembers
+                                    }
+
+                                    tasksByDay[dayName]?.add(taskCopy)
                                 }
                             }
                         }
@@ -127,23 +164,14 @@ class SemanalViewModel : ViewModel() {
             })
     }
 
-    private fun isRecurrentTask(task: Task): Boolean {
-        // Una tarea es recurrente si tiene al menos un día de la semana en inglés
-        val englishDays = listOf("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY",
-            "FRIDAY", "SATURDAY", "SUNDAY")
-        return task.schedule.keys.any { it in englishDays }
-    }
+    private fun calculateProgress(tasksByDay: Map<String, List<Task>>) {
+        val totalTasks = tasksByDay.values.sumOf { it.size }
+        val completedTasks = tasksByDay.values.flatMap { it }.count { it.completed }
 
-    private fun convertToEnglishDay(spanishDay: String): String? {
-        return when (spanishDay) {
-            "Lunes" -> "MONDAY"
-            "Martes" -> "TUESDAY"
-            "Miércoles" -> "WEDNESDAY"
-            "Jueves" -> "THURSDAY"
-            "Viernes" -> "FRIDAY"
-            "Sábado" -> "SATURDAY"
-            "Domingo" -> "SUNDAY"
-            else -> null
+        _progress.value = if (totalTasks > 0) {
+            (completedTasks.toFloat() / totalTasks.toFloat() * 100).toInt()
+        } else {
+            0
         }
     }
 
@@ -153,6 +181,7 @@ class SemanalViewModel : ViewModel() {
         cal.firstDayOfWeek = Calendar.MONDAY
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
         repeat(7) {
             val date = dateFormat.format(cal.time)
             val dayName = when (cal.get(Calendar.DAY_OF_WEEK)) {
@@ -169,17 +198,6 @@ class SemanalViewModel : ViewModel() {
             cal.add(Calendar.DAY_OF_YEAR, 1)
         }
         return dates
-    }
-
-    private fun calculateProgress(tasksByDay: Map<String, List<Task>>) {
-        val totalTasks = tasksByDay.values.sumOf { it.size }
-        val completedTasks = tasksByDay.values.flatMap { it }.count { it.completed }
-
-        _progress.value = if (totalTasks > 0) {
-            (completedTasks.toFloat() / totalTasks.toFloat() * 100).toInt()
-        } else {
-            0
-        }
     }
 
     override fun onCleared() {

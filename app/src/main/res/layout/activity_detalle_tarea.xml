@@ -12,31 +12,43 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Header con título y botón de editar -->
+        <!-- Header con título editable -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tvTitulo"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/etTitulo"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="24sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
                 android:textColor="#212121"
-                android:text=""
-                android:layout_marginBottom="8dp"/>
+                android:textStyle="bold"
+                android:background="@null"
+                android:inputType="textCapSentences"
+                android:enabled="false"
+                android:maxLines="1"/>
 
             <ImageButton
                 android:id="@+id/btnEditar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_edit"
-                android:background="?android:attr/selectableItemBackground"/>
+                android:contentDescription="@string/editar"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:visibility="visible"/>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guardar"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/green"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <!-- Subtítulo Descripción -->
@@ -52,14 +64,14 @@
         <!-- Campo de descripción -->
         <EditText
             android:id="@+id/etDescripcion"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/edit_text_border"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:padding="8dp"
-        android:editable="false"/>
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_border"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:padding="8dp"
+            android:enabled="false"/>
 
         <!-- Separador -->
         <View
@@ -115,7 +127,8 @@
                     android:id="@+id/miembro1Checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@android:color/black" />
+                    android:buttonTint="@android:color/black"
+                    android:enabled="false"/>
             </LinearLayout>
 
             <!-- Miembro 2 -->
@@ -148,7 +161,8 @@
                     android:id="@+id/miembro2Checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@android:color/black" />
+                    android:buttonTint="@android:color/black"
+                    android:enabled="false"/>
             </LinearLayout>
 
             <!-- Miembro 3 -->
@@ -181,7 +195,8 @@
                     android:id="@+id/miembro3Checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@android:color/black" />
+                    android:buttonTint="@android:color/black"
+                    android:enabled="false"/>
             </LinearLayout>
 
             <!-- Miembro 4 -->
@@ -214,10 +229,9 @@
                     android:id="@+id/miembro4Checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@android:color/black" />
+                    android:buttonTint="@android:color/black"
+                    android:enabled="false"/>
             </LinearLayout>
-
-
         </LinearLayout>
 
         <!-- Botones de acción -->
@@ -227,6 +241,18 @@
             android:orientation="horizontal"
             android:gravity="end"
             android:layout_marginTop="24dp">
+
+            <!-- Botón Cancelar (inicialmente oculto) -->
+            <Button
+                android:id="@+id/btnCancelar"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginEnd="12dp"
+                android:backgroundTint="#9E9E9E"
+                android:text="Cancelar"
+                android:textColor="@android:color/white"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btnEliminar"
@@ -238,8 +264,8 @@
                 android:text="Eliminar"
                 android:textColor="@android:color/white"
                 android:drawableStart="@drawable/ic_delate"
-            android:drawablePadding="8dp"
-            android:drawableTint="@android:color/white"/>
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/white"/>
 
             <Button
                 android:id="@+id/btnTerminar"
