@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import equipo.cuatro.proyecto_final_gestor_de_tareas_del_hogar.databinding.ActivityDetalleTareaBinding
 
@@ -24,10 +25,20 @@ class DetalleTareaActivity : AppCompatActivity() {
         val homeId = intent.getStringExtra("homeId") ?: ""
         val assignedTo = intent.getStringArrayListExtra("assignedTo") ?: emptyList()
         val isCompleted = intent.getBooleanExtra("completed", false)
+        val canEdit = intent.getBooleanExtra("canEdit", false)
+        val creator = intent.getStringExtra("creator") ?: ""
 
         // Configurar vistas con los datos básicos
         binding.tvTitulo.text = taskName
         binding.etDescripcion.setText(taskDescription)
+
+        if (creator == FirebaseAuth.getInstance().currentUser?.uid.toString()) {
+            binding.btnEditar.visibility = View.VISIBLE
+        }else if (canEdit) {
+            binding.btnEditar.visibility = View.VISIBLE
+        } else {
+            binding.btnEditar.visibility = View.GONE
+        }
 
         // Configurar estado de completado
         if (isCompleted) {

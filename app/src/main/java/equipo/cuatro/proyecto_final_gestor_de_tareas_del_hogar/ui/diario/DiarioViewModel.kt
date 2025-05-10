@@ -41,8 +41,36 @@ class DiarioViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _canEdit = MutableLiveData<Boolean>()
+    val canEdit: LiveData<Boolean> = _canEdit
+
+    private val _creator = MutableLiveData<String>()
+    val creator: LiveData<String> = _creator
+
     private val _homeCode = MutableLiveData<String>()
     val homeCode: LiveData<String> = _homeCode
+
+    fun loadCreator(homeId: String) {
+        FirebaseDatabase.getInstance().getReference("homes").child(homeId).get()
+            .addOnSuccessListener { snapshot ->
+                val creator = snapshot.getValue(Home::class.java)?.createdBy ?: ""
+                _creator.value = creator
+            }
+            .addOnFailureListener {
+                _creator.value = ""
+            }
+    }
+
+    fun loadCanEdit(homeId: String) {
+        FirebaseDatabase.getInstance().getReference("homes").child(homeId).get()
+            .addOnSuccessListener { snapshot ->
+                val canEdit = snapshot.getValue(Home::class.java)?.canParticipantEdit ?: false
+                _canEdit.value = canEdit
+            }
+            .addOnFailureListener {
+                _canEdit.value = false
+            }
+    }
 
     fun loadHomeCode(homeId: String) {
         _isLoading.value = true

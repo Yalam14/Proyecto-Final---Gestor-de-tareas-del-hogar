@@ -57,6 +57,9 @@ class DiarioFragment : Fragment() {
         setupObservers()
         loadInitialTasks()
 
+        viewModel.loadCanEdit(homeId)
+        viewModel.loadCreator(homeId)
+
         return binding.root
     }
 
@@ -213,6 +216,13 @@ class DiarioFragment : Fragment() {
                 "Domingo" -> "SUNDAY"
                 else -> ""
             }
+            
+            val asignados = task.schedule[englishDay]?.assignedTo ?: emptyList()
+
+            putStringArrayListExtra("assignedTo", ArrayList(asignados))
+            putExtra("completed", task.completed)
+            putExtra("canEdit", viewModel.canEdit.value)
+            putExtra("creator", viewModel.creator.value)
 
             // Obtener miembros asignados
             val assignedMembers = when {
