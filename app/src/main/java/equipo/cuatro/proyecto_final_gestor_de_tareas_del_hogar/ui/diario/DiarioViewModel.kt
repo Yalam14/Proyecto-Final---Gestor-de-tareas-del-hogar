@@ -50,10 +50,6 @@ class DiarioViewModel : ViewModel() {
     private val _homeCode = MutableLiveData<String>()
     val homeCode: LiveData<String> = _homeCode
 
-    init {
-        _currentDay.value = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-    }
-
     fun loadCreator(homeId: String) {
         FirebaseDatabase.getInstance().getReference("homes").child(homeId).get()
             .addOnSuccessListener { snapshot ->
